@@ -1,0 +1,542 @@
+/* ── Pretendard (한국어) ── */
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Playfair Display (세리프 이탤릭) ── */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/PlayfairDisplay-BoldItalic.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── DM Sans (영문) ── */
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Thin_9_11zon.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-ExtraLight_4_11zon.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Light_5_11zon.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Regular_7_11zon.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Medium_6_11zon.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-SemiBold_8_11zon.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Bold_2_11zon.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-ExtraBold_3_11zon.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Black_1_11zon.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* GOSPELFIX 브랜드 색상 토큰 */
+    --gf-bg: #f3f3f4;
+    --gf-white: #ffffff;
+    --gf-black: #111111;
+    --gf-gray1: #444444;
+    --gf-gray2: #888888;
+    --gf-gray3: #cccccc;
+    --gf-border: #e8e5df;
+    --gf-orange: #ff5500;
+    --gf-orange2: #ff6b1a;
+    --gf-orange-bg: rgba(255, 85, 0, 0.07);
+    --gf-line: #e0e0e0;
+    --gf-surface: #f9f9f9;
+
+    /* shadcn/ui 변수 → GOSPELFIX 토큰으로 매핑 */
+    --background: #f7f5f0;
+    --foreground: #111111;
+    --card: #ffffff;
+    --card-foreground: #111111;
+    --popover: #ffffff;
+    --popover-foreground: #111111;
+    --primary: #ff5500;
+    --primary-foreground: #ffffff;
+    --secondary: #ffffff;
+    --secondary-foreground: #111111;
+    --muted: #f0eee8;
+    --muted-foreground: #888888;
+    --accent: rgba(255, 85, 0, 0.07);
+    --accent-foreground: #111111;
+    --destructive: #dc2626;
+    --border: #e8e5df;
+    --input: #e8e5df;
+    --ring: #ff5500;
+    --radius: 1rem;
+
+    /* 폰트 */
+    --font-kr: "Pretendard", sans-serif;
+    --font-en: "DM Sans", sans-serif;
+    --font-playfair: "Playfair Display", serif;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--gf-bg);
+    color: var(--gf-black);
+    font-family: var(--font-kr);
+    font-size: 16px;
+    line-height: 1.6;
+    word-break: keep-all;
+    overflow-x: clip;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-kr);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    color: var(--gf-black);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes hero-timer {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes quote-model-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── HeroBanner 유틸리티 ── */
+.grain-texture {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.hero-timer-circle {
+  animation: hero-timer 2.8s linear forwards;
+}
+
+/* ── GOSPELFIX 유틸리티 클래스 ── */
+
+/* 색상 */
+.gf-text-black {
+  color: var(--gf-black);
+}
+.gf-text-gray1 {
+  color: var(--gf-gray1);
+}
+.gf-text-gray2 {
+  color: var(--gf-gray2);
+}
+.gf-text-orange {
+  color: var(--gf-orange);
+}
+.gf-bg-white {
+  background: var(--gf-white);
+}
+.gf-border {
+  border-color: var(--gf-border);
+}
+.gf-dot {
+  background: var(--gf-orange);
+}
+
+/* 섹션 레이블 */
+.gf-section-label {
+  display: inline-block;
+  background: var(--gf-orange-bg);
+  color: var(--gf-orange);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+}
+
+/* 섹션 타이틀 */
+.gf-section-title {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--gf-black);
+}
+
+/* 피처 카드 */
+.gf-feature-card {
+  background: var(--gf-bg);
+  border-color: var(--gf-gray3);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.gf-feature-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transform: translateY(-3px);
+}
+
+/* 피처 카드 아이콘 */
+.gf-feature-icon {
+  background: var(--gf-orange-bg);
+  color: var(--gf-orange);
+}
+
+/* 프로세스 타임라인 이동 점 */
+.process-line-dot {
+  position: absolute;
+  top: 27px;
+  left: calc(12.5%);
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gf-orange);
+  box-shadow: 0 0 8px rgba(255, 85, 0, 0.5);
+  z-index: 1;
+  animation: dotTravel 2.8s ease-in-out infinite;
+}
+
+@keyframes dotTravel {
+  0% {
+    left: calc(12.5%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  96% {
+    left: calc(87.5% - 20px);
+    opacity: 0;
+  }
+  100% {
+    left: calc(87.5% - 20px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .process-line-dot {
+    display: none;
+  }
+}
+
+.description a {
+  color: var(--gf-orange2);
+  text-decoration: underline;
+}
+
+/* CMS 본문(dangerouslySetInnerHTML)의 빈 문단은 줄바꿈 용도이므로 고정 여백만 부여한다.
+   에디터가 빈 줄을 <p></p> 또는 <p><br></p>로 저장하는 두 경우를 모두 잡는다. */
+.prose-gf p:empty,
+.prose-gf p:has(> br:only-child) {
+  height: 0;
+  margin: 0 0 32px;
+}
+
+.prose-gf p:has(> br:only-child) > br {
+  display: none;
+}
+
+/* Tailwind preflight가 h1~h6/ul/ol/li의 기본 스타일(font-size, list-style, 여백)을 초기화하므로,
+   관리자 에디터(TipTap 등)가 렌더링하는 서식과 맞추기 위해 여기서 명시적으로 복원한다.
+   (에디터 화면에서는 정상 표시되지만 클라이언트 상세 페이지에서 헤딩/리스트가 본문과
+   동일하게 보이던 문제 — .prose-gf에 타이포그래피 규칙이 없었던 것이 원인) */
+.prose-gf h1 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 40px 0 16px;
+}
+.prose-gf h2 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 36px 0 14px;
+}
+.prose-gf h3 {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 28px 0 12px;
+}
+.prose-gf h4,
+.prose-gf h5,
+.prose-gf h6 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0 8px;
+}
+.prose-gf h1:first-child,
+.prose-gf h2:first-child,
+.prose-gf h3:first-child,
+.prose-gf h4:first-child,
+.prose-gf h5:first-child,
+.prose-gf h6:first-child {
+  margin-top: 0;
+}
+
+.prose-gf ul,
+.prose-gf ol {
+  margin: 0 0 24px;
+  padding-left: 22px;
+}
+.prose-gf ul {
+  list-style: disc;
+}
+.prose-gf ol {
+  list-style: decimal;
+}
+.prose-gf li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+.prose-gf li > ul,
+.prose-gf li > ol {
+  margin: 6px 0 0;
+}
+
+.prose-gf blockquote {
+  border-left: 3px solid var(--gf-orange);
+  padding-left: 16px;
+  margin: 24px 0;
+  color: var(--gf-gray1);
+  font-style: italic;
+}
+
+.prose-gf hr {
+  border: none;
+  border-top: 1px solid var(--gf-border);
+  margin: 32px 0;
+}
+
+.prose-gf a {
+  color: var(--gf-orange2);
+  text-decoration: underline;
+}
+
+.prose-gf pre {
+  background: var(--gf-surface);
+  border: 1px solid var(--gf-border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.prose-gf code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--gf-surface);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.prose-gf pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* NewsDetailContent는 렌더링 전에 <img>를 별도 갤러리 Swiper로 분리하므로 이 컨테이너 안에서는
+   적용될 일이 없다 — .prose-gf를 재사용할 다른 화면(본문에 이미지를 그대로 남기는 경우) 대비용 */
+.prose-gf img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+/* 스크롤 기능은 유지하되 스크롤바만 시각적으로 숨긴다 */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge legacy */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* 사이트 전역 커스텀 스크롤바 — 클래식 스크롤바처럼 두껍고 또렷한 회색 필 형태 */
+html {
+  scrollbar-width: auto; /* Firefox */
+  scrollbar-color: rgba(120, 120, 120, 0.6) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 120, 0.6);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(90, 90, 90, 0.75);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(70, 70, 70, 0.85);
+}

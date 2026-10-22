@@ -1,0 +1,51 @@
+# Memory Index
+
+- [⚠️ "/growth" → "/layer" 라우트+컴포넌트 리네임 (2026-09-01)](project_growth_route_renamed_to_layer_2026-09-01.md) — "/growth"(에이전시)가 "/layer"로, `GrowthShell` 등 컴포넌트 패밀리도 `Layer*`로 전부 리네임됨. 아래 다른 메모리들의 "/growth"·"components/growth"·"Growth*" 서술은 이 날짜 **이전** 기준이니 먼저 이 항목부터 확인할 것
+- [⚠️ "/"↔"/growth" 라우트 콘텐츠 스왑 (2026-08-28)](project_root_growth_route_content_swap_2026-08-28.md) — 이 날짜부터 "/"=모다 마켓플레이스, "/growth"=에이전시로 반대가 됨(2026-09-01 "/growth"는 "/layer"로 리네임됨, 위 항목 참고). 아래 다른 메모리들의 "/growth" 서술은 이 날짜 **이전** 기준이니 먼저 이 항목부터 확인할 것
+- [라우트 리네임 시 md 문서/메모리 갱신 기준](feedback_route_rename_docs_memory_triage.md) — "살아있는 문서"(CLAUDE.md, 컨벤션 문서)만 실제로 고치고 "특정 시점 기록"(리뷰 로그, 날짜 박힌 project_*.md)은 그대로 둔 채 인덱스 최상단에 날짜 기준점 메모리 하나만 추가하는 방식. 위 스왑 작업이 실행 사례
+- [Swiper centeredSlides는 SSR 직후 "1단→3단" FOUC가 생긴다](feedback_swiper_ssr_centered_layout_fouc.md) — 레이아웃 계산(JS)이 끝나는 onSwiper 콜백 전까지 opacity-0으로 감췄다가 페이드인. HeroCarousel.tsx에서 발견(2026-08-28)
+- [양면 마켓플레이스 비즈니스 모델](project_business_model_vertical_ai_pivot.md) — 구매자(소상공인)+판매자(다양한 포지션의 전문 크리에이터)+운영자(GospelFix, 수수료30%) 구조, `/`·`/about`·`/growth` 카피 반영 완료. 2026-08-24: Phase 3(판매자 마켓플레이스) 착수 지시됨(아래 참고). 2026-08-21: "AI빌더"→"전문 크리에이터"로 카피만 확장. 실행계획은 루트 `ROADMAP.md`
+- [상품 CRUD를 마이페이지로 이전 (양쪽 저장소 구현 완료, cms.api 마이그레이션 056/057 실행 대기)](project_product_crud_migration_to_mypage.md) — 2026-08-26 gospelfix+cms.api 전부 완료(API 프록시, /growth/upload 확장, /mypage/products, /api/v1/my-products/*, admin 승인 UI, 기존 admin CRUD 삭제, /users 판매자 수동 전환 UI, /mypage/settings 판매자 신청 카드). cms.api 055 실행 후 status 컬럼명 충돌 버그 발견→056으로 수정. 057은 판매자 신청 신호(seller_requested_at) 추가. 056/057 둘 다 아직 미실행
+- [GOSPELFIX 한글 표기(가스펄픽스) 전환 진행 상황](project_gospelfix_korean_brand_display.md) — 2026-08-21, `/about` 본문은 완료, `<title>` 메타와 다른 페이지들(홈·growth·guide·quote·blog·legal 등)은 미착수. grep으로 최신 목록 재확인 필수
+- [파일 전체 Prettier 재포맷 금지](feedback_no_whole_file_prettier_reformat.md) — 문구 몇 줄 수정에 `prettier --write` 전체 실행 시 무관한 섹션까지 재포맷되어 diff 노이즈 발생, Edit으로 hunk만 고칠 것
+- [cms.api 공유 인프라 테이블 5개는 리네임 절대 금지](feedback_cms_api_shared_table_rename_forbidden.md) — profiles/auth_api_configs/content_api_configs/phone_verifications/referral_banners, cms.api CLAUDE.md 절대규칙. DB 변경은 cms.api의 supabase-db-architect(Supabase MCP)만 가능, gospelfix 세션에서 접근 불가
+- [React 19 useRef 타입 변경](feedback_formref_react19.md) — admin에서 `RefObject<HTMLFormElement | null>` 필수, `| null` 누락 시 빌드 에러
+- [Next.js redirect() 에러 처리](feedback_nextjs_redirect_error.md) — `isRedirectError(err)` re-throw 없으면 "NEXT_REDIRECT" 텍스트가 화면에 렌더링됨
+- [admin FormWrapper ConfirmDialog + formRef 패턴](feedback_confirm_dialog_pattern.md) — 저장/삭제 ConfirmDialog + requestSubmit() 표준 패턴
+- [admin 컴포넌트 폴더 구조](project_admin_components.md) — editor/layout/news/portfolio/products/providers/ui 도메인별 분리 구조
+- [CLAUDE.md 섹션 참조](reference_claude_md.md) — 프로젝트 규칙 문서의 주요 섹션 목록 및 역할
+- [견적 마법사 가격 노출 위치](feedback_quote_price_display.md) — 가격은 Step05 견적서에서만 표시, Step01·02 금지
+- [견적 마법사 구조 및 수정 이력](project_quote_wizard.md) — 5단계 구조, 2026-07-14 주요 변경 내역
+- [quote_submissions 누락 컬럼](project_supabase_quote_submissions.md) — ALTER TABLE 실행 필요 여부 확인 필요
+- [Toss Payments 연동 히스토리](project_toss_payments_history.md) — Toss PG 연동 후 카카오페이 QR로 전환, 파일 목록 및 흐름 보존
+- [다운로드→제작/상담 서비스 전환](project_digital_download_to_production_migration.md) — 2026-07-30, 즉시 다운로드 모델 폐기, 커밋 1223938
+- [axios 이중 baseURL은 정상](feedback_axios_dual_baseurl.md) — axiosInstance(/api)와 cmsApiClient(cms.api)는 보안 경계상 절대 통합 금지
+- [블로그 500 장애 → sanitize-html 교체](incident_blog500_sanitize_html.md) — jsdom→@exodus/bytes ERR_REQUIRE_ESM, sanitize-html 교체+리뷰 반영 완료, 배포 재현 확인 대기
+- [공용 컴포넌트는 정의부에서 고친다](feedback_shared_component_single_source_of_truth.md) — 개별 호출부 반복 오버라이드 금지, dialog.tsx 모바일 여백 버그 2회 반복이 계기, 정식 규칙은 .claude/rules/shared-component-changes.md
+- [장바구니 + 배치 체크아웃 기능](project_cart_batch_checkout_feature.md) — 2026-08-03 완료·배포, gospelfix+cms.api 양쪽 저장소, CartProvider 루트 레이아웃 상주 구조
+- [루트 레이아웃 모달은 모든 종료 액션에서 onClose 필수](feedback_root_layout_modal_close_pattern.md) — 페이지 이동만 하고 onClose 안 부르면 새 페이지 위에 모달이 계속 남음, BatchPaymentModal 버그가 계기
+- [LayerShell 새 페이지는 사이드바 링크 등록 필수](feedback_layer_shell_page_needs_sidebar_link.md) — Footer/TopBar 경로 배열은 셸 판별용일 뿐, LayerSidebar.tsx에 SidebarLink 추가 안 하면 고아 라우트가 됨. /introduce 페이지가 이걸 빠뜨려 code-reviewer BLOCKED
+- [git-commit-pusher에 Bash 도구 없음](feedback_git_commit_pusher_no_bash.md) — 실제 커밋 대신 명령어 안내문만 반환(8회차부터는 아예 성공했다고 허위 보고), APPROVED 후엔 결과를 git log/status로 직접 검증하고 메인 세션이 Bash로 커밋/푸시할 것. gospelfix·cms.api 양쪽에서 8회 재확인(최근 2026-09-15), 더 이상 재시도하지 말 것
+- [Vercel Image Optimization 402 → unoptimized:true 임시 우회](project_vercel_image_optimization_402.md) — 2026-09-15, 프로덕션 전용 이미지 깨짐의 원인은 Vercel 결제수단 미등록(신규 소스 이미지 변환 차단), next.config.mjs에 unoptimized:true 적용(커밋 478dfa3). 결제수단 등록 후 원복 여부 결정 대기
+- [2026-08-08 할 일 목록](project_todo_2026-08-08.md) — 1,2번(cms.api 상품 에디터 필드, 할인 카운트다운) 완료, 남은 건 무료상품 즉시다운로드(cms.api 연동 필요 가능)/중복 UI 컴포넌트 분리/컨벤션 점검, "오늘 뭐 하지" 질문 시 안내
+- [할인가/카운트다운 기능 리뷰](project_discount_countdown_feature.md) — 1차 BLOCKED(가격 불일치 Critical, hydration mismatch Major) → 2차 재검토 APPROVED, getActiveDiscount() 서버 1회 계산 패턴
+- [코딩 컨벤션 위반 전수 점검 (2026-08-08)](project_coding_convention_audit_2026-08-08.md) — cn() 교체 7건·sonner.tsx style→className 전환(CSS 커스텀 프로퍼티라 동일 동작 확인)·shadcn 8개 Prettier 재포맷, Critical/Major 없이 APPROVED, 전수 grep으로 style=/join()/asChild 잔존 0건 확인
+- [Claude 폴더 콘텐츠 → AI 스타터 킷 이니셔티브](project_ai_starter_kit_content_initiative.md) — 2026-08-11, 블로그 draft(claude-code-project-setup) 발행 대기 + has_ai_starter_kit 상품 플래그 배포 완료, 가격은 전환율 확인 전까지 동결
+- [결과물 설명은 목업부터](feedback_concrete_outcome_explanations.md) — 스키마/파일경로 먼저 말고 before/after 화면 목업으로 먼저 설명, "결과물이 어떻게 나온다는거야" 재질문이 계기
+- [상세페이지 fetch 워터폴 수정](project_detail_page_fetch_waterfall_fix.md) — product/reviews/coupons 순차 3단 → Promise.all 2단, 아직 커밋 안 됨(확인 필요), 다른 page.tsx도 같은 패턴 점검할 것
+- [프롬프트 파일 별도판매 카테고리 시도 → 되돌림](project_prompt_sale_category_attempt_reverted.md) — 2026-08-13, prompt 카테고리 신설했다가 원복, 최종은 "코드 미리보기" 섹션 상시노출+기본탭1개로 단순화. gospelfix 308cead, cms.api 341b7f1
+- [새 개념 신설보다 기존 확장을 선호함](feedback_prefer_minimal_extension_over_new_concept.md) — prompt 카테고리 신설 설계를 사용자가 결국 단순한 UI 확장으로 되돌린 사례가 계기
+- [저장소 여러 개 오갈 때 Bash cwd 주의](feedback_multi_repo_bash_cwd_caution.md) — gospelfix/cms.api 오가며 cd 상태 남아 엉뚱한 저장소서 tsc/lint 실행할 뻔함, pwd로 검증 대상 재확인 습관화
+- [PostHog 애널리틱스 도입 완료](project_posthog_analytics_setup.md) — posthog-js 설치, PostHogProvider/PostHogPageView, 쿠키 동의 연동, 커밋 a9fa81b
+- [새 추적 SDK는 쿠키 동의 게이팅부터 확인](feedback_check_cookie_consent_before_new_tracking_tool.md) — PostHog 1차 구현이 CookieConsentBanner/useCookieConsent 우회해 BLOCKED, 반드시 먼저 연동할 것
+- [회원가입 휴대폰 번호 중복 버그 → cms.api에서 수정](project_signup_phone_duplicate_bug_cms_api.md) — 2026-08-19, 원인은 profiles.phone 유니크 제약(트리거 실패), 이 저장소는 BFF 프록시라 실제 수정은 전부 cms.api 쪽, 자세한 내용은 cms.api 메모리 참고
+- [상세페이지 최상단 히스토리](project_detail_page_banner_image_migration.md) — 2026-08-24 하루 두 번 피벗: demo_url iframe→banner_image_url 이미지→content_html 에디터 콘텐츠(최종). cms.api의 banner_image_url 기능은 이제 고아 상태, 처리 방침 미정
+- [마이페이지 보관함→구매/혜택 통합](project_mypage_library_merged_into_orders.md) — 2026-08-26, /mypage/library 삭제, OrdersTabs.tsx(결제 대기/보유 쿠폰/구매한 상품 3탭)로 병합, 커밋 ae7d55a. "보관함" 재언급 시 이 컨텍스트로 이해할 것
+- [Swiper loop + centeredSlides는 슬라이드 적으면 마지막→처음 전환에서 멈춤](feedback_swiper_loop_needs_enough_slides.md) — loopAdditionalSlides는 역효과, 슬라이드 배열 자체를 반복해야 함. HeroCarousel.tsx에서 발견(2026-08-26), 다른 캐러셀에도 적용될 수 있는 일반 함정
+- [카테고리 체계 전면 개편 (소분류 도입→대분류까지 교체, 기존 데이터 전체 삭제)](project_category_taxonomy_overhaul_2026-08-27.md) — 2026-08-27, 대분류 3종(website/ux_ui/branding)·소분류 15종 최종 확정값, moda_orders/moda_products TRUNCATE(061) 완료, 관리자 category+growth 사이드바 메뉴 CRUD는 TODO(미착수)
+- [2026-08-29 할 일 목록](project_todo_2026-08-29.md) — 상단 배너 cms.api API 연동(대상 영역 미확정), 판매자 전환 시 "계좌번호 관리" 메뉴+카카오페이/토스 등 서브 계좌 저장 필드 추가(cms.api 스키마 선행 필요)
+- [카카오 로그인 콘솔 설정 함정 + scope 결정](project_kakao_login_setup.md) — "Redirect URI" vs "로그아웃 리다이렉트 URI" 혼동 주의, scope=account_email만 요청. 로컬/Vercel 실서버 redirect_uri 이중화(Vercel 대시보드+카카오 콘솔 등록)는 2026-09-06 안내만 하고 실제 설정 여부 미확인
+- [/layer·/about "AI 견적" 채팅 모달 기능 구현 완료](project_quote_chat_modal_feature.md) — 2026-10-13, QuoteFloatingButton이 /quote 대신 QuoteChatModal(버튼형 질문→결과 화면→cms.api 리드 저장) 오픈, SMS/실시간 가격계산은 범위 밖
+- [cms.api nullable 타입 ≠ DB NOT NULL 제약](feedback_zod_nullable_vs_db_not_null.md) — Zod nullable 필드도 실제 Postgres 컬럼은 NOT NULL일 수 있음, null 대신 []/0/false로 채울 것, 500 에러 원인 확인은 cms.api 재시작해 로그 캡처
+- [경쟁사 레퍼런스 UI의 커스텀 라벨·법적 문구는 베끼지 않는다](feedback_dont_copy_reference_ui_labeling_scheme.md) — 분류 체계는 원문 데이터로 대체, 법적 고지는 실제 PrivacyContent.tsx 등과 대조 후 사실과 다르면 생략
+- [pkill -f "next dev"는 형제 저장소 서버까지 죽인다](feedback_pkill_next_dev_kills_sibling_repo.md) — gospelfix/cms.api 둘 다 매칭됨, PID 지정(lsof -i :포트)으로 정확히 종료할 것

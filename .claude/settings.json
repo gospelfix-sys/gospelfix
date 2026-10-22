@@ -1,0 +1,51 @@
+{
+  "model": "sonnet",
+  "plansDirectory": ".claude/plans/",
+  "env": {
+    "MAX_THINKING_TOKENS": "10000",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "50",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "tmux",
+  "outputStyle": "Explanatory",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-hook.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash",
+      "mcp__ide__getDiagnostics",
+      "mcp__sequential-thinking"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./build/**)"
+    ],
+    "ask": [],
+    "defaultMode": "plan",
+    "additionalDirectories": ["/"]
+  }
+}
