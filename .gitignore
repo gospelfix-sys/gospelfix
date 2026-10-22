@@ -39,4 +39,7 @@ next-env.d.ts
 .claude/*.lock
 .claude/settings.local.json
 .claude/worktrees/
+# 내부 설계/사업 결정 기록 — 공개 저장소에 노출 금지 (로컬 전용)
+.claude/plans/
+.claude/memory/
 .vscode/sftp.json
