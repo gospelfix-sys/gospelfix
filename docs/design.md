@@ -110,4 +110,4 @@
 - 마케팅 CTA는 pill, 기능성 UI 버튼은 `rounded-lg` — 문맥을 바꿔 쓰지 않는다
 - 다크모드용 `dark:` 클래스를 새로 추가하지 않는다 (라이트 전용, ThemeProvider 미연결)
 - 카드 기본 상태에 그림자 남용 금지 — 그림자는 호버·모달·드롭다운 등 위계가 필요한 곳에만
-- 모션은 페이드+슬라이드(`opacity 0→1`, `translateY 8~24px`) 정도로 절제. `framer-motion`은 정말 정교한 시퀀싱이 필요한 곳(라우트 모달 전환, 플로팅 배너)에만 예외적으로 쓰고, 나머지는 CSS `@keyframes`/`tailwindcss-animate`(`animate-in fade-in slide-in-from-*`)로 처리한다
+- 모션은 페이드+슬라이드(`opacity 0→1`, `translateY 8~24px`) 정도로 절제. `motion`(`motion/react`, 구 framer-motion)은 정말 정교한 시퀀싱이 필요한 곳(라우트 모달 전환, 플로팅 배너)에만 예외적으로 쓰고, 나머지는 CSS `@keyframes`/`tailwindcss-animate`(`animate-in fade-in slide-in-from-*`)로 처리한다
