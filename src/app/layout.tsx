@@ -5,6 +5,7 @@ import PostHogProvider from "@/components/providers/PostHogProvider";
 import AuthProvider from "@/components/auth/AuthProvider";
 import CartProvider from "@/components/cart/CartProvider";
 import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
+import { Toaster } from "@/components/ui/sonner";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://gospelfix.vercel.app";
@@ -59,6 +60,7 @@ export default function RootLayout({
             <CookieConsentBanner />
           </RecoilProvider>
         </PostHogProvider>
+        <Toaster />
       </body>
     </html>
   );

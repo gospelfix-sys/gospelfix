@@ -11,6 +11,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
+      // 가로는 뷰포트 중앙, 세로는 하단 유지
+      position="bottom-center"
       className={cn(
         "toaster group",
         "[--normal-bg:var(--popover)] [--normal-text:var(--popover-foreground)] [--normal-border:var(--border)] [--border-radius:var(--radius)]",
