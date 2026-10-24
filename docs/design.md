@@ -110,4 +110,5 @@
 - 마케팅 CTA는 pill, 기능성 UI 버튼은 `rounded-lg` — 문맥을 바꿔 쓰지 않는다
 - 다크모드용 `dark:` 클래스를 새로 추가하지 않는다 (라이트 전용, ThemeProvider 미연결)
 - 카드 기본 상태에 그림자 남용 금지 — 그림자는 호버·모달·드롭다운 등 위계가 필요한 곳에만
-- 모션은 페이드+슬라이드(`opacity 0→1`, `translateY 8~24px`) 정도로 절제. `framer-motion`은 정말 정교한 시퀀싱이 필요한 곳(라우트 모달 전환, 플로팅 배너)에만 예외적으로 쓰고, 나머지는 CSS `@keyframes`/`tailwindcss-animate`(`animate-in fade-in slide-in-from-*`)로 처리한다
+- 모션은 페이드+슬라이드(`opacity 0→1`, `translateY 8~24px`) 정도로 절제하되, 구현은 인터랙션·전환·로딩 표시 등 움직이는 모든 것을 `motion`(`motion/react`, 구 framer-motion)으로 한다. CSS `@keyframes`/`tailwindcss-animate`(`animate-in` 등)로 새 애니메이션을 만들지 않는다 — 이 프로젝트는 Tailwind 3.4라 `data-open:animate-in` 같은 v4 문법은 CSS가 생성되지 않는다. 기존 CSS 애니메이션은 해당 코드를 수정할 때 함께 `motion`으로 옮긴다. 기준 구현은 `components/ui/dialog.tsx`
+- 모션·인터랙션·움직임에 해당하는 UI 작업은 반드시 `motion-designer` 에이전트(`.claude/agents/motion-designer.md`)가 맡는다. 새 모션의 타이밍·이징·퇴장 처리·reduced motion 기준은 이 에이전트의 원칙을 따른다

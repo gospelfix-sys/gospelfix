@@ -63,11 +63,13 @@ Client Component ─ axiosInstance ─┘
 
 - Prettier: 쌍따옴표, 세미콜론, 100자, 2칸, trailing comma all. **문구 몇 줄 수정에 파일 전체 `prettier --write` 금지** (diff 노이즈) — Edit으로 hunk만 수정.
 - 인라인 `style=` 금지 → `className`만. 조건부/병합은 `cn()`(`lib/utils.ts`, clsx+tailwind-merge). 임의값은 Tailwind arbitrary value 또는 `tailwind.config.ts` 토큰(`text-gf-orange` 등).
+- **인터랙션·모션·움직이는 모든 UI는 `motion` 라이브러리(`motion/react`)로 구현**한다. CSS `@keyframes`/`tailwindcss-animate`로 새 애니메이션을 만들지 않는다 (Tailwind 3.4라 `data-open:animate-in` 같은 v4 문법은 CSS가 생성되지 않음). 기존 CSS 애니메이션은 해당 코드를 수정할 때 함께 옮기고, 일괄 리팩터링은 요청 시에만. motion은 `transform`을 인라인으로 쓰므로 Tailwind `-translate-*`와 충돌하니 위치 잡기는 flex 래퍼에 맡긴다. 기준 구현은 `components/ui/dialog.tsx`.
+- **UI 작업 중 motion 인터랙션·움직임에 해당하는 요청(등장/퇴장, 전환, 호버·탭 피드백, 로딩 표시, 스크롤 연동, 기존 CSS 애니메이션의 motion 이전 등)이 있으면 반드시 `motion-designer` 에이전트(`.claude/agents/motion-designer.md`)를 사용한다.** 메인 세션이 직접 구현하지 않는다. 컴포넌트 작업에 모션이 섞여 있으면 구조/스타일은 `component-writer`, 모션 부분은 `motion-designer`가 맡는다.
 - **`asChild` 사용 금지** (shadcn base-nova는 `@base-ui/react` 기반). 링크 버튼은 `<Link className={buttonVariants({variant})}>`. 토스트는 `sonner`. `components/ui/form.tsx`는 수작업 구현.
 - `any` 금지, props interface 필수, `types/` 재사용. 주석은 한국어, 식별자는 영어.
 - 서버 컴포넌트 기본, 훅/핸들러/Recoil/브라우저 API가 필요할 때만 `"use client"`. 위젯급 UI를 `page.tsx`에 인라인하지 말고 `components/`로 분리. 같은 JSX가 2곳 이상 반복되면 추출.
 - 컴포넌트 위치: `components/ui/`(원자, 도메인 지식 없음) / `components/[domain]/`(도메인) / `components/layout/`·`widgets/`(복합) / `app/**/page.tsx`(조합·데이터 페칭). 자세한 판단 순서는 `.claude/rules/component-layers.md`.
-- **공용 컴포넌트·훅·유틸·스타일은 호출부가 아니라 정의 파일을 고친다** (`.claude/rules/shared-component-changes.md`). 예: `dialog.tsx`는 모바일 여백을 `inset-x-4`(position)로, 너비를 `sm:max-w-*`로 분리해 호출부 오버라이드가 서로 침범하지 않게 했다.
+- **공용 컴포넌트·훅·유틸·스타일은 호출부가 아니라 정의 파일을 고친다** (`.claude/rules/shared-component-changes.md`). 예: `dialog.tsx`는 여백을 flex 래퍼의 `p-4`(padding)로, 너비를 팝업의 `sm:max-w-*`로 분리해 호출부 오버라이드가 서로 침범하지 않게 했다.
 - cms.api의 nullable 필드도 실제 DB는 NOT NULL일 수 있으므로 `null` 대신 `[]`/`0`/`false`를 보낸다.
 - Swiper `loop` + `centeredSlides`는 슬라이드가 적으면 멈춘다 → 슬라이드 배열 자체를 반복. SSR 직후 FOUC는 `onSwiper` 전까지 `opacity-0`.
 - 브랜드 한글 표기는 "가스펄픽스" (전환 진행 중).

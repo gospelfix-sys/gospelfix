@@ -23,13 +23,13 @@
 
 // ✅ 공용 정의 자체를 고쳐서 한 번에 해결
 // dialog.tsx의 DialogContent 기본 클래스:
-//   모바일: inset-x-4                     (position 속성으로 여백 확보 — max-width와 무관)
-//   데스크톱: sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-sm
+//   래퍼: fixed inset-0 flex items-center justify-center p-4   (padding으로 여백 확보 — max-width와 무관)
+//   팝업: w-full sm:max-w-sm                                    (motion transform과 충돌하지 않도록 translate 정렬 대신 flex 래퍼 사용)
 // → 호출부는 이제 sm:max-w-lg 처럼 원하는 값만 얹으면 됨. 모바일 여백은 절대 깨지지 않음.
 <DialogContent className="sm:max-w-lg">
 ```
 
-핵심은 "여백 확보"와 "최대 너비 제한"이라는 서로 다른 관심사를 서로 다른 CSS 속성(`inset`
+핵심은 "여백 확보"와 "최대 너비 제한"이라는 서로 다른 관심사를 서로 다른 CSS 속성(`padding`
 vs `max-width`)으로 분리해, 한쪽을 덮어써도 다른 쪽이 깨지지 않도록 설계한 것이다.
 
 ## 적용 대상

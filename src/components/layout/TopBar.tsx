@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import { authUserAtom, authLoadingAtom } from "@/store/atoms/authAtom";
 import { useAuth } from "@/hooks/useAuth";

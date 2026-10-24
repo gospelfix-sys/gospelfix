@@ -6,6 +6,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { motion, type HTMLMotionProps, type Variants } from "motion/react";
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -23,13 +24,31 @@ function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
+// 열림은 부드럽게(0.3초), 닫힘은 반응이 굼뜨지 않게 빠르게(0.2초). base-ui는 언마운트 전에
+// 요소의 WAAPI 애니메이션(opacity)이 끝나길 기다리므로 닫힘 애니메이션이 끝난 뒤 DOM에서 제거된다.
+const overlayVariants: Variants = {
+  closed: { opacity: 0, transition: { duration: 0.2, ease: "easeIn" } },
+  open: { opacity: 1, transition: { duration: 0.3, ease: "easeOut" } },
+};
+
+const popupVariants: Variants = {
+  closed: { opacity: 0, y: 16, scale: 0.95, transition: { duration: 0.2, ease: "easeIn" } },
+  open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.3, ease: "easeOut" } },
+};
+
 function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) {
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
-      className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 backdrop-blur-[20px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
-        className,
+      className={cn("fixed inset-0 isolate z-50 bg-black/10 backdrop-blur-[20px]", className)}
+      render={(renderProps, state) => (
+        // base-ui props와 motion의 이벤트 핸들러 타입(onDrag 등)이 달라 캐스팅한다
+        <motion.div
+          {...(renderProps as HTMLMotionProps<"div">)}
+          variants={overlayVariants}
+          initial="closed"
+          animate={state.open ? "open" : "closed"}
+        />
       )}
       {...props}
     />
@@ -47,25 +66,36 @@ function DialogContent({
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Popup
-        data-slot="dialog-content"
-        className={cn(
-          "fixed inset-x-4 top-1/2 z-50 grid -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-black/10 duration-100 outline-none sm:inset-x-auto sm:left-1/2 sm:w-full sm:max-w-sm sm:-translate-x-1/2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
-            render={<Button variant="ghost" className="absolute top-2 right-2" size="icon-sm" />}
-          >
-            <X />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
-      </DialogPrimitive.Popup>
+      {/* 위치 잡기(여백·중앙 정렬)는 래퍼가 맡고, 팝업의 transform은 motion 애니메이션 전용으로 둔다. */}
+      <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+        <DialogPrimitive.Popup
+          data-slot="dialog-content"
+          className={cn(
+            "pointer-events-auto relative grid max-h-full w-full gap-4 overflow-y-auto rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-black/10 outline-none sm:max-w-sm",
+            className,
+          )}
+          render={(renderProps, state) => (
+            <motion.div
+              {...(renderProps as HTMLMotionProps<"div">)}
+              variants={popupVariants}
+              initial="closed"
+              animate={state.open ? "open" : "closed"}
+            />
+          )}
+          {...props}
+        >
+          {children}
+          {showCloseButton && (
+            <DialogPrimitive.Close
+              data-slot="dialog-close"
+              render={<Button variant="ghost" className="absolute top-2 right-2" size="icon-sm" />}
+            >
+              <X />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          )}
+        </DialogPrimitive.Popup>
+      </div>
     </DialogPortal>
   );
 }
