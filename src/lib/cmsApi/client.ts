@@ -70,6 +70,21 @@ export async function cmsApiFetch<T = unknown>(
     if (axios.isAxiosError(error)) {
       const status = error.response?.status ?? 500;
       const data = error.response?.data as { error?: string; field?: string } | undefined;
+
+      // 4xx는 정상적인 비즈니스 에러(검증/인증)라 제외하고, 연결 실패(응답 없음)와 5xx만 남긴다.
+      // 헤더(X-API-Key, Authorization)와 body는 절대 로그에 넣지 않는다.
+      if (!error.response || status >= 500) {
+        console.error("[cmsApi] 요청 실패", {
+          method: method.toUpperCase(),
+          path: path.split("?")[0],
+          baseURL: CMS_API_BASE_URL,
+          // 응답이 없으면 ECONNREFUSED / ENOTFOUND / ETIMEDOUT 등 네트워크 원인이 여기 찍힌다.
+          code: error.code,
+          status: error.response?.status ?? null,
+          cmsMessage: data?.error ?? error.message,
+        });
+      }
+
       throw new CmsApiError(status, data?.error ?? "요청 처리에 실패했습니다.", data?.field);
     }
     throw error;
