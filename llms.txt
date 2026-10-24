@@ -264,7 +264,7 @@ NEXT_PUBLIC_PAYMENT_HOLDER=    # 계좌이체 안내에 표시되는 예금주�
 
 > `CMS_API_KEY`는 서버 사이드 전용. `NEXT_PUBLIC_` 접두사를 붙이면 클라이언트 번들에
 > 노출되어 누구나 cms.api REST API를 직접 호출할 수 있게 된다. Supabase 관련
-> 환경변수(`NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY`)와 Toss Payments
+> 환경변수(`NEXT_PUBLIC_SUPABASE_*`)와 Toss Payments
 > 환경변수는 더 이상 이 앱의 코드에서 사용되지 않는다(둘 다 cms.api 이전/계좌이체
 > 전환으로 대체됨) — `.env.local`/`.env.example`에 남아 있다면 정리 대상.
 
