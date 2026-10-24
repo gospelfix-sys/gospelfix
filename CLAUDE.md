@@ -6,6 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 GOSPELFIX(가스펄픽스) 사용자 앱. Next.js 14.2 (App Router) + React 18 + Tailwind + shadcn/ui(base-nova, `@base-ui/react`) + Recoil + axios. 과거 `main/`·`admin/` 모노레포였으나 지금은 폴리레포이며, 이 저장소는 사용자 앱 하나만 담당한다. 관리자 기능과 DB(Supabase)는 별도 저장소 `gospelfix.cms.api`에 있고, **이 앱은 Supabase를 직접 호출하지 않는다.** (따라서 `SUPABASE_*` 키는 이 앱에 필요 없다.)
 
+## 상세 규칙 문서 (`.claude/rules/`)
+
+이 문서는 요약이고, 예시와 근거가 담긴 상세판은 아래 문서에 있다. 해당 작업을 하기 전에 먼저 읽는다. 문서 간 내용이 어긋나면 이 `CLAUDE.md`를 먼저 고치고 상세 문서를 맞춘다.
+
+| 문서 | 언제 읽나 |
+|------|-----------|
+| [`code-conventions.md`](.claude/rules/code-conventions.md) | 코드 작성 전반 — 포맷·네이밍·TypeScript·Tailwind·모션·BFF·Route Handler·인증·보안·커밋 규칙 |
+| [`component-layers.md`](.claude/rules/component-layers.md) | 새 컴포넌트를 만들 때 — `ui` / `layout` / `[domain]` / `page.tsx` 중 어디에 둘지 판단 |
+| [`shared-component-changes.md`](.claude/rules/shared-component-changes.md) | `components/ui/*`, 공용 훅·유틸·스타일을 고칠 때 — 호출부가 아니라 정의 파일을 수정 |
+
 ## 명령어
 
 패키지 매니저는 **yarn** (npm 금지). Node 24.x.
