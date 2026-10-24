@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 프로젝트 개요
 
-GOSPELFIX(가스펄픽스) 사용자 앱. Next.js 14.2 (App Router) + React 18 + Tailwind + shadcn/ui(base-nova, `@base-ui/react`) + Recoil + axios. 과거 `main/`·`admin/` 모노레포였으나 지금은 폴리레포이며, 이 저장소는 사용자 앱 하나만 담당한다. 관리자 기능과 DB(Supabase)는 별도 저장소 `gospelfix.cms.api`에 있고, **이 앱은 Supabase를 직접 호출하지 않는다.**
+GOSPELFIX(가스펄픽스) 사용자 앱. Next.js 14.2 (App Router) + React 18 + Tailwind + shadcn/ui(base-nova, `@base-ui/react`) + Recoil + axios. 과거 `main/`·`admin/` 모노레포였으나 지금은 폴리레포이며, 이 저장소는 사용자 앱 하나만 담당한다. 관리자 기능과 DB(Supabase)는 별도 저장소 `gospelfix.cms.api`에 있고, **이 앱은 Supabase를 직접 호출하지 않는다.** (따라서 `SUPABASE_*` 키는 이 앱에 필요 없다.)
 
 ## 명령어
 
@@ -20,6 +20,14 @@ yarn pretty       # src 전체 prettier --write (아래 주의 참고)
 
 테스트 스위트는 없다. 검증은 `tsc --noEmit` + `yarn lint` + `yarn build`로 한다. 환경변수는 `.env.example` 참고 (`CMS_API_BASE_URL`, `CMS_API_KEY`, `KAKAO_*`, `NEXT_PUBLIC_*`).
 
+의존성 설치는 `yarn install --frozen-lockfile`을 쓴다. 락파일이 재생성되면 `@types/react`가 두 벌 설치돼 `ReactNode` 타입 에러(`bigint is not assignable to ReactNode`)가 난다(`package.json`의 `resolutions`로 `@types/react-syntax-highlighter`만 18.3.28에 고정). `git diff --stat yarn.lock`이 크게 바뀌었다면 되돌린다.
+
+## 작업·배포 방식
+
+1인 프로젝트라 **브랜치/PR 없이 `main`에서 직접 커밋하고 푸시한다.** 커밋 전에는 `code-reviewer` 에이전트의 APPROVED가 필요하다(아래 "기타 주의" 참고).
+
+배포는 Vercel. 환경변수는 Production/Preview 등 환경별로 설정되며 **변경 후 재배포해야 반영**된다. 프로덕션에서 서버 컴포넌트가 던진 에러는 화면에 `Application error ... Digest: NNN`만 표시되므로, 실제 원인은 Vercel Runtime Logs에서 본다. 홈(`/`)은 `/api/products` 실패 시 HTTP 200으로도 에러 화면이 된다(스트리밍). `CMS_API_BASE_URL`은 호스트까지만 넣는다(코드가 `/api/v1/...`을 붙임).
+
 ## 아키텍처: BFF 데이터 흐름
 
 cms.api 호출은 **오직 `src/app/api/*/route.ts` Route Handler 안에서만** 일어난다.
@@ -31,7 +39,7 @@ Client Component ─ axiosInstance ─┘
 ```
 
 - `src/lib/serverFetch.ts`: Server Component/Action이 자기 앱의 `/api/*`를 호출. host 헤더로 절대 URL을 만들고, 원본 `cookie` 헤더를 전달해 `gf_at`가 handler에 도달하게 한다. axios 기반이라 Next fetch 캐시를 타지 않으며 React `cache()`로 요청 내 메모이제이션을 복원한다. 실패 시 `ServerFetchError`.
-- `src/lib/cmsApi/client.ts`: `cmsApiFetch()`. `X-API-Key: CMS_API_KEY` + 선택적 `Authorization: Bearer`. 실패 시 `CmsApiError(status, message, field?)`. 서버 전용 — `CMS_API_KEY`가 클라이언트 번들에 노출되면 안 된다.
+- `src/lib/cmsApi/client.ts`: `cmsApiFetch()`. `X-API-Key: CMS_API_KEY` + 선택적 `Authorization: Bearer`. 실패 시 `CmsApiError(status, message, field?)`. 서버 전용 — `CMS_API_KEY`가 클라이언트 번들에 노출되면 안 된다. 응답이 없는 네트워크 오류(DNS/연결 거부/타임아웃)는 status가 500으로 기록되어 cms.api의 500과 구분되지 않는다.
 - `src/lib/axios/instance.ts`: 브라우저 전용 (`baseURL: "/api"`, 401이면 `/login` 리다이렉트). **`axiosInstance`와 cms.api 클라이언트는 보안 경계상 절대 통합 금지.**
 - `src/lib/api/*`: `serverFetch`를 감싼 서버측 getter (`getMe()`는 실패 시 throw 대신 `null`).
 - Route Handler 관례: `getAccessToken()` → 없으면 `{error}` 401 → `cmsApiFetch(..., {accessToken})` → `catch`에서 `CmsApiError`면 같은 status로 `{error: message}`, 그 외 `console.error("[api/xxx]")` + 500(한국어 메시지). 검증은 수동(`if (!x)` → 400)이며 handler에서 zod를 쓰지 않는다. 동적 handler는 `export const dynamic = "force-dynamic"`.
@@ -78,7 +86,7 @@ Client Component ─ axiosInstance ─┘
 
 - `next.config.mjs`의 `images.unoptimized: true`는 Vercel Image Optimization 402 임시 우회 (결제수단 등록 후 원복 여부 결정 대기).
 - 이 저장소에서 cms.api 쪽 DB 스키마/공유 테이블(profiles 등 5개)은 변경 불가. DB 변경은 cms.api 저장소에서만.
-- `git-commit-pusher` 에이전트는 Bash가 없어 실제 커밋을 못 한다 → 리뷰(APPROVED) 후 메인 세션이 직접 커밋/푸시하고 `git log`로 검증.
+- 커밋 요청 시 `code-reviewer` 에이전트가 먼저 APPROVED를 내야 한다. `git-commit-pusher` 에이전트는 Bash가 없어 실제 커밋을 못 한다 → 리뷰(APPROVED) 후 메인 세션이 직접 커밋/푸시하고 `git log`로 검증.
 - `pkill -f "next dev"`는 형제 저장소(cms.api) 서버까지 죽인다 → `lsof -i :포트`로 PID 지정.
 - 여러 저장소를 오갈 때 `pwd`로 cwd를 확인한 뒤 tsc/lint 실행.
 - `.claude/agents/*`의 일부 문서는 과거 모노레포(`main/`, `admin/`, `lib/supabase`, `select('*')`) 기준이라 이 저장소와 맞지 않는다. 컨벤션은 이 문서와 `.claude/rules/`를 우선한다.
