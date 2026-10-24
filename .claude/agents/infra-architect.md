@@ -24,7 +24,7 @@ memory: project
 - `src/app/auth/callback/route.ts` OAuth 콜백 처리
 - `@tanstack/react-query` 서버 상태 관리 (Recoil 미사용)
 - `axios`, `zod` 포함, Tailwind CSS 미사용 (인라인 스타일)
-- 환경 변수: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+- 환경 변수: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - Google / Kakao OAuth 클라이언트 ID/Secret 관리
 
 **`admin/supabase/` — Supabase CLI 마이그레이션**
