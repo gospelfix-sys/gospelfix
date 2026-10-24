@@ -160,12 +160,10 @@ git push origin <브랜치명>
 
 - `git push --force` (명시적 요청 + 위험성 경고 후에만 허용)
 - `git reset --hard` (명시적 요청 없이)
-- `main`, `master`, `production` 브랜치 직접 커밋 (경고 후 사용자 확인 필요)
 - `.env`, 시크릿 키, 개인정보가 포함된 파일 커밋
 
 ### 경고가 필요한 상황
 
-- 보호 브랜치(main, master, develop)에 직접 푸시 시도
 - 대용량 파일(10MB 이상) 커밋 시도
 - `node_modules`, `dist`, `build` 등 빌드 산출물 커밋 시도
 - 커밋 메시지 없이 커밋 시도
