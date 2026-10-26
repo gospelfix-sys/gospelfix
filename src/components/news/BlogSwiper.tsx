@@ -103,7 +103,7 @@ export default function BlogSwiper({ news }: Props) {
                 <Link
                   href={`/blog/${item.slug}`}
                   scroll={false}
-                  className="group relative flex aspect-[2/3] rounded-3xl overflow-hidden no-underline bg-black"
+                  className="relative flex aspect-[2/3] rounded-3xl overflow-hidden no-underline bg-black"
                 >
                   {/* 이미지 (카드 전체를 채우는 배경) */}
                   {item.thumbnail_url ? (
@@ -132,11 +132,8 @@ export default function BlogSwiper({ news }: Props) {
                   </div>
 
                   {/* 원형 + 버튼 (장식용, 카드 전체가 Link) */}
-                  <span className="pointer-events-none absolute bottom-6 right-6 z-10 w-9 h-9 rounded-full bg-white flex items-center justify-center transition-all duration-300 group-hover:bg-gf-orange group-hover:scale-110">
-                    <Plus
-                      size={18}
-                      className="text-black transition-colors duration-300 group-hover:text-white"
-                    />
+                  <span className="pointer-events-none absolute bottom-6 right-6 z-10 w-9 h-9 rounded-full bg-white flex items-center justify-center">
+                    <Plus size={18} className="text-black" />
                   </span>
                 </Link>
               </SwiperSlide>
