@@ -1,0 +1,1 @@
+- [Route modal loading pitfalls](project_route_modal_loading_pitfalls.md) — loading.tsx 클라이언트 청크 suspend로 바깥 스켈레톤 1프레임 노출, backdrop opacity 이어받기 구조
