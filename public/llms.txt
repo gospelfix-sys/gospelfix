@@ -1,44 +1,36 @@
-# GOSPELFIX Mall
+# GOSPELFIX (가스펄픽스)
 
-> 브랜딩 디자인 소재 마켓플레이스. CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 구매 후 즉시 다운로드할 수 있습니다.
+> 브랜딩에 들어가는 디자인 소재를 판매하는 마켓플레이스. CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 둘러보고 구매할 수 있습니다.
 
-가스펄픽스(GOSPELFIX)는 브랜드를 만드는 데 필요한 모든 디자인 소재를 파는 마켓플레이스입니다. Supabase 인증, Toss Payments 결제, Supabase Storage 파일 전달까지 완전한 구매 파이프라인을 갖추고 있습니다. 기술 스택은 Next.js 14 (App Router) · Tailwind CSS · shadcn/ui · Recoil · Axios입니다.
+가스펄픽스(GOSPELFIX)는 브랜드를 만드는 데 필요한 디자인 소재를 한곳에서 고르는 마켓입니다. 로그인은 카카오 또는 이메일(인증 코드) 방식이며, 결제는 계좌이체 후 관리자가 입금을 확인하는 방식입니다. 사용자 앱은 Next.js 14 (App Router) · Tailwind CSS · shadcn/ui · Recoil로 만들었고, 상품·주문·회원 데이터는 별도 백엔드(`gospelfix.cms.api`)가 관리합니다.
 
 ## 주요 페이지
 
-- [소재 갤러리](https://gospelfix.vercel.app/main): 전체 디자인 소재 목록, 카테고리 필터
-- [소재 상세](https://gospelfix.vercel.app/main/[slug]): 데모 iframe 미리보기, 포함 항목 목록, 구매 버튼
-- [로그인](https://gospelfix.vercel.app/login): 이메일/비밀번호 인증, 비인증 접근 시 리다이렉트 대상
-- [회원가입](https://gospelfix.vercel.app/register): 신규 계정 생성
-- [사용자 대시보드](https://gospelfix.vercel.app/dashboard): 구매 내역 및 다운로드 관리 (인증 필요)
-- [결제 성공](https://gospelfix.vercel.app/payments/success): 결제 완료 후 파일 다운로드 페이지
-- [결제 실패](https://gospelfix.vercel.app/payments/fail): 결제 실패 또는 취소 안내
+- [소재 마켓](https://gospelfix.vercel.app/): 전체 디자인 소재 목록과 카테고리 탐색
+- [소재 상세](https://gospelfix.vercel.app/detail/[slug]): 소재 소개, 코드·이미지 미리보기, 구매 옵션, 리뷰
+- [블로그](https://gospelfix.vercel.app/blog): 소식과 제작 이야기 (상세는 `/blog/[slug]`)
+- [소개](https://gospelfix.vercel.app/introduce): 서비스 소개
+- [마이페이지](https://gospelfix.vercel.app/mypage): 주문 내역, 내 작품, 리뷰, 계정 설정 (로그인 필요)
 
-## API 엔드포인트
+`/free-resources`(무료 리소스), `/creator`(크리에이터), `/guide`(이용가이드)는 현재 콘텐츠를 준비 중인 페이지입니다.
 
-- [주문 생성 API](https://gospelfix.vercel.app/api/orders/create): `POST` — Supabase에 orders 레코드 생성 (status: pending), 인증 필요
-- [결제 승인 API](https://gospelfix.vercel.app/api/payments/confirm): `POST` — Toss Payments 승인 요청, 멱등성 보장 (pending→confirming→paid 원자적 전환)
+로그인과 회원가입은 별도 페이지가 아니라 모달로 열립니다. `/login`, `/register`로 접근하면 홈으로 이동하면서 모달이 열립니다.
 
-## 결제 흐름
+## 구매 흐름
 
-1. 상품 상세 페이지에서 구매 버튼 클릭
-2. 미로그인 시 `/login?next=/main/[slug]`로 리다이렉트 후 자동 복귀
-3. `POST /api/orders/create` — Supabase에 주문 레코드 생성
-4. Toss Payments SDK 결제창 호출 (카카오페이, 카드 등)
-5. 결제 완료 후 `/payments/success?paymentKey=...&orderId=...&amount=...`로 리다이렉트
-6. `POST /api/payments/confirm` — 서버에서 Toss 승인 및 Supabase Storage 서명 URL 발급
-7. 서명 URL로 즉시 파일 다운로드
+1. 소재 상세에서 구매 옵션을 고르고 구매하거나 장바구니에 담습니다.
+2. 미로그인 상태면 로그인 모달이 열리고, 로그인 후 원래 화면으로 돌아옵니다.
+3. 주문이 생성되면 계좌이체 안내(은행·계좌·예금주)가 표시됩니다.
+4. 입금 후 "입금했어요"를 누르면 입금 사실이 접수됩니다. 자동 승인이 아니라 관리자가 확인합니다.
+5. 확인이 끝나면 마이페이지 주문 내역에서 파일을 내려받습니다.
+
+## 기술 구성
+
+- 프레임워크: Next.js 14 (App Router), React 18, TypeScript
+- UI: Tailwind CSS 3, shadcn/ui (base-nova), motion
+- 상태: Recoil
+- 데이터: 브라우저와 서버 컴포넌트는 이 앱의 `/api/*` Route Handler만 호출하고, Route Handler가 서버 전용 API 키로 `gospelfix.cms.api`를 호출합니다 (BFF 구조). 이 앱은 데이터베이스에 직접 접속하지 않습니다.
 
 ## Optional
 
-- [Supabase 프로젝트](https://supabase.com): 인증(이메일/비밀번호)·데이터베이스·Storage 담당
-- [Toss Payments 개발자 문서](https://docs.tosspayments.com): 결제창 SDK 및 서버 승인 API 참고
-- [Vercel 배포](https://gospelfix.vercel.app): 프로덕션 배포 환경
-
-### 데이터 모델 (Optional)
-
-**products 테이블**: `id`, `slug`, `name`, `description`, `category`, `price`, `thumbnail_url`, `content_html`, `includes`(string[]), `file_path`, `is_active`
-
-**orders 테이블**: `order_id`, `user_id`, `product_id`, `amount`, `status`(`pending`→`confirming`→`paid`), `payment_key`, `download_url`, `paid_at`
-
-**profiles 테이블**: `id`(auth.users 참조), `email`, `full_name`, `avatar_url`, `role`(`user`|`admin`)
+- [Vercel 배포](https://gospelfix.vercel.app): 프로덕션 환경

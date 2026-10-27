@@ -4,8 +4,8 @@
 > 옮긴 것이다. **여기 적힌 기능은 아직 구현되지 않았다** — 실제 코드 작업 전
 > 우선순위와 순서를 맞추기 위한 계획 문서다. 실 코드와 어긋나면 이 문서를 갱신할 것.
 >
-> 정렬 기준 메모리: [`.claude/memory/project_business_model_vertical_ai_pivot.md`](./.claude/memory/project_business_model_vertical_ai_pivot.md)
-> 원본 비즈니스 모델 문서: `/Users/mac/Downloads/gospelfix-business-model.md`
+> **주의**: 이 문서는 "업종별 AI 홈페이지" 사업 시절의 계획이다. 현재 `/`의 정체성은 브랜딩 디자인 소재
+> 마켓이며, 현재 구현 상태와 로드맵은 [`docs/PRD.md`](./docs/PRD.md), [`docs/ROADMAP.md`](./docs/ROADMAP.md)를 따른다.
 
 ## 지금 상태 (완료됨)
 
@@ -58,8 +58,7 @@ B2C 소상공인 유입 채널, 링크드인은 AI 빌더·개발자 판매자 �
 
 **필요 기능 (미구현)**: 유지보수 월정액(기본 29,000원/AI포함 49,000원)을 반복
 청구할 **구독형 자동결제**가 아직 없다 — 현재는 계좌이체 기반 1회성 결제만
-존재한다(`project_toss_payments_history.md` 참고: Toss 연동 후 카카오페이 QR로
-전환한 이력 있음). MRR 100만원 목표를 실제로 달성하려면 이 결제 방식부터
+존재한다(Toss 연동 후 카카오페이 QR로 전환한 이력 있음). MRR 100만원 목표를 실제로 달성하려면 이 결제 방식부터
 설계해야 한다.
 
 ---

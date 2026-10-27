@@ -1,239 +1,115 @@
-# GOSPELFIX Mall
+# GOSPELFIX (가스펄픽스)
 
-> 브랜딩 디자인 소재 마켓 — CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 판매하는 Next.js 14 앱
+> 브랜딩 디자인 소재 마켓 — CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 판매하는 Next.js 14 사용자 앱
 
-가스펄픽스(GOSPELFIX)는 브랜딩에 들어가는 모든 디자인 소재 — CI 로고, 목업, 홈페이지,
-대시보드, 이커머스 템플릿, 광고 소재(PSD·AI 파일) 등 — 를 판매하는 마켓플레이스입니다.
-사용자는 소재를 탐색·구매해 내려받습니다. 결제는 계좌이체 + 관리자 수동 확인 방식입니다.
+가스펄픽스는 브랜딩에 들어가는 디자인 소재를 판매하는 마켓플레이스입니다. 이 저장소는 사용자 앱 하나만 담당하며,
+관리자 기능과 데이터베이스는 별도 저장소 `gospelfix.cms.api`에 있습니다. 코딩 규칙과 작업 방식의 단일 출처는
+[`CLAUDE.md`](CLAUDE.md)와 `.claude/rules/`이고, 이 문서는 구조를 빠르게 파악하기 위한 요약입니다.
 
-## 아키텍처
+공개 사이트용 요약은 [`public/llms.txt`](public/llms.txt)(`/llms.txt`로 서빙)에 있습니다.
 
-과거에는 `main/`(사용자 앱)+`admin/`(관리자 앱)을 한 저장소에 묶은 **모노레포** 구조였다.
-지금은 두 앱이 완전히 독립된 저장소로 분리된 **폴리레포(polyrepo)** 구조로 전환되었다.
-이 저장소(`gospelfix`)는 그중 사용자 앱(포트 3000) 단일 프로젝트만 담당한다. 루트가
-곧 앱 루트이며 서브폴더로 나뉘어 있지 않다.
+## 아키텍처 (BFF)
 
-관리자 기능(상품/소식/포트폴리오 CRUD, 주문 승인, 회원 관리 등)은 **별도 저장소
-`gospelfix.cms.api`**(포트 3001, 별도 배포)로 완전히 이전되었다. 이 앱은 Supabase에
-직접 접근하지 않고, 서버 사이드에서만 `gospelfix.cms.api`의 REST API(`/api/v1/*`)를
-호출하는 **BFF(Backend For Frontend) 아키텍처**를 사용한다.
+이 앱은 Supabase를 직접 호출하지 않습니다. cms.api 호출은 `src/app/api/*/route.ts` 안에서만 일어납니다.
 
 ```
-브라우저 → Server Component (serverFetch) → 이 앱의 Route Handler (동일 오리진, cmsApiFetch)
-        → cms.api REST API → Supabase
+Server Component ─ serverFetch() ─┐
+                                  ├─> /api/* Route Handler ─ cmsApiFetch() ─> cms.api (/api/v1/*)
+Client Component ─ axiosInstance ─┘
 ```
 
-Supabase 스키마는 대시보드에서 직접 관리 (로컬 CLI 마이그레이션 미사용). 이 저장소와
-`gospelfix.cms.api`는 같은 Supabase 프로젝트를 공유한다.
+- `src/lib/serverFetch.ts` — Server Component가 자기 앱의 `/api/*`를 호출. host 헤더로 절대 URL을 만들고 원본
+  `cookie` 헤더를 전달하며, React `cache()`로 요청 내 메모이제이션. 실패 시 `ServerFetchError`.
+- `src/lib/cmsApi/client.ts` — `cmsApiFetch()`. `X-API-Key` + 선택적 `Authorization: Bearer`. 서버 전용이라
+  `CMS_API_KEY`가 클라이언트 번들에 들어가면 안 됩니다. 실패 시 `CmsApiError(status, message)`.
+- `src/lib/axios/instance.ts` — 브라우저 전용(`baseURL: "/api"`, 401이면 `/login`). cms.api 클라이언트와
+  보안 경계상 합치지 않습니다.
+- `src/lib/api/*` — `serverFetch`를 감싼 서버측 getter (`getMe()`는 실패 시 `null`).
 
-패키지 매니저: **yarn** 사용 (`npm install` 금지).
+패키지 매니저는 yarn입니다. 설치는 `yarn install --frozen-lockfile`.
 
-기술 스택: Next.js 14.2.35 (App Router) · Tailwind CSS v3 · shadcn/ui (base-nova) ·
-Recoil · Axios · react-hook-form + zod · isomorphic-dompurify · jsPDF + html2canvas
+## 기술 스택
 
-> `@supabase/ssr`, `@supabase/supabase-js`, `@tosspayments/tosspayments-sdk`에는
-> 더 이상 의존하지 않는다 (각각 cms.api 이전, 계좌이체 방식 전환으로 제거됨).
+Next.js 14.2 (App Router) · React 18 · TypeScript · Tailwind CSS 3 · shadcn/ui (base-nova, `@base-ui/react`) ·
+motion · Recoil · axios · Tiptap · Swiper · sanitize-html · PostHog (쿠키 동의 후)
 
-## 핵심 파일 및 경로
-
-- `src/middleware.ts` — Edge 런타임, 페이지 내비게이션에만 적용(`/api/*` 제외 매처).
-  `gf_at`/`gf_rt`/`gf_exp` 쿠키로 세션 판단, 만료 5분 전이면 cms.api
-  `/api/v1/auth/refresh`를 직접 fetch(자기 자신의 `/api/*`를 재호출하지 않음).
-  `/dashboard` 보호, 미인증 시 `/login` 리다이렉트.
-- `src/lib/serverFetch.ts` — Server Component/Action이 자기 자신의 `/api/*`를 호출하는
-  헬퍼. `next/headers`로 절대 URL 구성 + Cookie 헤더 전달, `React.cache()`로 렌더당
-  메모이제이션. 실패 시 `ServerFetchError(status, message)` throw.
-- `src/lib/cmsApi/client.ts` — `cmsApiFetch<T>()`, cms.api 호출 전용 axios 클라이언트
-  (`X-API-Key` + 선택적 `Authorization: Bearer`). **route.ts 안에서만 import.**
-- `src/lib/cmsApi/cookies.ts` — 쿠키 이름(`gf_at`/`gf_rt`/`gf_exp`)과 옵션 정의.
-  `next/headers` 미의존 — middleware.ts(Edge)에서도 import 가능.
-- `src/lib/cmsApi/session.ts` — `getAccessToken()`/`setSessionCookies()`/
-  `clearSessionCookies()` 등, Node 런타임 전용(route.ts에서만 사용).
-- `src/lib/axios/instance.ts` — 브라우저용 axios 인스턴스, `baseURL: "/api"` 고정.
-  응답 인터셉터는 401 시 `/login` 리다이렉트만 수행(토큰 주입 없음).
-- `src/lib/api/me.ts` — `getMe()`: `serverFetch("/api/auth/me")`, 실패 시 `null`.
-- `src/lib/utils.ts` — `cn()` = `twMerge(clsx(inputs))`, className 병합 유일 유틸.
-- `src/store/atoms/{authAtom,userAtom,uiAtom}.ts` — Recoil atoms.
-- `src/store/selectors/authSelector.ts` — `isAuthenticatedSelector`, `isAdminSelector`.
-- `src/types/*.types.ts` — 도메인별 타입(`auth`, `product`, `news`, `order`, `portfolio`,
-  `review`, `user`, `api`).
-- `src/hooks/useAuth.ts` — `signIn`/`signUp`/`signOut` (모두 이 앱 자신의 `/api/auth/*`
-  호출), `signInWithOAuth`는 미구현.
-- `src/hooks/useCookieConsent.ts` — 쿠키 동의 배너 상태 훅.
-
-## 라우트 구조
+## 라우트
 
 ```
 src/app/
-├── layout.tsx                       루트 레이아웃: RecoilProvider > AuthProvider > children
-├── login/, register/                공개 — useAuth() 호출, ?next= 리다이렉트 지원
-├── (dashboard)/
-│   ├── layout.tsx                   getMe() 호출 + DashboardHeader
-│   └── dashboard/page.tsx           프로필 카드 + 구매 내역(serverFetch /api/orders) + 다운로드
+├── layout.tsx            PostHogProvider > RecoilProvider > AuthProvider > CartProvider, CookieConsentBanner
+├── login/, register/     페이지가 아니라 openAuthModal()을 열고 /로 replace (?next=는 sanitizeInternalPath로 검증)
 ├── (public)/
-│   ├── page.tsx                     "/" 홈 — 히어로, 필터 줄, 상품 그리드
-│   ├── about/page.tsx                /about — 서비스/프로세스 소개
-│   ├── mall/page.tsx                 /mall — 상품 갤러리(CategoryFilter, ProductCard)
-│   ├── detail/[slug]/page.tsx        /detail/[slug] — 상품 상세, BuyButton, ReviewSection
-│   ├── blog/page.tsx, blog/[slug]/   /blog — 소식 목록/상세(DOMPurify + dangerouslySetInnerHTML)
-│   ├── privacy/page.tsx, terms/      정적 약관 페이지
-└── api/
-    ├── auth/{login,logout,me,signup}/route.ts   cms.api 인증 API 프록시, 쿠키 세션 관리
-    ├── products/, products/[slug]/               cms.api 상품 목록/상세 프록시
-    ├── news/, news/[slug]/                       cms.api 블로그(news) 목록/상세 프록시(resource slug: blog)
-    ├── portfolios/                                cms.api 포트폴리오 목록 프록시(resource slug: portfolio)
-    ├── orders/create/, orders/notify-payment/     주문 생성 / 계좌이체 완료 알림
-    ├── orders/route.ts (GET)                      내 구매 목록
-    ├── downloads/[productId]/                     다운로드 signed URL 프록시(302 리다이렉트)
-    └── reviews/route.ts (GET/POST)                리뷰 조회(공개)/작성(구매자 전용)
+│   ├── page.tsx          / — 디자인 소재 마켓 홈
+│   ├── detail/[slug]/    소재 상세 (목록에서는 @modal 인터셉트로 모달, 직접 진입하면 풀 페이지)
+│   ├── blog/, blog/[slug]/  블로그 (상세도 @modal 인터셉트)
+│   ├── layer/, introduce/, about/, upload/(작품 업로드 에디터)
+│   ├── creator/, free-resources/, guide/   현재 "콘텐츠를 준비 중입니다" 자리표시 페이지
+│   └── @modal/           병렬 라우트: (.)detail/[slug], (.)blog/[slug] → RouteModal
+├── (mypage)/mypage/      orders, products, reviews, settings (force-dynamic 서버 레이아웃, 로그인 필요)
+└── api/                  BFF Route Handler (아래 참고)
 ```
 
-> `src/app/(auth)/{login,register}/`, `src/app/api/auth/callback/`은 빈 디렉토리
-> 껍데기(이전 구조의 잔재)로 남아 있음 — 실제 로그인/회원가입은 `src/app/login/`,
-> `src/app/register/`(라우트 그룹 밖).
+- `LayerShell`(`components/layer/`)을 쓰는 페이지는 `layerNav.ts`의 `LAYER_NAV_ITEMS`에 등록해야 합니다.
+- 옛 경로는 `next.config.mjs`가 리다이렉트합니다: `/growth` → `/layer`, `/mall` → `/`, `/quote` → `/`.
 
-## 인증 흐름
+## API Route Handler (`src/app/api/`)
 
-```
-브라우저 요청
-  → middleware.ts   # 모든 페이지 요청 인터셉트(Edge), gf_at/gf_rt/gf_exp 쿠키로 세션 판단
-                     # 만료 임박 시 cms.api의 /api/v1/auth/refresh 호출 후 쿠키 재발급
-  → 보호 라우트: /dashboard    # 비인증 시 /login으로 리다이렉트
-  → 인증 라우트: /login, /register # (현재 코드상 인증 상태에서의 자동 리다이렉트는 미구현)
-```
+`auth/*`(login, logout, signup, me, password, avatar, refresh, seller-request, email/send-code, email/verify-code,
+kakao, kakao/callback) · `products`, `products/[slug]`, `products/like` · `news`, `news/[slug]` ·
+`portfolios` · `categories`, `sub-categories` · `cart`, `cart/add`, `cart/[cartItemId]` · `coupons` ·
+`orders`, `orders/create`, `orders/create-batch`, `orders/pending`, `orders/notify-payment`,
+`orders/notify-payment-batch` · `downloads/[productId]` · `reviews`, `reviews/me` · `my-products`,
+`my-products/[id]`, `my-products/files`, `my-products/images` · `referral-banners`
 
-세션은 cms.api가 발급한 Supabase Auth access_token/refresh_token을 이 앱 도메인의
-httpOnly 쿠키(`gf_at`, `gf_rt`, `gf_exp`)에 저장 — 브라우저 JS는 이 값을 읽지 않는다.
-`AuthProvider`(컴포넌트)가 마운트 시 `/api/auth/me`를 한 번 호출해 Recoil atoms 동기화.
-커스텀 훅 `useAuth()`로 컴포넌트에서 접근.
+Handler 관례: `getAccessToken()` → 없으면 401 → 수동 검증(400) → `cmsApiFetch` → `catch`에서 `CmsApiError`는 같은
+status로, 그 외는 `console.error("[api/xxx]")` + 500(한국어 메시지). handler에서는 zod를 쓰지 않습니다.
 
-## 결제 시스템 (계좌이체 + 관리자 수동 확인)
+## 인증
 
-Toss Payments는 완전히 제거되었다. 현재는 계좌이체 기반 흐름이다:
+- 쿠키(`src/lib/cmsApi/cookies.ts`): `gf_at`(access), `gf_rt`(refresh, 30일), `gf_exp`(만료 unix초),
+  `gf_kakao_oauth`(state, 5분). httpOnly, sameSite=lax. Edge middleware도 import하므로 `next/headers` 금지.
+  서버 쿠키 헬퍼는 `session.ts`.
+- `src/middleware.ts` — 보호 경로는 `/mypage`뿐. 만료 300초 미만이면 cms.api `/auth/refresh`를 직접 호출
+  (1.5초 타임아웃). matcher가 `/api`를 제외해 `serverFetch` 자기호출이 중복 refresh를 일으키지 않게 합니다.
+- 그 외 refresh는 `/api/auth/refresh` (AuthProvider가 마운트 시 fire-and-forget 호출).
+- 로그인은 카카오(scope `account_email`만) 또는 이메일 + 인증 코드 가입.
 
-```
-BuyButton 클릭 (/detail/[slug])
-  → POST /api/orders/create        # cms.api가 가격 재검증 후 pending 주문 생성, {orderId} 반환
-      · 미인증 시 /login?next=/detail/[slug]로 리다이렉트
-      · 409(이미 구매함) 시 별도 안내 모달 표시
-  → PaymentModal 오픈               # QR 이미지(/qr-transfer.png) + 계좌 정보(AccountTransferCard)
-                                    # (NEXT_PUBLIC_PAYMENT_BANK/ACCOUNT/HOLDER 환경변수)
-  → "입금했어요" 클릭 → POST /api/orders/notify-payment  # 결제 완료를 "신고"만 함(자동 승인 아님)
-  → 완료 화면: "관리자 확인 후 마이페이지에서 다운로드 가능"
-```
+## 결제 (계좌이체 + 관리자 수동 확인)
 
-실제 입금 확인/승인(주문 status → paid, `paid_at` 기록)은 이 저장소가 아닌
-**`gospelfix.cms.api`(관리자 앱)**에서 수동으로 처리한다. `/dashboard`
-(`src/app/(dashboard)/dashboard/page.tsx`)는 `serverFetch("/api/orders")`로 구매
-목록을 가져와 `file_path`가 있으면 다운로드 링크(`/api/downloads/[productId]`)를 표시.
+구매 → `POST /api/orders/create`(또는 장바구니 일괄 `create-batch`) → 계좌이체 안내 모달(은행·계좌·예금주는
+`NEXT_PUBLIC_PAYMENT_*`) → "입금했어요" → `POST /api/orders/notify-payment`는 입금 **신고**만 합니다.
+승인(status → paid)은 cms.api의 관리자 앱에서 수동으로 처리하고, 승인 후 `downloads/[productId]`로 내려받습니다.
 
-- `components/products/BuyButton.tsx` — 구매 버튼(중복 요청 방지)
-- `components/products/PaymentModal.tsx` — 계좌이체 안내 + 입금 확인 요청 모달
+## 상태·타입·훅
 
-## 리뷰 기능
-
-구매자만 작성 가능한 상품 리뷰 시스템.
-
-- `src/app/api/reviews/route.ts` — `GET`(공개, `?productId=`)은 리뷰 조회, `POST`(인증
-  필요)는 리뷰 작성 — 미구매 시 cms.api가 403 반환.
-- `components/products/ReviewSection.tsx` (Server Component) — 리뷰 + 사용자의 구매
-  이력을 조회해 `hasPurchased`/기존 리뷰 여부 계산, 평균 별점 및 분포 렌더링.
-- `components/products/ReviewForm.tsx` (Client Component) — 별점 + 텍스트 입력,
-  `isLoggedIn`/`hasPurchased`로 게이팅.
-- `types/review.types.ts` — `Review.profiles.email`은 cms.api에서 이미 마스킹되어 전달됨.
-
-## 상태 관리 (Recoil)
-
-`AuthProvider`가 마운트 시 `/api/auth/me`를 한 번 호출해 Recoil atoms를 동기화한다.
-
-- `authAtom.ts` — `authUserAtom<CmsUser|null>`, `authLoadingAtom<boolean>`
-- `userAtom.ts` — `userProfileAtom<UserProfile|null>`
-- `uiAtom.ts` — `sidebarOpenAtom`, `toastAtom`
-- `authSelector.ts` — `isAuthenticatedSelector`, `isAdminSelector`(파생 상태)
-
-## 공통 UI 컴포넌트
-
-- `components/ui/AppSwiper.tsx` — Swiper 재사용 래퍼. `swiper/react`, `swiper/css`, 네비/
-  페이지네이션 모듈을 이 파일에만 집중, `SwiperSlide` re-export, `swiperClass` prop으로
-  스코프 클래스명 지정. `next.config.mjs`에 `transpilePackages: ["swiper"]` 필수.
-- `components/products/{ProductCard,CategoryFilter}.tsx`
-- `components/portfolio/PortfolioSwiper.tsx` — AppSwiper 기반 포트폴리오 캐러셀.
-- `components/layout/{TopBar,Footer,LeftSidebar,NavPopover,CookieConsentBanner}.tsx`
-- shadcn/ui(base-nova) 프리미티브 + 수동 작성된 `components/ui/form.tsx`(레지스트리에 없음).
-
-## 코딩 규칙
-
-### 절대 금지 사항
-
-```tsx
-// ❌ 인라인 style= 절대 금지 (@dnd-kit 런타임 transform만 예외)
-<div style={{ color: "red" }}>
-
-// ✅ className만 사용
-<div className="text-red-500">
-```
-
-```tsx
-// ❌ shadcn base-nova에는 asChild prop 없음
-<Button asChild><Link href="/blog">블로그</Link></Button>
-
-// ✅ <Link className={buttonVariants()}> 패턴 사용
-<Link href="/blog" className={buttonVariants({ variant: "default" })}>블로그</Link>
-```
-
-```tsx
-// ❌ Server Component에서 cmsApiFetch 직접 호출 금지
-const data = await cmsApiFetch("/api/v1/orders/me", { accessToken });
-
-// ✅ serverFetch()로 이 앱 자신의 Route Handler 호출
-import { serverFetch } from "@/lib/serverFetch";
-const orders = await serverFetch<PurchasedOrder[]>("/api/orders");
-```
-
-```tsx
-// ❌ className 수동 배열/템플릿 조합 금지
-className={["bdg", `bdg-${variant}`].filter(Boolean).join(" ")}
-
-// ✅ cn() 사용
-import { cn } from "@/lib/utils";
-className={cn("bdg", `bdg-${variant}`, className)}
-```
-
-### 주요 주의사항
-
-- `cmsApiFetch()` 호출은 `src/app/api/*/route.ts` 안에서만 (CMS_API_KEY 노출 방지 +
-  통신 로직 한 곳 집중).
-- cms.api 통신 로직은 도메인별 route.ts에 인라인 작성(별도 lib 파일로 분리하지 않음).
-- 알려진 죽은 코드: `src/lib/axios/endpoints.ts`(미사용 ENDPOINTS 맵),
-  빈 디렉토리 `src/app/(auth)/{login,register}`, `src/app/api/auth/callback` — 정리 대상.
-
-### Prettier 규칙
-
-쌍따옴표(`"`), 세미콜론, 들여쓰기 2칸, 최대 100자, 후행 쉼표(`all`).
+- Recoil: `src/store/atoms/{auth,user,ui,cart,coupon}Atom.ts`, `src/store/selectors/{auth,cart}Selector.ts`.
+  서버 데이터는 Recoil에 복제하지 않고 서버 컴포넌트에서 props로 내립니다.
+- 훅은 `src/hooks/`(모두 `"use client"`), 타입은 `src/types/<domain>.types.ts`.
 
 ## 환경변수
 
 ```env
-CMS_API_BASE_URL=              # gospelfix.cms.api 서버 주소 (서버 전용)
-CMS_API_KEY=                   # cms.api의 INTERNAL_API_KEY와 동일 값 (서버 전용)
-NEXT_PUBLIC_SITE_URL=          # OG 메타데이터 등에 사용되는 사이트 절대 URL
-NEXT_PUBLIC_PAYMENT_BANK=      # 계좌이체 안내에 표시되는 은행명
-NEXT_PUBLIC_PAYMENT_ACCOUNT=   # 계좌이체 안내에 표시되는 계좌번호
-NEXT_PUBLIC_PAYMENT_HOLDER=    # 계좌이체 안내에 표시되는 예금주명
+CMS_API_BASE_URL=              # cms.api 호스트까지만 (코드가 /api/v1/...을 붙임), 서버 전용
+CMS_API_KEY=                   # cms.api의 내부 API 키, 서버 전용 — NEXT_PUBLIC_ 금지
+KAKAO_CLIENT_ID=               # 카카오 로그인 REST API 키
+KAKAO_REDIRECT_URI=            # 카카오 콜백 URL (/api/auth/kakao/callback)
+NEXT_PUBLIC_SITE_URL=          # 사이트 절대 URL (OG 메타데이터 등)
+NEXT_PUBLIC_PAYMENT_BANK=      # 계좌이체 안내: 은행명
+NEXT_PUBLIC_PAYMENT_ACCOUNT=   # 계좌이체 안내: 계좌번호
+NEXT_PUBLIC_PAYMENT_HOLDER=    # 계좌이체 안내: 예금주
+NEXT_PUBLIC_POSTHOG_KEY=       # 선택, 쿠키 동의 후에만 초기화
+NEXT_PUBLIC_POSTHOG_HOST=
 ```
 
-> `CMS_API_KEY`는 서버 사이드 전용. `NEXT_PUBLIC_` 접두사를 붙이면 클라이언트 번들에
-> 노출되어 누구나 cms.api REST API를 직접 호출할 수 있게 된다. Supabase 관련
-> 환경변수(`NEXT_PUBLIC_SUPABASE_*`)와 Toss Payments
-> 환경변수는 더 이상 이 앱의 코드에서 사용되지 않는다(둘 다 cms.api 이전/계좌이체
-> 전환으로 대체됨) — `.env.local`/`.env.example`에 남아 있다면 정리 대상.
+환경변수를 바꾸면 Vercel 재배포가 필요합니다.
 
-## Supabase Storage 버킷 (cms.api가 관리, 이 앱은 URL만 소비)
+## 이미지
 
-| 버킷 이름 | 공개 여부 | 용도 |
-|-----------|-----------|------|
-| `blogs-images` | Public | 소식 대표 썸네일 + 본문 이미지 |
-| `portfolio-images` | Public | 포트폴리오 대표 썸네일 |
+`next.config.mjs`의 `images.unoptimized: true`는 Vercel Image Optimization 402를 임시로 피하는 설정입니다.
+`remotePatterns`는 `**.supabase.co`(cms.api가 돌려주는 Storage URL), `images.unsplash.com`, `img.youtube.com`,
+`i.vimeocdn.com`을 허용합니다.
 
-`next.config.mjs`의 `images.remotePatterns`가 `**.supabase.co`를 허용해 cms.api가
-반환하는 Storage URL의 `next/image` 최적화를 지원한다.
+## 검증
+
+테스트 스위트는 없고 `npx tsc --noEmit` → `yarn lint` → `yarn build` 순서로 검증합니다.

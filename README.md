@@ -54,7 +54,7 @@ cms.api를 호출한다.
 %%{init: {"flowchart": {"nodeSpacing": 60, "rankSpacing": 90}, "themeVariables": {"fontSize": "24px"}}}%%
 flowchart LR
     subgraph client["클라이언트"]
-        SC["Server Component (SSR)\nmall/page.tsx 등"]
+        SC["Server Component (SSR)\npage.tsx 등"]
         CC["Client Component (브라우저)\nBuyButton, ReviewForm 등"]
     end
 
@@ -106,7 +106,7 @@ flowchart LR
 
 ### 사전 준비
 
-- Node.js 18+
+- Node.js 24.x, yarn
 - `gospelfix.cms.api` 서버가 로컬(기본 3001) 또는 원격에서 실행 중이어야 함
 
 ### 환경변수 설정
@@ -118,6 +118,8 @@ CMS_API_BASE_URL=http://localhost:3001   # gospelfix.cms.api 서버 주소
 CMS_API_KEY=...                          # gospelfix.cms.api의 INTERNAL_API_KEY와 동일한 값
 ```
 
+나머지 변수(`KAKAO_*`, `NEXT_PUBLIC_*`)는 [`llms.txt`](./llms.txt)의 환경변수 목록을 참고한다.
+
 ### 실행
 
 ```bash
@@ -127,67 +129,9 @@ yarn dev     # http://localhost:3000
 
 ---
 
-## Supabase 스키마
+## 데이터베이스
 
-`gospelfix.cms.api`가 관리하는 스키마다. 이 저장소(`gospelfix`)는 직접 접근하지 않으며, 참고용으로만 남긴다.
-
-```sql
--- products 테이블
-CREATE TABLE public.products (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  slug TEXT UNIQUE NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT,
-  category TEXT NOT NULL,
-  price INTEGER NOT NULL DEFAULT 0,
-  thumbnail_url TEXT,
-  demo_url TEXT,
-  includes TEXT[] DEFAULT '{}',
-  file_path TEXT,
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- orders 테이블
-CREATE TABLE public.orders (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  order_id TEXT UNIQUE NOT NULL,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  product_id UUID REFERENCES public.products(id) NOT NULL,
-  amount INTEGER NOT NULL,
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirming', 'paid')),
-  payment_key TEXT,
-  download_url TEXT,
-  paid_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- profiles 테이블
-CREATE TABLE public.profiles (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  full_name TEXT,
-  avatar_url TEXT,
-  role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- 회원가입 시 자동 프로필 생성 트리거
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email, full_name, avatar_url)
-  VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'avatar_url');
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-```
+DB 스키마는 `gospelfix.cms.api` 저장소가 관리한다. 이 저장소는 DB에 직접 접근하지 않는다.
 
 ---
 

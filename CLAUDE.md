@@ -99,5 +99,5 @@ Client Component ─ axiosInstance ─┘
 - 커밋 요청 시 `code-reviewer` 에이전트가 먼저 APPROVED를 내야 한다. `git-commit-pusher` 에이전트는 Bash가 없어 실제 커밋을 못 한다 → 리뷰(APPROVED) 후 메인 세션이 직접 커밋/푸시하고 `git log`로 검증.
 - `pkill -f "next dev"`는 형제 저장소(cms.api) 서버까지 죽인다 → `lsof -i :포트`로 PID 지정.
 - 여러 저장소를 오갈 때 `pwd`로 cwd를 확인한 뒤 tsc/lint 실행.
-- `.claude/agents/*`의 일부 문서는 과거 모노레포(`main/`, `admin/`, `lib/supabase`, `select('*')`) 기준이라 이 저장소와 맞지 않는다. 컨벤션은 이 문서와 `.claude/rules/`를 우선한다.
+- `.claude/agents/`에는 `code-reviewer`, `component-writer`, `motion-designer`, `git-commit-pusher` 4개만 남아 있다(과거 모노레포 시절 에이전트는 삭제). 어긋나는 내용이 보이면 이 문서와 `.claude/rules/`를 우선한다.
 - `.claude/memory/MEMORY.md`에 프로젝트 히스토리/결정 사항 인덱스가 있다. 날짜가 박힌 `project_*.md`는 당시 기준이며 최신 리네임/스왑 항목을 먼저 확인할 것.
