@@ -72,12 +72,18 @@ export function useAuth() {
   );
 
   const signUp = useCallback(
-    async (email: string, password: string, referralCode?: string) => {
+    async (
+      email: string,
+      password: string,
+      emailVerificationToken: string,
+      referralCode?: string,
+    ) => {
       setIsLoading(true);
       try {
         const data = await postJson<{ status?: "confirmation_required" }>("/api/auth/signup", {
           email,
           password,
+          emailVerificationToken,
           referralCode,
         });
         const confirmationRequired = data.status === "confirmation_required";
@@ -95,6 +101,18 @@ export function useAuth() {
     },
     [setIsLoading, refreshAuthUser, setSignupCoupon],
   );
+
+  const sendEmailCode = useCallback(async (email: string) => {
+    await postJson("/api/auth/email/send-code", { email });
+  }, []);
+
+  const verifyEmailCode = useCallback(async (email: string, code: string) => {
+    const data = await postJson<{ emailVerificationToken: string }>(
+      "/api/auth/email/verify-code",
+      { email, code },
+    );
+    return data.emailVerificationToken;
+  }, []);
 
   const signInWithOAuth = useCallback(
     (provider: OAuthProvider) => {
@@ -144,6 +162,8 @@ export function useAuth() {
     isAdmin,
     signIn,
     signUp,
+    sendEmailCode,
+    verifyEmailCode,
     signInWithOAuth,
     signOut,
     authModalView: authModal.view,

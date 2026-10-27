@@ -1,14 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Lock, Mail, Users } from "lucide-react";
+import { CheckCircle2, Lock, Mail, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import KakaoLoginButton from "./KakaoLoginButton";
+
+const CODE_TTL_SECONDS = 180;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function formatCountdown(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
 
 // 가입 시 필수 동의 항목. 동의 여부는 클라이언트에서만 검증하고 서버에는 기록하지 않는다.
 const REQUIRED_AGREEMENTS = [
@@ -22,6 +32,8 @@ type AgreementKey = (typeof REQUIRED_AGREEMENTS)[number]["key"];
 export default function SignupForm() {
   const {
     signUp,
+    sendEmailCode,
+    verifyEmailCode,
     closeAuthModal,
     openAuthModal,
     authModalReferralCode,
@@ -31,6 +43,13 @@ export default function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [code, setCode] = useState("");
+  const [emailVerificationToken, setEmailVerificationToken] = useState<string | null>(null);
+  const [codeSent, setCodeSent] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [sendingCode, setSendingCode] = useState(false);
+  const [verifyingCode, setVerifyingCode] = useState(false);
+  const [emailMessage, setEmailMessage] = useState("");
   const [referralCode, setReferralCode] = useState(() => authModalReferralCode ?? "");
   const [agreements, setAgreements] = useState<Record<AgreementKey, boolean>>({
     terms: false,
@@ -40,6 +59,58 @@ export default function SignupForm() {
   const [error, setError] = useState(() => authModalError ?? "");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+
+  const isEmailVerified = !!emailVerificationToken;
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => setCountdown((c) => c - 1), 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  // 이메일을 잘못 썼거나 토큰이 만료됐을 때 처음부터 다시 인증할 수 있도록 상태를 모두 비운다.
+  function resetEmailVerification() {
+    setEmailVerificationToken(null);
+    setCodeSent(false);
+    setCode("");
+    setCountdown(0);
+    setEmailMessage("");
+  }
+
+  async function handleSendCode() {
+    setEmailMessage("");
+    const trimmedEmail = email.trim();
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      setEmailMessage("올바른 이메일 주소를 입력해주세요.");
+      return;
+    }
+    setSendingCode(true);
+    try {
+      await sendEmailCode(trimmedEmail);
+      setCodeSent(true);
+      setCode("");
+      setCountdown(CODE_TTL_SECONDS);
+      setEmailMessage("인증번호를 이메일로 발송했습니다.");
+    } catch (err) {
+      setEmailMessage(err instanceof Error ? err.message : "인증메일 발송에 실패했습니다.");
+    } finally {
+      setSendingCode(false);
+    }
+  }
+
+  async function handleVerifyCode() {
+    setEmailMessage("");
+    setVerifyingCode(true);
+    try {
+      const token = await verifyEmailCode(email.trim(), code.trim());
+      setEmailVerificationToken(token);
+      setEmailMessage("이메일 인증이 완료되었습니다.");
+    } catch (err) {
+      setEmailMessage(err instanceof Error ? err.message : "인증번호가 올바르지 않습니다.");
+    } finally {
+      setVerifyingCode(false);
+    }
+  }
 
   const allAgreed = REQUIRED_AGREEMENTS.every(({ key }) => agreements[key]);
 
@@ -56,6 +127,11 @@ export default function SignupForm() {
       return;
     }
 
+    if (!emailVerificationToken) {
+      setError("이메일 인증을 완료해주세요.");
+      return;
+    }
+
     if (!allAgreed) {
       setError("필수 약관에 모두 동의해주세요.");
       return;
@@ -66,6 +142,7 @@ export default function SignupForm() {
       const { confirmationRequired } = await signUp(
         email,
         password,
+        emailVerificationToken,
         referralCode.trim() || undefined,
       );
       if (confirmationRequired) {
@@ -75,7 +152,10 @@ export default function SignupForm() {
       }
       closeAuthModal();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
+      const message = err instanceof Error ? err.message : "회원가입에 실패했습니다.";
+      // 인증 토큰이 만료(30분)된 경우 UI가 "인증 완료"에 머물러 막히지 않도록 인증을 되돌린다.
+      if (message.includes("이메일 인증")) resetEmailVerification();
+      setError(message);
       setLoading(false);
     }
   }
@@ -104,17 +184,99 @@ export default function SignupForm() {
       <p className="mt-1 mb-6 text-sm text-gf-gray2">템플릿 마켓 계정을 만들어보세요</p>
 
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
-        <div className="relative">
-          <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gf-gray2" />
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="이메일 주소를 입력하세요."
-            className="h-11 pl-9"
-          />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gf-gray2" />
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={codeSent || isEmailVerified}
+              placeholder="이메일 주소를 입력하세요."
+              className="h-11 pl-9"
+            />
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 shrink-0"
+            disabled={isEmailVerified || sendingCode || (codeSent && countdown > 0) || !email}
+            onClick={handleSendCode}
+          >
+            {isEmailVerified ? (
+              <>
+                <CheckCircle2 className="size-4 text-gf-orange" aria-hidden="true" />
+                <span className="sr-only">이메일 인증 완료</span>
+              </>
+            ) : sendingCode ? (
+              "발송 중..."
+            ) : codeSent ? (
+              "재전송"
+            ) : (
+              "인증메일 전송"
+            )}
+          </Button>
         </div>
+
+        {codeSent && !isEmailVerified && (
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                onKeyDown={(e) => {
+                  // 인증 전에는 가입 버튼이 비활성이라 Enter로 submit되지 않으므로 인증 확인에 연결한다.
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (!verifyingCode && countdown > 0 && code.trim()) handleVerifyCode();
+                  }
+                }}
+                aria-label="이메일 인증번호"
+                placeholder="인증번호를 입력해주세요."
+                className="h-11 pr-14"
+              />
+              {countdown > 0 && (
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs text-gf-orange tabular-nums">
+                  {formatCountdown(countdown)}
+                </span>
+              )}
+            </div>
+            <Button
+              type="button"
+              className="h-11 shrink-0"
+              disabled={verifyingCode || code.trim().length === 0 || countdown <= 0}
+              onClick={handleVerifyCode}
+            >
+              {verifyingCode ? "확인 중..." : "인증하기"}
+            </Button>
+          </div>
+        )}
+
+        {(emailMessage || codeSent) && (
+          <div className="flex items-center justify-between gap-2">
+            <p
+              role="status"
+              className={cn("text-xs", isEmailVerified ? "text-gf-orange" : "text-gf-gray2")}
+            >
+              {emailMessage}
+            </p>
+            {codeSent && (
+              <Button
+                type="button"
+                variant="link"
+                size="xs"
+                className="shrink-0 px-0 text-gf-gray2"
+                onClick={resetEmailVerification}
+              >
+                이메일 변경
+              </Button>
+            )}
+          </div>
+        )}
 
         <div className="relative">
           <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gf-gray2" />
@@ -186,14 +348,17 @@ export default function SignupForm() {
         </div>
 
         {error && (
-          <p className="rounded-lg bg-[rgba(220,38,38,0.1)] px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-lg bg-[rgba(220,38,38,0.1)] px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}
 
         <Button
           type="submit"
-          disabled={loading || password !== passwordConfirm || !allAgreed}
+          disabled={loading || password !== passwordConfirm || !allAgreed || !isEmailVerified}
           size="lg"
           className="mt-1 h-11 w-full"
         >

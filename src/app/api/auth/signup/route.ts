@@ -12,14 +12,17 @@ interface SignupResponse {
 
 export async function POST(request: Request) {
   try {
-    const { email, password, referralCode } = await request.json();
+    const { email, password, emailVerificationToken, referralCode } = await request.json();
     if (!email || !password) {
       return NextResponse.json({ error: "이메일과 비밀번호를 입력해주세요." }, { status: 400 });
+    }
+    if (!emailVerificationToken) {
+      return NextResponse.json({ error: "이메일 인증을 완료해주세요." }, { status: 400 });
     }
 
     const data = await cmsApiFetch<SignupResponse>("/api/v1/auth/signup", {
       method: "POST",
-      body: JSON.stringify({ email, password, referralCode }),
+      body: JSON.stringify({ email, password, emailVerificationToken, referralCode }),
     });
 
     if (data.status === "confirmation_required" || !data.session) {
