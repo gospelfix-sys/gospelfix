@@ -6,6 +6,7 @@ import { Product } from "@/types/product.types";
 import { Coupon } from "@/types/coupon.types";
 import { PurchasedOrder } from "@/types/order.types";
 import { getBestAvailableCoupon } from "@/lib/coupon";
+import { decodeRouteParam } from "@/lib/utils";
 import { ProductDetailView } from "@/components/products/ProductDetailView";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ interface TemplateDetailPageProps {
 }
 
 export async function generateMetadata({ params }: TemplateDetailPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const slug = decodeRouteParam((await params).slug);
   const { data: product } = await serverFetch<{ data: Product | null }>(
     `/api/products/${encodeURIComponent(slug)}`,
   );
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: TemplateDetailPageProps): Pro
 }
 
 export default async function TemplateDetailPage({ params }: TemplateDetailPageProps) {
-  const { slug } = await params;
+  const slug = decodeRouteParam((await params).slug);
 
   // 리뷰는 ProductDetailView 내부(ReviewSection/ReviewCountBadge)가 각자 Suspense로 감싸
   // 스트리밍하므로, 여기서는 페이지 응답을 블로킹하는 product/coupons/purchasedOrders만 기다린다.

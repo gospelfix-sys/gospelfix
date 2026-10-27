@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { serverFetch } from "@/lib/serverFetch";
+import { decodeRouteParam } from "@/lib/utils";
 import { NewsItem } from "@/types/news.types";
 import NewsDetailContent from "@/components/news/NewsDetailContent";
 import BackToBlogButton from "@/components/news/BackToBlogButton";
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export default async function BlogDetailModal({ params }: Props) {
-  const { slug } = await params;
+  const slug = decodeRouteParam((await params).slug);
   const { data: news } = await serverFetch<{ data: NewsItem | null }>(
     `/api/news/${encodeURIComponent(slug)}`,
   );

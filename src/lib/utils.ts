@@ -21,6 +21,18 @@ export function sanitizeInternalPath(rawPath: string | null | undefined, fallbac
   }
 }
 
+// Next 14.2의 동적 라우트 params는 한글 같은 비ASCII 문자가 percent-encoding된 채로 들어온다.
+// 그대로 encodeURIComponent로 API 경로에 넣으면 이중 인코딩되어(%25ED…) cms.api가 원문 slug를
+// 못 찾고 404가 나므로, 경로에 넣기 전에 한 번 디코딩한다. 잘못된 % 시퀀스는 URIError를
+// 던지므로 원본을 그대로 돌려줘 정상적인 404 흐름으로 보낸다.
+export function decodeRouteParam(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 // work_period_days는 숫자(예: 1)뿐 아니라 "협의" 같은 텍스트로도 입력될 수 있고,
 // API 응답에서는 숫자가 문자열("1")로 내려올 수도 있어 값 자체가 숫자로 변환 가능한지로 판단한다.
 export function formatWorkPeriodDays(value: number | string | null | undefined) {
