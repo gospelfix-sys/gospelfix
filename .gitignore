@@ -43,3 +43,6 @@ next-env.d.ts
 .claude/plans/
 .claude/memory/
 .vscode/sftp.json
+
+# shrimp-task-manager 로컬 데이터 (실행마다 포트가 바뀜)
+.shrimp_data/
