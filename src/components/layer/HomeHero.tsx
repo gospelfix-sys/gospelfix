@@ -1,30 +1,19 @@
 import { ArrowRight } from "lucide-react";
 import { HeroCta, HeroReveal, HeroRevealItem } from "@/components/layer/HeroReveal";
+import { HeroTypingTitle } from "@/components/layer/HeroTypingTitle";
+
+// 판매 카테고리 순서와 맞춘다. 가장 긴 문구가 모바일 한 줄 폭의 기준이 된다.
+const HERO_PHRASES = ["LOGOS.", "MOCKUPS.", "WEBSITES.", "AD CREATIVES."] as const;
 
 // 홈 상단 정적 히어로. 갤러리(#gallery)로 앵커 이동하는 CTA를 둔다.
 // 등장 stagger·CTA 피드백은 클라이언트 경계(HeroReveal)가 맡고, 이 파일은 서버 컴포넌트로 둔다.
 export function HomeHero() {
   return (
     <HeroReveal className="flex flex-col items-center gap-6 px-6 pb-14 pt-16 text-center lg:pb-20 lg:pt-24">
-      {/* 그라디언트 테두리 pill 배지: 바깥 래퍼의 1px 패딩이 테두리 역할 */}
-      <HeroRevealItem
-        as="span"
-        className="rounded-full bg-gradient-to-r from-gf-orange to-purple-500 p-px"
-      >
-        <span className="block rounded-full bg-gf-bg px-4 py-1.5 text-xs font-semibold text-gf-gray1">
-          브랜딩 디자인 소재 마켓
-        </span>
-      </HeroRevealItem>
-
-      <HeroRevealItem
-        as="h1"
-        className="text-4xl font-black leading-[1.1] tracking-[-0.04em] text-gf-black sm:text-5xl lg:text-7xl"
-      >
-        브랜드를 완성하는
-        <br />
-        <span className="bg-gradient-to-r from-gf-orange to-purple-500 bg-clip-text text-transparent">
-          모든 디자인 소재
-        </span>
+      {/* 스크린리더·검색엔진에는 한국어 문장을, 화면에는 움직이는 영문 타이틀을 보여준다 */}
+      <HeroRevealItem as="h1" className="w-full">
+        <span className="sr-only">당신만의 브랜드를 구매하세요</span>
+        <HeroTypingTitle label="GOSPELFIX" script="Buy your brand" phrases={HERO_PHRASES} />
       </HeroRevealItem>
 
       <HeroRevealItem
