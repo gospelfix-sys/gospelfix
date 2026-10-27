@@ -2,11 +2,10 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { serverFetch } from "@/lib/serverFetch";
 import { getProductPriceState } from "@/lib/discount";
-import { Product } from "@/types/product.types";
 import { Coupon } from "@/types/coupon.types";
 import { PurchasedOrder } from "@/types/order.types";
 import { getBestAvailableCoupon } from "@/lib/coupon";
-import { decodeRouteParam } from "@/lib/utils";
+import { getProductBySlug } from "@/lib/api/products";
 import { ProductDetailView } from "@/components/products/ProductDetailView";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +15,8 @@ interface TemplateDetailPageProps {
 }
 
 export async function generateMetadata({ params }: TemplateDetailPageProps): Promise<Metadata> {
-  const slug = decodeRouteParam((await params).slug);
-  const { data: product } = await serverFetch<{ data: Product | null }>(
-    `/api/products/${encodeURIComponent(slug)}`,
-  );
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
   if (!product) return {};
 
   return {
@@ -35,12 +32,12 @@ export async function generateMetadata({ params }: TemplateDetailPageProps): Pro
 }
 
 export default async function TemplateDetailPage({ params }: TemplateDetailPageProps) {
-  const slug = decodeRouteParam((await params).slug);
+  const { slug } = await params;
 
   // 리뷰는 ProductDetailView 내부(ReviewSection/ReviewCountBadge)가 각자 Suspense로 감싸
   // 스트리밍하므로, 여기서는 페이지 응답을 블로킹하는 product/coupons/purchasedOrders만 기다린다.
-  const [{ data: product }, coupons, purchasedOrders] = await Promise.all([
-    serverFetch<{ data: Product | null }>(`/api/products/${encodeURIComponent(slug)}`),
+  const [product, coupons, purchasedOrders] = await Promise.all([
+    getProductBySlug(slug),
     // 비로그인 사용자는 /api/coupons·/api/orders가 빈 배열을 반환하므로 별도 로그인 분기 없이 그대로 호출한다.
     serverFetch<Coupon[]>("/api/coupons"),
     serverFetch<PurchasedOrder[]>("/api/orders"),

@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { serverFetch } from "@/lib/serverFetch";
-import { decodeRouteParam } from "@/lib/utils";
-import { NewsItem } from "@/types/news.types";
+import { getNewsBySlug } from "@/lib/api/news";
 import NewsDetailContent from "@/components/news/NewsDetailContent";
 import BackToBlogButton from "@/components/news/BackToBlogButton";
 
@@ -13,10 +11,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = decodeRouteParam((await params).slug);
-  const { data: news } = await serverFetch<{ data: NewsItem | null }>(
-    `/api/news/${encodeURIComponent(slug)}`,
-  );
+  const { slug } = await params;
+  const news = await getNewsBySlug(slug);
 
   if (!news) {
     return { title: "게시물을 찾을 수 없습니다 | GOSPELFIX" };
@@ -32,10 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogDetailPage({ params }: Props) {
-  const slug = decodeRouteParam((await params).slug);
-  const { data: news } = await serverFetch<{ data: NewsItem | null }>(
-    `/api/news/${encodeURIComponent(slug)}`,
-  );
+  const { slug } = await params;
+  const news = await getNewsBySlug(slug);
 
   if (!news) notFound();
 

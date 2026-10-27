@@ -25,9 +25,12 @@ export function sanitizeInternalPath(rawPath: string | null | undefined, fallbac
 // 그대로 encodeURIComponent로 API 경로에 넣으면 이중 인코딩되어(%25ED…) cms.api가 원문 slug를
 // 못 찾고 404가 나므로, 경로에 넣기 전에 한 번 디코딩한다. 잘못된 % 시퀀스는 URIError를
 // 던지므로 원본을 그대로 돌려줘 정상적인 404 흐름으로 보낸다.
+// "."/".."는 인코딩되지 않아 axios가 URL 경로를 정규화해 버리므로(…/api/products/.. → …/api/)
+// 디코딩하지 않고 원본(%2E%2E)을 유지해 이중 인코딩된 채로 404가 되게 한다.
 export function decodeRouteParam(value: string): string {
   try {
-    return decodeURIComponent(value);
+    const decoded = decodeURIComponent(value);
+    return decoded === "." || decoded === ".." ? value : decoded;
   } catch {
     return value;
   }
