@@ -6,8 +6,15 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  ROUTE_MODAL_BACKDROP_CLASS,
+  ROUTE_MODAL_FADE_TRANSITION,
+  clearRouteModalBackdropSnapshot,
+  readRouteModalBackdropOpacity,
+} from "@/components/ui/routeModalBackdrop";
+import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 
-const FADE_TRANSITION = { duration: 0.3, ease: "easeOut" as const };
+const FADE_TRANSITION = ROUTE_MODAL_FADE_TRANSITION;
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
@@ -43,8 +50,14 @@ export default function RouteModal({
   const [mounted, setMounted] = React.useState(false);
   const closeButtonRef = React.useRef<HTMLElement>(null);
   const popupRef = React.useRef<HTMLDivElement>(null);
+  // 로딩 오버레이 backdrop이 떠 있었다면 그 opacity에서 이어 fade해 깜빡임·이중 backdrop을 막는다.
+  // useState 초기화라 첫 렌더 값으로 고정되고, 읽기 함수는 순수해 StrictMode 이중 호출에도 안전하다.
+  const [initialBackdropOpacity] = React.useState(readRouteModalBackdropOpacity);
 
-  React.useEffect(() => {
+  // useEffect면 로딩 backdrop이 사라진 뒤 portal이 그려지기 전에 한 프레임이 페인트되어
+  // backdrop이 깜빡인다. 페인트 전에 마운트를 확정해 빈 프레임을 없앤다.
+  useIsomorphicLayoutEffect(() => {
+    clearRouteModalBackdropSnapshot();
     setMounted(true);
   }, []);
 
@@ -116,8 +129,8 @@ export default function RouteModal({
         ? [
             <motion.div
               key="backdrop"
-              className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[20px]"
-              initial={{ opacity: 0 }}
+              className={ROUTE_MODAL_BACKDROP_CLASS}
+              initial={{ opacity: initialBackdropOpacity }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={FADE_TRANSITION}
