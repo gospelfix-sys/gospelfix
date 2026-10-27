@@ -7,13 +7,21 @@ import { getProductCategories } from "@/lib/api/categories";
 import { ProductCard } from "@/components/products/ProductCard";
 import { FilterDropdown } from "@/components/products/FilterDropdown";
 import { LayerShell } from "@/components/layer/LayerShell";
-import { HeroCarousel } from "@/components/layer/HeroCarousel";
+import { HomeHero } from "@/components/layer/HomeHero";
+import { SortTabs } from "@/components/layer/SortTabs";
 import { CategoryTabs } from "@/components/layer/CategoryTabs";
 
+const HOME_TITLE = "가스펄픽스 | 브랜딩 디자인 소재 마켓";
+const HOME_DESCRIPTION =
+  "CI 로고, 목업, 홈페이지, 대시보드, 이커머스 템플릿, 광고 소재(PSD·AI)까지. 브랜딩에 필요한 모든 디자인 소재를 한 곳에서 구매하세요.";
+
+// 루트 레이아웃의 openGraph/twitter는 최상위 키 단위로 통째로 대체되므로,
+// 홈의 제목·설명이 공유 미리보기에도 반영되도록 함께 지정한다.
 export const metadata: Metadata = {
-  title: "모다(MODA) | 만드는 사람들이 모이는 곳",
-  description:
-    "다양한 포지션의 전문 크리에이터가 만든 작품과, 그 결과물이 필요한 클라이언트가 만나는 곳. 업종별 AI 홈페이지부터 대시보드, 이커머스까지 완성형 템플릿을 구매 즉시 오픈하세요. 가스펄픽스가 만든 크리에이터 마켓플레이스 모다입니다.",
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  openGraph: { title: HOME_TITLE, description: HOME_DESCRIPTION },
+  twitter: { title: HOME_TITLE, description: HOME_DESCRIPTION },
 };
 
 interface LayerPageProps {
@@ -41,57 +49,42 @@ export default async function LayerPage({ searchParams }: LayerPageProps) {
 
   return (
     <LayerShell>
-      <HeroCarousel />
+      <HomeHero />
 
       {/* ── 모든 템플릿 갤러리 ── */}
-      <section className="px-6 py-10 lg:px-10">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <span className="gf-section-label">Gallery</span>
-            <h2 className="gf-section-title">
-              {currentCategory === "all"
-                ? "모든 템플릿"
-                : (categoryLabelMap[currentCategory] ?? getCategoryLabel(currentCategory))}
-            </h2>
-          </div>
-          <p className="mb-1 text-sm text-gf-gray2">
-            총 <strong className="text-gf-black">{products.length}개</strong>의 템플릿
-          </p>
-        </div>
+      <section id="gallery" className="scroll-mt-20 px-6 pb-16 lg:px-10">
+        <h2 className="sr-only">
+          {currentCategory === "all"
+            ? "모든 디자인 소재"
+            : (categoryLabelMap[currentCategory] ?? getCategoryLabel(currentCategory))}
+        </h2>
 
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+        {/* 필터 한 줄: 정렬 세그먼트 / 카테고리 / 가격 (모바일은 줄바꿈) */}
+        <div className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+          <Suspense fallback={null}>
+            <SortTabs />
+          </Suspense>
           <CategoryTabs currentCategory={currentCategory} categories={categories} />
-          <Suspense>
-            <div className="flex items-center gap-2">
-              <FilterDropdown
-                paramKey="sort"
-                placeholder="추천"
-                options={[
-                  { value: "recommended", label: "추천" },
-                  { value: "popular", label: "인기 있는" },
-                  { value: "recent", label: "최근" },
-                ]}
-              />
-              <FilterDropdown
-                paramKey="price"
-                placeholder="가격"
-                options={[
-                  { value: "", label: "전체" },
-                  { value: "free", label: "무료" },
-                  { value: "premium", label: "프리미엄" },
-                ]}
-              />
-            </div>
+          <Suspense fallback={null}>
+            <FilterDropdown
+              paramKey="price"
+              placeholder="가격"
+              options={[
+                { value: "", label: "전체" },
+                { value: "free", label: "무료" },
+                { value: "premium", label: "프리미엄" },
+              ]}
+            />
           </Suspense>
         </div>
 
         {products.length === 0 ? (
           <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-gf-border bg-gf-white">
-            <p className="mb-2 text-lg font-semibold text-gf-black">템플릿이 없습니다</p>
-            <p className="text-sm text-gf-gray2">해당 카테고리의 템플릿이 준비 중입니다.</p>
+            <p className="mb-2 text-lg font-semibold text-gf-black">디자인 소재가 없습니다</p>
+            <p className="text-sm text-gf-gray2">해당 카테고리의 소재가 준비 중입니다.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product, index) => {
               const isPick = index < 3;
               const isNew = checkIsNew(product.created_at);

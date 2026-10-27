@@ -22,10 +22,7 @@ const LAYER_NAV_ITEMS = [
 const OFFICIAL_NAV_ITEMS = [
   { href: "/about", linkHref: "/about", label: "소개" },
   { href: "/guide", linkHref: "/guide", label: "이용가이드" },
-  // href는 활성 상태 매칭 전용(블로그 상세 모달 경로 /blog/[slug]와 매칭되도록 유지),
-  // 실제 이동은 linkHref(에이전시 홈페이지 앵커)로 한다 — LAYER_NAV_ITEMS와 동일한
-  // href/linkHref 분리 컨벤션.
-  { href: "/blog", linkHref: "/layer#blog", label: "블로그" },
+  { href: "/blog", linkHref: "/blog", label: "블로그" },
 ];
 
 export function NavPopover({

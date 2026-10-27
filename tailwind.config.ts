@@ -86,9 +86,6 @@ const config: Config = {
         kr: ['var(--font-kr)', 'Pretendard', 'sans-serif'],
         playfair: ['var(--font-playfair)', 'Playfair Display', 'serif'],
       },
-      animation: {
-        ticker: 'ticker 24s linear infinite',
-      },
     },
   },
   plugins: [require('tailwindcss-animate')],

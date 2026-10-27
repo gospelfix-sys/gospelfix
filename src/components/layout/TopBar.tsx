@@ -14,13 +14,13 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { NavPopover } from "@/components/layout/NavPopover";
 import { cn } from "@/lib/utils";
 
-// LayerShell(자체 사이드바+상단바)이 전역 TopBar 대신 렌더링되는 경로.
-const MODA_SHELL_PATHS = ["/upload", "/free-resources", "/creator", "/introduce"];
+// LayerShell(상단 가로 네비 LayerNavBar)이나 업로드 에디터(LayerSidebar)가 전역 TopBar 대신 렌더링되는 경로.
+const MODA_SHELL_PATHS = ["/upload", "/free-resources", "/creator", "/introduce", "/blog"];
 // "모다" 섹션 탭 활성 상태를 판단할 때 쓴다. 주의: 이 목록의 경로들은 위 hide 조건에서
 // 이미 걸러져 TopBar 자체가 렌더링되지 않으므로(그리고 "/"·"/detail"도 마찬가지), 아래
 // isLayer는 이 컴포넌트가 실제로 렌더링되는 모든 경로에서 항상 false다 — "모다" 탭은
 // 구조상 활성 표시될 일이 없고, CompactNav의 장바구니 버튼도 항상 숨겨진다(의도된 동작:
-// 모다 섹션 안에서는 LayerTopBar의 장바구니 버튼을 대신 쓴다). 상수/분기를 남겨둔 건
+// 모다 섹션 안에서는 LayerNavBar의 장바구니 버튼을 대신 쓴다). 상수/분기를 남겨둔 건
 // 나중에 "모다" 섹션 중 LayerShell을 쓰지 않는 페이지가 다시 생길 경우를 위한 확장
 // 지점이라서다.
 const MODA_ACTIVE_PATHS = ["/upload"];
@@ -32,7 +32,7 @@ const COMPACT_WIDTH = 460;
 export default function TopBar() {
   const pathname = usePathname();
 
-  // 모다(마켓플레이스) 홈/업로드는 자체 사이드바+상단바(LayerShell)를 쓰므로 전역 TopBar를
+  // 모다(마켓플레이스) 홈/업로드는 자체 네비(LayerShell의 LayerNavBar, 업로드는 LayerSidebar)를 쓰므로 전역 TopBar를
   // 렌더링하지 않는다. /detail(상품 상세)은 LayerShell을 쓰진 않지만 자체 네비게이션이
   // 없는 페이지라, 압축 알약 헤더가 콘텐츠 위에 떠 있는 게 불필요해 마찬가지로 숨긴다.
   if (

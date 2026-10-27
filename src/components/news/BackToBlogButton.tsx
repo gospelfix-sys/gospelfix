@@ -20,7 +20,7 @@ export default function BackToBlogButton() {
   }
 
   return (
-    <Link href="/#blog" className={buttonClassName}>
+    <Link href="/blog" className={buttonClassName}>
       <ArrowLeft width={16} height={16} />
       모든 블로그 보기
     </Link>

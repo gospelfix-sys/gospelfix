@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils";
 
 const FOOTER_LINKS = [
   { href: "/about", label: "서비스소개" },
-  { href: "/layer#blog", label: "블로그" },
-  { href: "/quote", label: "문의하기" },
+  { href: "/blog", label: "블로그" },
 ];
 
 // TODO: cms.api 연동 후 serverFetch로 조회한 값으로 교체
@@ -27,21 +26,25 @@ export default function Footer() {
   const pathname = usePathname();
   const [infoOpen, setInfoOpen] = useState(false);
 
-  // 모다 홈("/")과 업로드("/upload")는 lg 이상에서 fixed 왼쪽 사이드바(LayerSidebar,
-  // w-[220px])를 쓴다. 사이드바는 fixed라 항상 화면에 떠 있으므로, 이 Footer가 일반 문서
-  // 흐름에 있어도 그 경로에서는 사이드바 폭만큼 왼쪽 패딩을 줘 겹치지 않게 한다.
-  const isModaShell =
+  // 업로드("/upload")만 lg 이상에서 fixed 왼쪽 사이드바(LayerSidebar, w-[220px])를 쓴다.
+  // 사이드바는 fixed라 항상 화면에 떠 있으므로, 이 Footer가 일반 문서 흐름에 있어도
+  // 그 경로에서는 사이드바 폭만큼 왼쪽 패딩을 줘 겹치지 않게 한다.
+  const isUploadShell = pathname.startsWith("/upload");
+
+  // LayerShell(다크 상단 네비) 경로는 푸터도 다크 스코프로 맞춘다.
+  const isDarkShell =
     pathname === "/" ||
-    pathname.startsWith("/upload") ||
     pathname.startsWith("/free-resources") ||
     pathname.startsWith("/creator") ||
-    pathname.startsWith("/introduce");
+    pathname.startsWith("/introduce") ||
+    pathname.startsWith("/blog");
 
   return (
     <footer
       className={cn(
         "hidden border-t border-gf-border bg-gf-white md:block",
-        isModaShell && "lg:pl-[220px]",
+        isUploadShell && "lg:pl-[220px]",
+        isDarkShell && "gf-dark",
       )}
     >
       <div className="relative px-10">

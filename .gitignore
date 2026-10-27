@@ -46,3 +46,6 @@ next-env.d.ts
 
 # shrimp-task-manager 로컬 데이터 (실행마다 포트가 바뀜)
 .shrimp_data/
+
+# Playwright MCP 스크린샷·로그
+.playwright-mcp/

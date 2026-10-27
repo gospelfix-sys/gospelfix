@@ -1,28 +1,20 @@
-"use client";
-
-import { Suspense, useState } from "react";
-import { LayerSidebar } from "@/components/layer/LayerSidebar";
-import { LayerTopBar } from "@/components/layer/LayerTopBar";
+import { LayerNavBar } from "@/components/layer/LayerNavBar";
+import { ReducedMotionConfig } from "@/components/ui/ReducedMotionConfig";
 
 interface LayerShellProps {
   children: React.ReactNode;
 }
 
-// 모다(마켓플레이스) 페이지 전용 레이아웃 셸. 모바일 사이드바 열림 상태를 여기서 관리해
-// 형제 관계인 LayerSidebar(패널)와 LayerTopBar(햄버거 버튼)가 같은 상태를 공유하게 한다.
+// 모다(마켓플레이스) 페이지 전용 레이아웃 셸. 루트의 gf-dark가 하위 전체의 색 토큰을
+// 다크로 덮어쓴다(globals.css). 모바일 드로어 상태는 LayerNavBar 내부에서 관리한다.
+// 셸 아래 모든 모션(네비·히어로·카드·탭)이 움직임 감소 설정을 따르도록 여기서 한 번 감싼다.
 export function LayerShell({ children }: LayerShellProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
-    <div className="min-h-dvh bg-gf-bg">
-      <Suspense fallback={null}>
-        <LayerSidebar open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-      </Suspense>
-
-      <div className="lg:pl-[220px]">
-        <LayerTopBar onMenuClick={() => setMobileMenuOpen(true)} />
+    <ReducedMotionConfig>
+      <div className="gf-dark min-h-dvh bg-gf-bg">
+        <LayerNavBar />
         {children}
       </div>
-    </div>
+    </ReducedMotionConfig>
   );
 }

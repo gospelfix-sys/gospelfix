@@ -47,7 +47,7 @@ export default function IntroducePage() {
         </p>
       </section>
 
-      <section className="border-t border-gf-border bg-white px-6 py-20">
+      <section className="border-t border-gf-border bg-gf-white px-6 py-20">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3">
           {VALUES.map((item) => {
             const Icon = item.icon;

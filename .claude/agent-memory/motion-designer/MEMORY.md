@@ -1,1 +1,2 @@
+- [Home layer motion](project_home_layer_motion.md) — 홈 loading↔page 교체로 셸 재마운트(등장 재생 함정), MotionConfig 범위, motionPresets 위치
 - [Route modal loading pitfalls](project_route_modal_loading_pitfalls.md) — loading.tsx 클라이언트 청크 suspend로 바깥 스켈레톤 1프레임 노출, backdrop opacity 이어받기 구조

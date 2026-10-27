@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getNewsBySlug } from "@/lib/api/news";
 import NewsDetailContent from "@/components/news/NewsDetailContent";
 import BackToBlogButton from "@/components/news/BackToBlogButton";
+import { LayerShell } from "@/components/layer/LayerShell";
 
 export const dynamic = "force-dynamic";
 
@@ -34,8 +35,8 @@ export default async function BlogDetailPage({ params }: Props) {
   if (!news) notFound();
 
   return (
-    <div className="bg-gf-bg min-h-screen">
-      <article className="px-6 lg:px-[60px] pt-20 pb-14">
+    <LayerShell>
+      <article className="px-6 lg:px-[60px] pt-14 pb-14">
         <div className="mx-auto max-w-3xl">
           <NewsDetailContent news={news} />
 
@@ -45,6 +46,6 @@ export default async function BlogDetailPage({ params }: Props) {
           </div>
         </div>
       </article>
-    </div>
+    </LayerShell>
   );
 }

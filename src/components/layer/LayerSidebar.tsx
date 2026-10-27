@@ -2,10 +2,22 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { CloudDownload, Home, Info, Shapes, X, type LucideIcon } from "lucide-react";
+import { X, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarProfileMenu } from "@/components/layer/SidebarProfileMenu";
+import { LAYER_NAV_ITEMS } from "@/components/layer/layerNav";
 import { cn } from "@/lib/utils";
+
+// 업로드 에디터용 사이드바는 기존 구성(주요 3개 + 하단 소개)을 유지한다. 블로그는
+// 상단 네비 전용이라 제외 — 항목 정의 자체는 layerNav.ts 단일 상수를 읽는다.
+const SIDEBAR_MAIN_HREFS = ["/", "/free-resources", "/creator"];
+const SIDEBAR_BOTTOM_HREFS = ["/introduce"];
+const SIDEBAR_MAIN_ITEMS = LAYER_NAV_ITEMS.filter((item) =>
+  SIDEBAR_MAIN_HREFS.includes(item.href),
+);
+const SIDEBAR_BOTTOM_ITEMS = LAYER_NAV_ITEMS.filter((item) =>
+  SIDEBAR_BOTTOM_HREFS.includes(item.href),
+);
 
 interface LayerSidebarProps {
   open: boolean;
@@ -77,6 +89,7 @@ function SidebarContent({
   onNavigate: () => void;
 }) {
   const pathname = usePathname();
+  const navContext = { pathname, category: currentCategory, price: currentPrice };
 
   return (
     <>
@@ -90,37 +103,29 @@ function SidebarContent({
       </Link>
 
       <nav className="flex flex-1 flex-col gap-1.5 px-3">
-        <SidebarLink
-          href="/"
-          icon={Home}
-          label="HOME"
-          active={pathname === "/" && currentCategory === "all" && currentPrice === ""}
-          onNavigate={onNavigate}
-        />
-        <SidebarLink
-          href="/free-resources"
-          icon={CloudDownload}
-          label="FREE RESOURCES"
-          active={pathname === "/free-resources"}
-          onNavigate={onNavigate}
-        />
-        <SidebarLink
-          href="/creator"
-          icon={Shapes}
-          label="CREATOR"
-          active={pathname === "/creator"}
-          onNavigate={onNavigate}
-        />
+        {SIDEBAR_MAIN_ITEMS.map((item) => (
+          <SidebarLink
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={item.isActive(navContext)}
+            onNavigate={onNavigate}
+          />
+        ))}
       </nav>
 
       <div className="px-3 pb-2">
-        <SidebarLink
-          href="/introduce"
-          icon={Info}
-          label="소개"
-          active={pathname === "/introduce"}
-          onNavigate={onNavigate}
-        />
+        {SIDEBAR_BOTTOM_ITEMS.map((item) => (
+          <SidebarLink
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={item.isActive(navContext)}
+            onNavigate={onNavigate}
+          />
+        ))}
       </div>
 
       <SidebarProfileMenu onNavigate={onNavigate} />

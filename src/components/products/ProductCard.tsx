@@ -2,9 +2,21 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion, type Variants } from "motion/react";
 import { ProductPriceState } from "@/lib/discount";
 import { cn, formatPrice } from "@/lib/utils";
 import { getCategoryLabel, Product } from "@/types/product.types";
+import { PRESS_TRANSITION } from "@/components/ui/motionPresets";
+
+// 카드가 많아 마운트 시 애니메이션 없이 호버·탭 제스처에만 반응한다(whileHover는 터치 에뮬레이션 호버를 무시).
+// 카드는 살짝만 떠오르고, 썸네일은 프레임(overflow-hidden) 안에서 조금 더 천천히 확대된다.
+const cardVariants: Variants = {
+  hover: { y: -4, transition: { duration: 0.25, ease: "easeOut" } },
+  tap: { scale: 0.985, transition: PRESS_TRANSITION },
+};
+const thumbnailVariants: Variants = {
+  hover: { scale: 1.04, transition: { duration: 0.35, ease: "easeOut" } },
+};
 
 interface ProductCardProps {
   product: Product;
@@ -16,31 +28,37 @@ interface ProductCardProps {
   priceState: ProductPriceState;
 }
 
+// 홈 갤러리 카드: 큰 4:3 썸네일 + 하단 제목/가격/카테고리 (테두리·푸터 없음)
 export function ProductCard({
   product,
   isPick = false,
   isNew = false,
   priceState,
 }: ProductCardProps) {
-  /* 제작자 표시 이름: 추후 product.publisher 필드 추가 시 대체 가능 */
-  const publisherName = "GOSPELFIX";
-
   /* 카테고리 한국어 레이블 */
   const categoryLabel = getCategoryLabel(product.category);
 
   return (
     <Link href={`/detail/${product.slug}`} scroll={false} className="group block no-underline">
-      <article className="h-full rounded-2xl border border-gf-border overflow-hidden transition-all duration-200 hover:-translate-y-1 bg-gf-white shadow-[0_4px_16px_rgba(0,0,0,0.09)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
-        {/* 썸네일 */}
-        <div className="relative aspect-[1080/1350] overflow-hidden rounded-t-2xl border-b border-gf-border bg-gf-bg">
+      <motion.article
+        variants={cardVariants}
+        whileHover="hover"
+        whileTap="tap"
+        className="flex flex-col gap-3"
+      >
+        {/* 썸네일 — 기존 세로형(1080x1350) 원본을 가로 프레임에 상단 기준으로 크롭.
+            isolate: 확대 중인 자식이 Safari에서 둥근 모서리 클리핑을 벗어나지 않게 한다 */}
+        <div className="relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-gf-white">
           {product.thumbnail_url ? (
-            <Image
-              src={product.thumbnail_url}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+            <motion.div variants={thumbnailVariants} className="absolute inset-0">
+              <Image
+                src={product.thumbnail_url}
+                alt={product.name}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+              />
+            </motion.div>
           ) : (
             /* 썸네일 없을 때 플레이스홀더 */
             <div className="flex h-full items-center justify-center text-sm font-medium text-gf-gray2">
@@ -48,78 +66,57 @@ export function ProductCard({
             </div>
           )}
 
-          {/* 카테고리 배지 (좌측 상단) */}
-          <span className="absolute left-3 top-3 rounded-full border border-gf-border px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm bg-white/90 text-gf-gray1">
-            {categoryLabel}
-          </span>
-
-          {/* PICK / NEW 배지 (우측 상단, 우선순위: PICK > NEW) */}
+          {/* PICK / NEW 배지 (우측 상단, 우선순위: PICK > NEW).
+              gf-black은 다크 스코프에서 밝은 색이라 NEW는 비반전 색(흰 배경/검정 글씨)을 쓴다 */}
           {(isPick || isNew) && (
             <span
               className={cn(
-                "absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-white",
-                isPick ? "bg-gf-orange" : "bg-gf-black",
+                "absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-black uppercase tracking-wide",
+                isPick ? "bg-gf-orange text-white" : "bg-white text-black",
               )}
             >
               {isPick ? "Pick" : "New"}
             </span>
           )}
-
-          {/* 호버 오버레이 */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center bg-black/30">
-            <span className="text-white text-xs font-bold px-4 py-2 rounded-full bg-white/20 backdrop-blur-[8px]">
-              상세 보기
-            </span>
-          </div>
         </div>
 
-        {/* 카드 바디 */}
-        <div className="p-5 pb-4">
-          <h3 className="font-bold text-[15px] leading-snug line-clamp-2 mb-1.5 min-h-[42px] text-gf-black">
-            {product.name}
-          </h3>
-          <p className="text-xs leading-relaxed line-clamp-2 min-h-[39px] text-gf-gray2">
-            {product.description}
-          </p>
-        </div>
+        {/* 제목 + 가격 */}
+        <div className="flex flex-col gap-1 px-1">
+          <div className="flex items-start justify-between gap-3">
+            {/* 터치 기기에서 hover가 눌린 채 남지 않도록 hover 지원 환경에서만 색을 바꾼다 */}
+            <h3 className="truncate text-[15px] font-bold leading-snug text-gf-black transition-colors duration-200 [@media(hover:hover)]:group-hover:text-gf-orange">
+              {product.name}
+            </h3>
 
-        {/* 카드 푸터: 제작자 + 가격 */}
-        <div className="px-5 py-3.5 border-t border-gf-border flex items-center justify-between">
-          {/* 제작자 정보 */}
-          <div className="flex items-center gap-2">
-            {/* 제작자 아바타 (이니셜 기반) */}
-            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black flex-shrink-0 bg-gf-orange-bg text-gf-orange border border-[rgba(255,85,0,0.2)]">
-              {publisherName.slice(0, 1)}
-            </div>
-            <span className="text-[12px] font-medium text-gf-gray2">{publisherName}</span>
-          </div>
-
-          {/* 가격 (0원이면 FREE로 노출, 할인 기간 활성 시에만 정가 취소선 + 할인율 —
-              카드는 상시 공급원가 취소선을 보여주지 않던 기존 스코프를 유지) */}
-          <span className="flex flex-col items-end">
-            {priceState.discount && priceState.strikethroughPrice != null && (
-              <span className="text-[11px] leading-none text-gf-gray2 line-through">
-                {formatPrice(priceState.strikethroughPrice)}
-              </span>
-            )}
-            <span className="font-black text-[16px] font-en tracking-[-0.02em] text-gf-orange">
-              {product.price === 0 ? (
-                "FREE"
-              ) : (
-                <>
-                  {priceState.effectivePrice.toLocaleString("ko-KR")}
-                  <span className="text-[12px] font-bold ml-0.5 text-gf-black">원</span>
-                  {priceState.discount && priceState.discount.percent > 0 && (
-                    <span className="ml-1 text-[11px] font-bold">
-                      {priceState.discount.percent}%
-                    </span>
-                  )}
-                </>
+            {/* 가격 (0원이면 FREE로 노출, 할인 기간 활성 시에만 정가 취소선 + 할인율 —
+                카드는 상시 공급원가 취소선을 보여주지 않던 기존 스코프를 유지) */}
+            <span className="flex shrink-0 flex-col items-end">
+              {priceState.discount && priceState.strikethroughPrice != null && (
+                <span className="text-[11px] leading-none text-gf-gray2 line-through">
+                  {formatPrice(priceState.strikethroughPrice)}
+                </span>
               )}
+              <span className="font-en text-[15px] font-black tracking-[-0.02em] text-gf-orange">
+                {product.price === 0 ? (
+                  "FREE"
+                ) : (
+                  <>
+                    {priceState.effectivePrice.toLocaleString("ko-KR")}
+                    <span className="ml-0.5 text-[12px] font-bold text-gf-black">원</span>
+                    {priceState.discount && priceState.discount.percent > 0 && (
+                      <span className="ml-1 text-[11px] font-bold">
+                        {priceState.discount.percent}%
+                      </span>
+                    )}
+                  </>
+                )}
+              </span>
             </span>
-          </span>
+          </div>
+
+          <p className="text-xs text-gf-gray2">{categoryLabel}</p>
         </div>
-      </article>
+      </motion.article>
     </Link>
   );
 }

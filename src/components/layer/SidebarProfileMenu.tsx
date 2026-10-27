@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
-import { ChevronDown, ChevronUp, LogOut, Package, Receipt, Settings, User } from "lucide-react";
+import { ChevronDown, ChevronUp, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { PROFILE_MENU_ITEMS } from "@/components/layer/profileMenuItems";
 import { authUserAtom } from "@/store/atoms/authAtom";
 import { userProfileAtom } from "@/store/atoms/userAtom";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,7 +17,7 @@ interface SidebarProfileMenuProps {
 
 // 사이드바 하단 프로필 트리거 — 클릭하면 위쪽으로 설정/프로필/구매·혜택/(seller·admin 한정
 // 내 상품)/로그아웃 팝오버가 열린다.
-// 로그아웃 상태의 로그인 진입점은 LayerTopBar의 "로그인" 버튼이 담당하므로
+// 로그아웃 상태의 로그인 진입점은 LayerNavBar의 "로그인" 버튼이 담당하므로
 // 여기서는 user가 없으면 아무것도 렌더링하지 않는다.
 export function SidebarProfileMenu({ onNavigate }: SidebarProfileMenuProps) {
   const user = useRecoilValue(authUserAtom);
@@ -54,51 +55,20 @@ export function SidebarProfileMenu({ onNavigate }: SidebarProfileMenuProps) {
     <div ref={containerRef} className="relative mt-2 border-t border-gf-border px-3 pb-3 pt-3">
       {open && (
         <div className="absolute inset-x-3 bottom-full mb-2 rounded-2xl border border-gf-border bg-gf-white p-2 shadow-lg">
-          <Link
-            href="/mypage/settings"
-            onClick={() => {
-              setOpen(false);
-              onNavigate?.();
-            }}
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-gf-gray2 no-underline transition-colors hover:bg-gf-bg hover:text-gf-black"
-          >
-            <Settings className="h-4 w-4" />
-            설정
-          </Link>
-          <Link
-            href="/mypage"
-            onClick={() => {
-              setOpen(false);
-              onNavigate?.();
-            }}
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-gf-gray2 no-underline transition-colors hover:bg-gf-bg hover:text-gf-black"
-          >
-            <User className="h-4 w-4" />
-            프로필
-          </Link>
-          <Link
-            href="/mypage/orders"
-            onClick={() => {
-              setOpen(false);
-              onNavigate?.();
-            }}
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-gf-gray2 no-underline transition-colors hover:bg-gf-bg hover:text-gf-black"
-          >
-            <Receipt className="h-4 w-4" />
-            구매 / 혜택
-          </Link>
-          {canSell && (
+          {PROFILE_MENU_ITEMS.filter((item) => !item.sellerOnly || canSell).map((item) => (
             <Link
-              href="/mypage/products"
+              key={item.href}
+              href={item.href}
               onClick={() => {
                 setOpen(false);
                 onNavigate?.();
               }}
               className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-gf-gray2 no-underline transition-colors hover:bg-gf-bg hover:text-gf-black"
             >
-              <Package className="h-4 w-4" />내 상품
+              <item.icon className="h-4 w-4" />
+              {item.label}
             </Link>
-          )}
+          ))}
           <div className="my-1 border-t border-gf-border" />
           <Button
             variant="ghost"
