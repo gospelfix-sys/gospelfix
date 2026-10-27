@@ -72,22 +72,12 @@ export function useAuth() {
   );
 
   const signUp = useCallback(
-    async (
-      email: string,
-      password: string,
-      fullName: string,
-      phone: string,
-      phoneVerificationToken: string,
-      referralCode?: string,
-    ) => {
+    async (email: string, password: string, referralCode?: string) => {
       setIsLoading(true);
       try {
         const data = await postJson<{ status?: "confirmation_required" }>("/api/auth/signup", {
           email,
           password,
-          fullName,
-          phone,
-          phoneVerificationToken,
           referralCode,
         });
         const confirmationRequired = data.status === "confirmation_required";
@@ -105,18 +95,6 @@ export function useAuth() {
     },
     [setIsLoading, refreshAuthUser, setSignupCoupon],
   );
-
-  const sendPhoneCode = useCallback(async (phone: string) => {
-    await postJson("/api/auth/phone/send-code", { phone });
-  }, []);
-
-  const verifyPhoneCode = useCallback(async (phone: string, code: string) => {
-    const data = await postJson<{ phoneVerificationToken: string }>("/api/auth/phone/verify-code", {
-      phone,
-      code,
-    });
-    return data.phoneVerificationToken;
-  }, []);
 
   const signInWithOAuth = useCallback(
     (provider: OAuthProvider) => {
@@ -166,8 +144,6 @@ export function useAuth() {
     isAdmin,
     signIn,
     signUp,
-    sendPhoneCode,
-    verifyPhoneCode,
     signInWithOAuth,
     signOut,
     authModalView: authModal.view,

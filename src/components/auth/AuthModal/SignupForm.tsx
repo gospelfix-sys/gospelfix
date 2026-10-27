@@ -1,29 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, Lock, Mail, Phone, Users } from "lucide-react";
+import { Lock, Mail, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import KakaoLoginButton from "./KakaoLoginButton";
 
-const CODE_TTL_SECONDS = 180;
-const PHONE_REGEX = /^01[0-9]{8,9}$/;
+// 가입 시 필수 동의 항목. 동의 여부는 클라이언트에서만 검증하고 서버에는 기록하지 않는다.
+const REQUIRED_AGREEMENTS = [
+  { key: "terms", label: "서비스 이용약관 동의(필수)", legal: "terms" },
+  { key: "privacy", label: "개인정보 수집 및 이용 동의(필수)", legal: "privacy" },
+  { key: "age", label: "만 14세 이상입니다.(필수)", legal: null },
+] as const;
 
-function formatCountdown(seconds: number) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${String(s).padStart(2, "0")}`;
-}
+type AgreementKey = (typeof REQUIRED_AGREEMENTS)[number]["key"];
 
 export default function SignupForm() {
   const {
     signUp,
-    sendPhoneCode,
-    verifyPhoneCode,
     closeAuthModal,
     openAuthModal,
     authModalReferralCode,
@@ -33,59 +31,20 @@ export default function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [phone, setPhone] = useState("");
   const [referralCode, setReferralCode] = useState(() => authModalReferralCode ?? "");
-  const [code, setCode] = useState("");
-  const [phoneVerificationToken, setPhoneVerificationToken] = useState<string | null>(null);
-  const [codeSent, setCodeSent] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  const [sendingCode, setSendingCode] = useState(false);
-  const [verifyingCode, setVerifyingCode] = useState(false);
-  const [phoneMessage, setPhoneMessage] = useState("");
+  const [agreements, setAgreements] = useState<Record<AgreementKey, boolean>>({
+    terms: false,
+    privacy: false,
+    age: false,
+  });
   const [error, setError] = useState(() => authModalError ?? "");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const isPhoneVerified = !!phoneVerificationToken;
+  const allAgreed = REQUIRED_AGREEMENTS.every(({ key }) => agreements[key]);
 
-  useEffect(() => {
-    if (countdown <= 0) return;
-    const timer = setInterval(() => setCountdown((c) => c - 1), 1000);
-    return () => clearInterval(timer);
-  }, [countdown]);
-
-  async function handleSendCode() {
-    setPhoneMessage("");
-    const normalizedPhone = phone.replace(/-/g, "");
-    if (!PHONE_REGEX.test(normalizedPhone)) {
-      setPhoneMessage("올바른 휴대폰 번호를 입력해주세요.");
-      return;
-    }
-    setSendingCode(true);
-    try {
-      await sendPhoneCode(normalizedPhone);
-      setCodeSent(true);
-      setCountdown(CODE_TTL_SECONDS);
-      setPhoneMessage("인증번호를 발송했습니다.");
-    } catch (err) {
-      setPhoneMessage(err instanceof Error ? err.message : "인증번호 발송에 실패했습니다.");
-    } finally {
-      setSendingCode(false);
-    }
-  }
-
-  async function handleVerifyCode() {
-    setPhoneMessage("");
-    setVerifyingCode(true);
-    try {
-      const token = await verifyPhoneCode(phone.replace(/-/g, ""), code);
-      setPhoneVerificationToken(token);
-      setPhoneMessage("휴대폰 인증이 완료되었습니다.");
-    } catch (err) {
-      setPhoneMessage(err instanceof Error ? err.message : "인증번호가 올바르지 않습니다.");
-    } finally {
-      setVerifyingCode(false);
-    }
+  function handleToggleAll(checked: boolean) {
+    setAgreements({ terms: checked, privacy: checked, age: checked });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -97,8 +56,8 @@ export default function SignupForm() {
       return;
     }
 
-    if (!phoneVerificationToken) {
-      setError("휴대폰 인증을 완료해주세요.");
+    if (!allAgreed) {
+      setError("필수 약관에 모두 동의해주세요.");
       return;
     }
 
@@ -107,9 +66,6 @@ export default function SignupForm() {
       const { confirmationRequired } = await signUp(
         email,
         password,
-        "",
-        phone.replace(/-/g, ""),
-        phoneVerificationToken,
         referralCode.trim() || undefined,
       );
       if (confirmationRequired) {
@@ -140,15 +96,6 @@ export default function SignupForm() {
       </div>
     );
   }
-
-  const phoneButtonDisabled = isPhoneVerified || sendingCode || (codeSent && countdown > 0);
-  const phoneButtonLabel = sendingCode
-    ? "발송 중..."
-    : codeSent && countdown > 0
-      ? formatCountdown(countdown)
-      : codeSent
-        ? "재전송"
-        : "인증";
 
   return (
     <div className="flex flex-col items-center">
@@ -199,64 +146,6 @@ export default function SignupForm() {
           <p className="text-xs text-destructive">비밀번호가 일치하지 않습니다.</p>
         )}
 
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Phone className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gf-gray2" />
-            <Input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              disabled={isPhoneVerified || codeSent}
-              placeholder="휴대폰 번호를 입력하세요."
-              className="h-11 pl-9"
-            />
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            className="h-11 shrink-0"
-            disabled={phoneButtonDisabled}
-            onClick={handleSendCode}
-          >
-            {isPhoneVerified ? (
-              <CheckCircle2 className="size-4 text-gf-orange" />
-            ) : (
-              phoneButtonLabel
-            )}
-          </Button>
-        </div>
-
-        {codeSent && !isPhoneVerified && (
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              inputMode="numeric"
-              maxLength={6}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              required
-              placeholder="인증번호 6자리"
-              className="h-11 flex-1"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11 shrink-0"
-              disabled={verifyingCode || code.length === 0}
-              onClick={handleVerifyCode}
-            >
-              {verifyingCode ? "확인 중..." : "확인"}
-            </Button>
-          </div>
-        )}
-
-        {phoneMessage && (
-          <p className={cn("text-xs", isPhoneVerified ? "text-gf-orange" : "text-gf-gray2")}>
-            {phoneMessage}
-          </p>
-        )}
-
         <div className="relative">
           <Users className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gf-gray2" />
           <Input
@@ -268,6 +157,34 @@ export default function SignupForm() {
           />
         </div>
 
+        <div className="mt-1 flex flex-col gap-2 text-sm text-gf-gray1">
+          <label className="flex items-center gap-2 font-semibold text-gf-black">
+            <Checkbox checked={allAgreed} onCheckedChange={handleToggleAll} />
+            전체 동의
+          </label>
+          {REQUIRED_AGREEMENTS.map(({ key, label, legal }) => (
+            <div key={key} className="flex items-center justify-between gap-2 pl-1">
+              <label className="flex items-center gap-2">
+                <Checkbox
+                  checked={agreements[key]}
+                  onCheckedChange={(checked) =>
+                    setAgreements((prev) => ({ ...prev, [key]: checked }))
+                  }
+                />
+                {label}
+              </label>
+              {legal && (
+                <LegalDialogTrigger
+                  type={legal}
+                  className="shrink-0 text-xs underline underline-offset-2 hover:text-gf-gray2"
+                >
+                  보기
+                </LegalDialogTrigger>
+              )}
+            </div>
+          ))}
+        </div>
+
         {error && (
           <p className="rounded-lg bg-[rgba(220,38,38,0.1)] px-3 py-2 text-sm text-destructive">
             {error}
@@ -276,7 +193,7 @@ export default function SignupForm() {
 
         <Button
           type="submit"
-          disabled={loading || password !== passwordConfirm}
+          disabled={loading || password !== passwordConfirm || !allAgreed}
           size="lg"
           className="mt-1 h-11 w-full"
         >
@@ -295,24 +212,6 @@ export default function SignupForm() {
         >
           로그인
         </button>
-      </p>
-
-      <p className="mt-3 text-center text-xs text-gf-gray3">
-        가입 시,{" "}
-        <LegalDialogTrigger
-          type="terms"
-          className="underline underline-offset-2 hover:text-gf-gray2"
-        >
-          이용약관
-        </LegalDialogTrigger>{" "}
-        및{" "}
-        <LegalDialogTrigger
-          type="privacy"
-          className="underline underline-offset-2 hover:text-gf-gray2"
-        >
-          개인정보처리방침
-        </LegalDialogTrigger>
-        에 동의합니다.
       </p>
     </div>
   );
