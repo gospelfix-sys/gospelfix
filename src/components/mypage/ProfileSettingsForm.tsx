@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
+import axiosInstance from "@/lib/axios/instance";
+import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,14 +15,6 @@ interface ProfileSettingsFormProps {
   email: string;
   fullName: string;
   avatarUrl: string | null;
-}
-
-function getErrorMessage(error: unknown, fallback: string): string {
-  if (isAxiosError(error) && error.response) {
-    const data = error.response.data as { error?: string } | undefined;
-    return data?.error ?? fallback;
-  }
-  return fallback;
 }
 
 // "프로필설정" 페이지 전용 — 이름/아바타만 다룬다. 계정(로그인 이메일 확인, 비밀번호,

@@ -1,18 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Megaphone } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 import type { NewsListItem } from "@/types/news.types";
 
 interface BlogCardProps {
   news: NewsListItem;
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 // 블로그 목록 카드: 큰 썸네일 + 하단 카테고리/제목/날짜. 목록에서는 상세가 모달로 인터셉트된다.

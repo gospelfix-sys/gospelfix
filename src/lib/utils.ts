@@ -48,6 +48,15 @@ export function formatPrice(amount: number): string {
   return `${amount.toLocaleString("ko-KR")}원`;
 }
 
+// "2026년 10월 27일" 형태. 블로그 카드·상세가 같은 표기를 쓰도록 한 곳에서 정의한다.
+export function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 // cms.api ProductForm과 동일한 규칙(gospelfix.cms.api/src/libs/utils.ts) — 판매자가
 // 마이페이지에서 등록한 상품도 관리자가 등록한 것과 같은 형태의 slug를 갖도록 맞춘다.
 // 슬러그(URL)는 영문 소문자/숫자/하이픈만 허용한다 — 한글·특수문자는 입력 즉시 제거된다.

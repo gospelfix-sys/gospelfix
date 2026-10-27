@@ -55,7 +55,7 @@ export interface Product {
   demo_url?: string | null;
 }
 
-export interface LicenseOption {
+interface LicenseOption {
   value: string;
   label: string;
   description: string;
@@ -107,7 +107,7 @@ export type ProductCategory = {
 // 2026-08-27 카테고리 체계 전면 개편 — 기존 landing/dashboard/ecommerce/corporate/blog(페이지
 // 유형 기준) 5종을 폐기하고, 서비스 성격 기준의 3종으로 교체했다. cms.api 061 마이그레이션으로
 // 기존 상품 데이터가 전량 삭제된 뒤 새 체계로만 다시 등록된다는 전제하에 값을 재사용하지 않았다.
-export const PRODUCT_CATEGORY_LABELS: Record<string, string> = {
+const PRODUCT_CATEGORY_LABELS: Record<string, string> = {
   website: "웹사이트",
   ux_ui: "UX/UI",
   branding: "브랜딩",
@@ -131,7 +131,7 @@ export const FALLBACK_PRODUCT_CATEGORIES: ProductCategory[] = [
 // products.admin.ts의 VALID_SUB_CATEGORIES 화이트리스트와 값이 정확히 일치해야 한다.
 export const MAX_SUB_CATEGORIES = 3;
 
-export const SUB_CATEGORY_LABELS: Record<string, string> = {
+const SUB_CATEGORY_LABELS: Record<string, string> = {
   etc: "기타분류",
   leisure_sports: "레저/스포츠",
   appliance_electronics: "가전/전자",
@@ -168,10 +168,6 @@ export const FALLBACK_SUB_CATEGORIES: ProductCategory[] = [
   { value: "event_promotion", label: SUB_CATEGORY_LABELS.event_promotion },
   { value: "occasion_campaign", label: SUB_CATEGORY_LABELS.occasion_campaign },
 ];
-
-export function getSubCategoryLabel(value: string): string {
-  return SUB_CATEGORY_LABELS[value] ?? value;
-}
 
 // 판매자 셀프서비스 상품 등록/수정 검수 상태. approved만 공개 카탈로그(/,
 // /detail/[slug])에 노출된다 — 관리자 수동 승인제(project_product_crud_migration_to_mypage

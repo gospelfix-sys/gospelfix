@@ -1,6 +1,6 @@
 import { Calendar, Tag } from "lucide-react";
 import { NewsItem } from "@/types/news.types";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import NewsImageGallery from "@/components/news/NewsImageGallery";
 import { ProseHtml } from "@/components/ui/ProseHtml";
@@ -10,14 +10,6 @@ const CATEGORY_COLOR: Record<string, string> = {
   "신규 템플릿": "bg-gf-orange-bg text-gf-orange",
   이벤트: "bg-green-500/15 text-green-400",
 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 export default function NewsDetailContent({ news }: { news: NewsItem }) {
   const contentHtml = sanitizeContentHtml(news.content);

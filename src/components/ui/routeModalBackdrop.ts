@@ -10,7 +10,7 @@
 export const ROUTE_MODAL_FADE_TRANSITION = { duration: 0.3, ease: "easeOut" as const };
 export const ROUTE_MODAL_BACKDROP_CLASS = "fixed inset-0 z-50 bg-black/10 backdrop-blur-[20px]";
 // 패널 겉면과 스크롤 본문. 로딩 패널과 실제 모달이 같은 면 위에서 내용만 바뀌도록 공유한다.
-export const ROUTE_MODAL_PANEL_CLASS =
+const ROUTE_MODAL_PANEL_CLASS =
   "fixed inset-0 top-6 z-50 bg-white outline-none overflow-hidden";
 export const ROUTE_MODAL_BODY_CLASS = "h-full overflow-y-auto bg-gf-bg px-6 lg:px-[60px] py-14";
 

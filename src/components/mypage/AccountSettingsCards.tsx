@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { CheckCircle2, Trash2 } from "lucide-react";
-import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
+import axiosInstance from "@/lib/axios/instance";
+import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,14 +24,6 @@ interface AccountSettingsCardsProps {
   email: string;
   role: "user" | "admin" | "seller";
   sellerRequestedAt: string | null;
-}
-
-function getErrorMessage(error: unknown, fallback: string): string {
-  if (isAxiosError(error) && error.response) {
-    const data = error.response.data as { error?: string } | undefined;
-    return data?.error ?? fallback;
-  }
-  return fallback;
 }
 
 // "설정" 개요 페이지 전용 — 프로필(이름/아바타)은 /mypage(프로필 페이지)의
