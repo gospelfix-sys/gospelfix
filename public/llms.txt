@@ -1,13 +1,13 @@
 # GOSPELFIX Mall
 
-> 바로 사용 가능한 고품질 웹 템플릿 마켓플레이스. Next.js 기반 랜딩페이지·대시보드·이커머스·포트폴리오·블로그 템플릿을 구매 후 즉시 다운로드할 수 있습니다.
+> 브랜딩 디자인 소재 마켓플레이스. CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 구매 후 즉시 다운로드할 수 있습니다.
 
-GOSPELFIX Mall은 개발자와 디자이너를 위한 프리미엄 웹 템플릿 스토어입니다. Supabase 인증, Toss Payments 결제, Supabase Storage 파일 전달까지 완전한 구매 파이프라인을 갖추고 있습니다. 기술 스택은 Next.js 14 (App Router) · Tailwind CSS · shadcn/ui · Recoil · Axios입니다.
+가스펄픽스(GOSPELFIX)는 브랜드를 만드는 데 필요한 모든 디자인 소재를 파는 마켓플레이스입니다. Supabase 인증, Toss Payments 결제, Supabase Storage 파일 전달까지 완전한 구매 파이프라인을 갖추고 있습니다. 기술 스택은 Next.js 14 (App Router) · Tailwind CSS · shadcn/ui · Recoil · Axios입니다.
 
 ## 주요 페이지
 
-- [템플릿 갤러리](https://gospelfix.vercel.app/main): 전체 템플릿 목록, 카테고리 필터(전체·랜딩페이지·대시보드·이커머스·포트폴리오·블로그)
-- [템플릿 상세](https://gospelfix.vercel.app/main/[slug]): 데모 iframe 미리보기, 포함 항목 목록, 구매 버튼
+- [소재 갤러리](https://gospelfix.vercel.app/main): 전체 디자인 소재 목록, 카테고리 필터
+- [소재 상세](https://gospelfix.vercel.app/main/[slug]): 데모 iframe 미리보기, 포함 항목 목록, 구매 버튼
 - [로그인](https://gospelfix.vercel.app/login): 이메일/비밀번호 인증, 비인증 접근 시 리다이렉트 대상
 - [회원가입](https://gospelfix.vercel.app/register): 신규 계정 생성
 - [사용자 대시보드](https://gospelfix.vercel.app/dashboard): 구매 내역 및 다운로드 관리 (인증 필요)

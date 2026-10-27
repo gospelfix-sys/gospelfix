@@ -1,10 +1,10 @@
 # GOSPELFIX Mall
 
-> 디자인 서비스 이커머스 플랫폼 — 상품 구매, AI 가견적 신청, 소식/포트폴리오 열람을 제공하는 Next.js 14 앱
+> 브랜딩 디자인 소재 마켓 — CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재(PSD/AI)를 판매하는 Next.js 14 앱
 
-GOSPELFIX Mall은 홈페이지·상세페이지·SNS 콘텐츠·회사소개서 등 디자인 서비스를 판매하는
-이커머스 플랫폼입니다. 사용자는 상품을 구매하거나 5단계 위저드를 통해 맞춤 가견적을
-신청할 수 있습니다. 결제는 계좌이체 + 관리자 수동 확인 방식입니다.
+가스펄픽스(GOSPELFIX)는 브랜딩에 들어가는 모든 디자인 소재 — CI 로고, 목업, 홈페이지,
+대시보드, 이커머스 템플릿, 광고 소재(PSD·AI 파일) 등 — 를 판매하는 마켓플레이스입니다.
+사용자는 소재를 탐색·구매해 내려받습니다. 결제는 계좌이체 + 관리자 수동 확인 방식입니다.
 
 ## 아키텍처
 
@@ -53,14 +53,10 @@ Recoil · Axios · react-hook-form + zod · isomorphic-dompurify · jsPDF + html
   응답 인터셉터는 401 시 `/login` 리다이렉트만 수행(토큰 주입 없음).
 - `src/lib/api/me.ts` — `getMe()`: `serverFetch("/api/auth/me")`, 실패 시 `null`.
 - `src/lib/utils.ts` — `cn()` = `twMerge(clsx(inputs))`, className 병합 유일 유틸.
-- `src/lib/quote/constants.ts` — 가견적 가격 데이터(카테고리, 라인 아이템, 옵션).
-- `src/lib/quote/calculator.ts` — `calculateQuote()`, `formatKRW()` 순수 함수.
-- `src/lib/quote/pdfGenerator.ts` — `downloadQuotePdf()`, jsPDF+html2canvas 클라이언트
-  전용 동적 import(SSR 방지). 오프스크린 DOM 렌더링에 `style=` 예외 사용.
-- `src/store/atoms/{authAtom,userAtom,uiAtom,quoteAtom}.ts` — Recoil atoms.
+- `src/store/atoms/{authAtom,userAtom,uiAtom}.ts` — Recoil atoms.
 - `src/store/selectors/authSelector.ts` — `isAuthenticatedSelector`, `isAdminSelector`.
 - `src/types/*.types.ts` — 도메인별 타입(`auth`, `product`, `news`, `order`, `portfolio`,
-  `quote`, `review`, `user`, `api`).
+  `review`, `user`, `api`).
 - `src/hooks/useAuth.ts` — `signIn`/`signUp`/`signOut` (모두 이 앱 자신의 `/api/auth/*`
   호출), `signInWithOAuth`는 미구현.
 - `src/hooks/useCookieConsent.ts` — 쿠키 동의 배너 상태 훅.
@@ -71,18 +67,15 @@ Recoil · Axios · react-hook-form + zod · isomorphic-dompurify · jsPDF + html
 src/app/
 ├── layout.tsx                       루트 레이아웃: RecoilProvider > AuthProvider > children
 ├── login/, register/                공개 — useAuth() 호출, ?next= 리다이렉트 지원
-├── actions/submitQuoteAction.ts     Server Action — headers()로 IP/UA/referer 수집 후
-│                                    serverFetch POST /api/quotes
 ├── (dashboard)/
 │   ├── layout.tsx                   getMe() 호출 + DashboardHeader
 │   └── dashboard/page.tsx           프로필 카드 + 구매 내역(serverFetch /api/orders) + 다운로드
 ├── (public)/
-│   ├── page.tsx                     "/" 홈 — 히어로, PortfolioSwiper, StatsSection, 견적 CTA
+│   ├── page.tsx                     "/" 홈 — 히어로, 필터 줄, 상품 그리드
 │   ├── about/page.tsx                /about — 서비스/프로세스 소개
 │   ├── mall/page.tsx                 /mall — 상품 갤러리(CategoryFilter, ProductCard)
 │   ├── detail/[slug]/page.tsx        /detail/[slug] — 상품 상세, BuyButton, ReviewSection
 │   ├── blog/page.tsx, blog/[slug]/   /blog — 소식 목록/상세(DOMPurify + dangerouslySetInnerHTML)
-│   ├── quote/page.tsx                /quote — 5단계 AI 가견적 위저드
 │   ├── privacy/page.tsx, terms/      정적 약관 페이지
 └── api/
     ├── auth/{login,logout,me,signup}/route.ts   cms.api 인증 API 프록시, 쿠키 세션 관리
@@ -92,41 +85,12 @@ src/app/
     ├── orders/create/, orders/notify-payment/     주문 생성 / 계좌이체 완료 알림
     ├── orders/route.ts (GET)                      내 구매 목록
     ├── downloads/[productId]/                     다운로드 signed URL 프록시(302 리다이렉트)
-    ├── reviews/route.ts (GET/POST)                리뷰 조회(공개)/작성(구매자 전용)
-    └── quotes/route.ts (POST)                     가견적 제출(비로그인 허용)
+    └── reviews/route.ts (GET/POST)                리뷰 조회(공개)/작성(구매자 전용)
 ```
 
 > `src/app/(auth)/{login,register}/`, `src/app/api/auth/callback/`은 빈 디렉토리
 > 껍데기(이전 구조의 잔재)로 남아 있음 — 실제 로그인/회원가입은 `src/app/login/`,
 > `src/app/register/`(라우트 그룹 밖).
-
-## 가견적 위저드 (Quote Wizard)
-
-`/quote` 경로의 5단계 견적 신청 기능 — 여전히 완전히 동작하며, 홈 CTA와
-`QuoteFloatingButton`에서 연결된다.
-
-```
-src/components/quote/
-├── QuoteMain.tsx              /quote 진입점 — QuoteWizard를 dynamic import(ssr:false)
-├── QuoteWizard.tsx            오케스트레이터 — quoteWizardAtom 관리, UTM 파라미터를
-│                              sessionStorage에 캡처, estimatedTotal을 calculateQuote()로 재계산
-├── QuoteProgressBar.tsx       5단계 진행 바
-├── QuoteSummaryPanel.tsx      실시간 예상 금액 패널
-├── steps/
-│   ├── Step01DesignType.tsx   카테고리 선택(shopping_mall/homepage/ai_mvp/maintenance)
-│   ├── Step02ScopeDetail.tsx  범위·업종·상태·기능 상세(카테고리별 분기)
-│   ├── Step03ScheduleStyle.tsx 일정·스타일·타겟 연령
-│   ├── Step04ContactInfo.tsx  연락처 폼(react-hook-form + zod)
-│   └── Step05Result.tsx       결과 화면 — submitQuoteAction 호출, PDF 다운로드
-└── ui/{QuoteFaqSection,QuoteQuantityInput,QuoteSelectCard}.tsx
-```
-
-상태는 Recoil `quoteWizardAtom`(sessionStorage 퍼시스턴스, 키 `"quoteWizard"`)에 저장.
-제출 흐름: Step05 → `submitQuoteAction`(Server Action, IP/UA/referer/UTM 캡처) →
-`serverFetch POST /api/quotes` → `cmsApiFetch POST /api/v1/quotes` (비로그인도 제출 가능).
-
-가격 데이터는 `src/lib/quote/constants.ts`에 4개 카테고리·30개 라인 아이템(AI 구독
-플랜인 Claude Pro/Max, ChatGPT Codex 플랜 포함)으로 정의되어 있다.
 
 ## 인증 흐름
 
@@ -185,8 +149,6 @@ BuyButton 클릭 (/detail/[slug])
 - `authAtom.ts` — `authUserAtom<CmsUser|null>`, `authLoadingAtom<boolean>`
 - `userAtom.ts` — `userProfileAtom<UserProfile|null>`
 - `uiAtom.ts` — `sidebarOpenAtom`, `toastAtom`
-- `quoteAtom.ts` — `quoteWizardAtom` (sessionStorage AtomEffect로 새로고침 후에도 유지,
-  로드 시 `DESIGN_CATEGORIES`/`CATEGORY_LINE_ITEMS` 기준으로 선택값 재검증)
 - `authSelector.ts` — `isAuthenticatedSelector`, `isAdminSelector`(파생 상태)
 
 ## 공통 UI 컴포넌트
@@ -213,10 +175,10 @@ BuyButton 클릭 (/detail/[slug])
 
 ```tsx
 // ❌ shadcn base-nova에는 asChild prop 없음
-<Button asChild><Link href="/quote">견적</Link></Button>
+<Button asChild><Link href="/blog">블로그</Link></Button>
 
 // ✅ <Link className={buttonVariants()}> 패턴 사용
-<Link href="/quote" className={buttonVariants({ variant: "default" })}>견적</Link>
+<Link href="/blog" className={buttonVariants({ variant: "default" })}>블로그</Link>
 ```
 
 ```tsx
@@ -242,8 +204,6 @@ className={cn("bdg", `bdg-${variant}`, className)}
 - `cmsApiFetch()` 호출은 `src/app/api/*/route.ts` 안에서만 (CMS_API_KEY 노출 방지 +
   통신 로직 한 곳 집중).
 - cms.api 통신 로직은 도메인별 route.ts에 인라인 작성(별도 lib 파일로 분리하지 않음).
-- PDF 생성(`pdfGenerator.ts`)은 jsPDF + html2canvas를 dynamic import로 로드(SSR 방지).
-- `quoteWizardAtom`은 sessionStorage effect 포함 — SSR 시 `typeof window` 가드 처리됨.
 - 알려진 죽은 코드: `src/lib/axios/endpoints.ts`(미사용 ENDPOINTS 맵),
   빈 디렉토리 `src/app/(auth)/{login,register}`, `src/app/api/auth/callback` — 정리 대상.
 

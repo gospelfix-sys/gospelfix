@@ -70,7 +70,7 @@
 - 토스트는 `sonner`. `components/ui/form.tsx`는 수작업 구현이다.
 - 루트 레이아웃에 상주하는 모달(`BatchPaymentModal` 등)은 페이지 이동만 하지 말고 **모든 종료
   액션에서 `onClose`를 호출**한다.
-- `LayerShell`을 쓰는 새 페이지를 추가하면 `LayerSidebar.tsx`에 `SidebarLink`를 등록한다(안 하면 고아
+- `LayerShell`을 쓰는 새 페이지를 추가하면 `layerNav.ts`의 `LAYER_NAV_ITEMS`에 등록한다(안 하면 고아
   라우트).
 - Swiper `loop` + `centeredSlides`는 슬라이드가 적으면 멈춘다 → 슬라이드 배열 자체를 반복한다.
   SSR 직후 FOUC는 `onSwiper` 전까지 `opacity-0`으로 막는다.

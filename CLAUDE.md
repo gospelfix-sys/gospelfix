@@ -66,8 +66,8 @@ Client Component ─ axiosInstance ─┘
 
 - 루트 레이아웃 Provider 중첩: `PostHogProvider > RecoilProvider > AuthProvider > CartProvider`, `CookieConsentBanner`는 RecoilProvider 안 형제. **새 추적 SDK는 `CookieConsentBanner`/`useCookieConsent` 게이팅부터 연동.**
 - `(public)/@modal` 병렬 라우트: `(.)detail/[slug]`, `(.)blog/[slug]`는 `RouteModal` 인터셉트, 전체 페이지 버전도 별도 존재. 목록에서는 모달, 직접 진입하면 풀 페이지.
-- `LayerShell`(`components/layer/`)을 쓰는 페이지(`/`, `introduce`, `creator`, `free-resources`, `upload`): **새 페이지를 추가하면 `LayerSidebar.tsx`에 `SidebarLink`를 반드시 등록**해야 한다(안 하면 고아 라우트).
-- 라우트 이력: `/growth` → `/layer`로 리네임(next.config.mjs 영구 리다이렉트), `/mall` → `/`. 현재 `/`는 마켓플레이스.
+- `LayerShell`(`components/layer/`)을 쓰는 페이지(`/`, `introduce`, `creator`, `free-resources`, `blog`, `blog/[slug]`; `upload` 에디터는 LayerShell이 아니라 `LayerSidebar`를 직접 쓴다): **새 페이지를 추가하면 `layerNav.ts`의 `LAYER_NAV_ITEMS`에 반드시 등록**해야 한다(안 하면 고아 라우트).
+- 라우트 이력: `/growth` → `/layer`로 리네임(next.config.mjs 영구 리다이렉트), `/mall` → `/`. 현재 `/`는 브랜딩 디자인 소재(CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재 PSD/AI) 마켓.
 - `(mypage)/layout.tsx`는 `force-dynamic` 서버 레이아웃.
 - 루트 레이아웃에 상주하는 모달(`BatchPaymentModal` 등)은 페이지 이동만 하지 말고 **모든 종료 액션에서 `onClose` 호출**.
 - Server Action은 `src/app/actions/`.
