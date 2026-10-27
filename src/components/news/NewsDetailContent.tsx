@@ -3,6 +3,7 @@ import { NewsItem } from "@/types/news.types";
 import { cn, formatDate } from "@/lib/utils";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import NewsImageGallery from "@/components/news/NewsImageGallery";
+import BlogSignupTrigger from "@/components/news/BlogSignupTrigger";
 import { ProseHtml } from "@/components/ui/ProseHtml";
 
 const CATEGORY_COLOR: Record<string, string> = {
@@ -54,6 +55,9 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
         title={news.title}
         galleryId={`news-gallery-${news.id}`}
       />
+
+      {/* 본문을 끝까지 읽은 비로그인 사용자에게 회원가입 유도 */}
+      <BlogSignupTrigger next={`/blog/${news.slug}`} />
     </>
   );
 }
