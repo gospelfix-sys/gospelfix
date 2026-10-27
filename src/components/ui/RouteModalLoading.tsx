@@ -2,32 +2,27 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import {
   ROUTE_MODAL_BACKDROP_CLASS,
+  ROUTE_MODAL_BODY_CLASS,
   ROUTE_MODAL_FADE_TRANSITION,
-  registerRouteModalBackdropSource,
+  ROUTE_MODAL_PANEL_CLASS,
+  ROUTE_MODAL_PANEL_HIDDEN,
+  ROUTE_MODAL_PANEL_SHOWN,
+  registerRouteModalOverlaySource,
 } from "@/components/ui/routeModalBackdrop";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ArticleSkeleton } from "@/components/skeletons/ArticleSkeleton";
+import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
-
-// 응답이 빠르면 인디케이터가 번쩍였다 사라지는 게 더 거슬리므로, 이 시간 안에 모달이 열리면
-// backdrop fade만 보이고 인디케이터는 아예 나타나지 않는다.
-const INDICATOR_DELAY_S = 0.4;
-const INDICATOR_TRANSITION = { duration: 0.2, ease: "easeOut" as const, delay: INDICATOR_DELAY_S };
-const SPIN_TRANSITION = { duration: 0.8, ease: "linear" as const, repeat: Infinity };
-// 움직임 감소 설정에서는 회전 대신 느린 opacity 맥동으로 "진행 중"만 알린다.
-const PULSE_TRANSITION = {
-  duration: 1.2,
-  ease: "easeInOut" as const,
-  repeat: Infinity,
-  repeatType: "reverse" as const,
-};
 
 /**
  * 인터셉트 라우트 모달(RouteModal)의 데이터를 기다리는 동안 보여주는 오버레이.
- * RouteModal과 같은 backdrop을 즉시 fade-in해 클릭에 바로 반응하고, 지연 후에만 작은
- * 로딩 인디케이터를 띄운다. backdrop opacity는 RouteModal이 이어받으므로 교체 순간 깜빡이거나
- * 두 겹으로 어두워지지 않는다.
+ * RouteModal과 같은 backdrop과 같은 패널을 클릭 즉시 띄우고, 패널 안에는 본문형 스켈레톤을 둔다.
+ * 블로그·상품 상세가 같은 슬롯을 쓰므로 어느 쪽에도 어긋나지 않는 범용 본문 모양을 쓴다.
+ * backdrop opacity와 패널 opacity/y는 RouteModal이 이어받으므로, 교체 순간에는 패널이 다시
+ * 올라오지 않고 안의 내용만 실제 상세로 바뀐다.
  *
  * 배경 스크롤 락은 하지 않는다 — RouteModal이 마운트될 때 그 시점의 scrollY로 잠그고 닫을 때
  * 복원하므로, 여기서 먼저 잠그면 body가 fixed로 바뀐 뒤의 scrollY(0)를 RouteModal이 저장해
@@ -35,13 +30,16 @@ const PULSE_TRANSITION = {
  */
 export function RouteModalLoading({ label = "불러오는 중" }: RouteModalLoadingProps) {
   const [mounted, setMounted] = React.useState(false);
-  const shouldReduceMotion = useReducedMotion();
   // 스타일로 바인딩하지 않고(인라인 style 금지) 애니메이션 진행값만 기록해 RouteModal에 넘긴다.
-  const backdropOpacityRef = React.useRef(0);
+  const overlayRef = React.useRef({
+    backdropOpacity: 0,
+    panelOpacity: ROUTE_MODAL_PANEL_HIDDEN.opacity,
+    panelY: ROUTE_MODAL_PANEL_HIDDEN.y,
+  });
 
   useIsomorphicLayoutEffect(() => {
     setMounted(true);
-    return registerRouteModalBackdropSource(() => backdropOpacityRef.current);
+    return registerRouteModalOverlaySource(() => ({ ...overlayRef.current }));
   }, []);
 
   if (!mounted) return null;
@@ -55,39 +53,33 @@ export function RouteModalLoading({ label = "불러오는 중" }: RouteModalLoad
         animate={{ opacity: 1 }}
         transition={ROUTE_MODAL_FADE_TRANSITION}
         onUpdate={(latest) => {
-          if (typeof latest.opacity === "number") backdropOpacityRef.current = latest.opacity;
+          if (typeof latest.opacity === "number")
+            overlayRef.current.backdropOpacity = latest.opacity;
         }}
         onAnimationComplete={() => {
-          backdropOpacityRef.current = 1;
+          overlayRef.current.backdropOpacity = 1;
         }}
       />
-      <div
-        role="status"
-        className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center"
+      <motion.div
+        className={ROUTE_MODAL_PANEL_CLASS}
+        initial={ROUTE_MODAL_PANEL_HIDDEN}
+        animate={ROUTE_MODAL_PANEL_SHOWN}
+        transition={ROUTE_MODAL_FADE_TRANSITION}
+        onUpdate={(latest) => {
+          if (typeof latest.opacity === "number") overlayRef.current.panelOpacity = latest.opacity;
+          if (typeof latest.y === "number") overlayRef.current.panelY = latest.y;
+        }}
+        onAnimationComplete={() => {
+          overlayRef.current.panelOpacity = ROUTE_MODAL_PANEL_SHOWN.opacity;
+          overlayRef.current.panelY = ROUTE_MODAL_PANEL_SHOWN.y;
+        }}
       >
-        <span className="sr-only">{label}</span>
-        <motion.div
-          className="flex size-12 items-center justify-center rounded-full bg-white shadow-[0_4px_16px_rgba(0,0,0,0.09)]"
-          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
-          animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-          transition={INDICATOR_TRANSITION}
-        >
-          {shouldReduceMotion ? (
-            <motion.span
-              className="size-5 rounded-full border-2 border-black/15 border-t-black"
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 0.4 }}
-              transition={PULSE_TRANSITION}
-            />
-          ) : (
-            <motion.span
-              className="size-5 rounded-full border-2 border-black/15 border-t-black"
-              animate={{ rotate: 360 }}
-              transition={SPIN_TRANSITION}
-            />
-          )}
-        </motion.div>
-      </div>
+        {/* RouteModal의 뒤로가기 버튼 자리. 로딩 중에는 누를 대상이 없으므로 자리표시만 둔다. */}
+        <Skeleton className="absolute bottom-6 right-4 z-10 size-[60px] rounded-xl" />
+        <SkeletonRegion label={label} className={ROUTE_MODAL_BODY_CLASS}>
+          <ArticleSkeleton />
+        </SkeletonRegion>
+      </motion.div>
     </>,
     document.body,
   );

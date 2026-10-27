@@ -8,9 +8,13 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ROUTE_MODAL_BACKDROP_CLASS,
+  ROUTE_MODAL_BODY_CLASS,
   ROUTE_MODAL_FADE_TRANSITION,
-  clearRouteModalBackdropSnapshot,
-  readRouteModalBackdropOpacity,
+  ROUTE_MODAL_PANEL_CLASS,
+  ROUTE_MODAL_PANEL_HIDDEN,
+  ROUTE_MODAL_PANEL_SHOWN,
+  clearRouteModalOverlaySnapshot,
+  readRouteModalOverlayState,
 } from "@/components/ui/routeModalBackdrop";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 
@@ -50,14 +54,15 @@ export default function RouteModal({
   const [mounted, setMounted] = React.useState(false);
   const closeButtonRef = React.useRef<HTMLElement>(null);
   const popupRef = React.useRef<HTMLDivElement>(null);
-  // 로딩 오버레이 backdrop이 떠 있었다면 그 opacity에서 이어 fade해 깜빡임·이중 backdrop을 막는다.
-  // useState 초기화라 첫 렌더 값으로 고정되고, 읽기 함수는 순수해 StrictMode 이중 호출에도 안전하다.
-  const [initialBackdropOpacity] = React.useState(readRouteModalBackdropOpacity);
+  // 로딩 오버레이(backdrop + 스켈레톤 패널)가 떠 있었다면 그 진행값에서 이어 움직여 깜빡임·
+  // 이중 backdrop·패널 재등장을 막는다. useState 초기화라 첫 렌더 값으로 고정되고, 읽기 함수는
+  // 순수해 StrictMode 이중 호출에도 안전하다.
+  const [initialOverlay] = React.useState(readRouteModalOverlayState);
 
   // useEffect면 로딩 backdrop이 사라진 뒤 portal이 그려지기 전에 한 프레임이 페인트되어
   // backdrop이 깜빡인다. 페인트 전에 마운트를 확정해 빈 프레임을 없앤다.
   useIsomorphicLayoutEffect(() => {
-    clearRouteModalBackdropSnapshot();
+    clearRouteModalOverlaySnapshot();
     setMounted(true);
   }, []);
 
@@ -130,7 +135,7 @@ export default function RouteModal({
             <motion.div
               key="backdrop"
               className={ROUTE_MODAL_BACKDROP_CLASS}
-              initial={{ opacity: initialBackdropOpacity }}
+              initial={{ opacity: initialOverlay.backdropOpacity }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={FADE_TRANSITION}
@@ -142,10 +147,10 @@ export default function RouteModal({
               role="dialog"
               aria-modal="true"
               aria-label={ariaLabel}
-              className="fixed inset-0 top-6 z-50 bg-white outline-none overflow-hidden"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 40 }}
+              className={ROUTE_MODAL_PANEL_CLASS}
+              initial={{ opacity: initialOverlay.panelOpacity, y: initialOverlay.panelY }}
+              animate={ROUTE_MODAL_PANEL_SHOWN}
+              exit={ROUTE_MODAL_PANEL_HIDDEN}
               transition={FADE_TRANSITION}
             >
               <Button
@@ -159,7 +164,7 @@ export default function RouteModal({
               >
                 <ArrowLeft size={28} />
               </Button>
-              <div className="h-full overflow-y-auto bg-gf-bg px-6 lg:px-[60px] py-14">
+              <div className={ROUTE_MODAL_BODY_CLASS}>
                 <RouteModalContext.Provider value={() => setOpen(false)}>
                   {children}
                 </RouteModalContext.Provider>

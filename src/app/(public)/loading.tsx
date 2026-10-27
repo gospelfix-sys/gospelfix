@@ -4,6 +4,8 @@ import { HomeHero } from "@/components/layer/HomeHero";
 import { SortTabs } from "@/components/layer/SortTabs";
 import { CategoryTabs } from "@/components/layer/CategoryTabs";
 import { FilterDropdown } from "@/components/products/FilterDropdown";
+import { ProductCardSkeleton } from "@/components/products/ProductCardSkeleton";
+import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
 
 // 상단 네비/히어로/정렬 탭/카테고리 탭/가격 필터는 상품 목록 fetch와 무관하게 즉시 렌더
 // 가능한 실제 컴포넌트라 그대로 재사용한다 — 별도 스켈레톤을 손으로 맞추면 실제 레이아웃이
@@ -25,18 +27,12 @@ export default function LayerLoading() {
           </Suspense>
         </div>
 
-        {/* 카드 그리드 스켈레톤 — ProductCard 실제 구조(4:3 썸네일 + 제목/카테고리 줄)와 동일 치수 */}
-        <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {/* 카드 그리드만 fetch 결과에 의존하므로 스켈레톤으로 둔다 */}
+        <SkeletonRegion className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="flex flex-col gap-3">
-              <div className="aspect-[4/3] animate-pulse rounded-2xl bg-gf-white" />
-              <div className="flex flex-col gap-2 px-1">
-                <div className="h-4 w-3/4 animate-pulse rounded bg-gf-white" />
-                <div className="h-3 w-16 animate-pulse rounded bg-gf-white" />
-              </div>
-            </div>
+            <ProductCardSkeleton key={i} />
           ))}
-        </div>
+        </SkeletonRegion>
       </section>
     </LayerShell>
   );

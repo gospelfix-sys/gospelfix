@@ -1,6 +1,14 @@
-// 상품 상세 직접 진입 시 상위 (public)/loading.tsx(마켓플레이스용 사이드바+상품그리드 스켈레톤)를
-// 물려받으면 전혀 다른 레이아웃이 잠깐 비쳤다가 상세로 바뀐다.
-// 실제 상세 레이아웃(bg-gf-bg 단색 배경)과 같은 빈 배경만 두어 그 전환을 막는다.
+import { ProductDetailSkeleton } from "@/components/products/ProductDetailSkeleton";
+import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
+
+// 상품 상세 직접 진입 시 상위 (public)/loading.tsx(홈 상품그리드 스켈레톤)를 물려받으면 전혀
+// 다른 레이아웃이 잠깐 비친다. 실제 상세와 같은 라이트 배경·여백의 2단 자리표시를 둔다.
 export default function ProductDetailLoading() {
-  return <div className="bg-gf-bg min-h-screen" />;
+  return (
+    <SkeletonRegion className="min-h-screen bg-gf-bg">
+      <div className="max-w-[2400px] px-6 pb-10 pt-20 lg:px-[40px]">
+        <ProductDetailSkeleton />
+      </div>
+    </SkeletonRegion>
+  );
 }
