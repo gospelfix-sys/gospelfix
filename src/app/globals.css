@@ -469,7 +469,7 @@
   background: var(--gf-surface);
   border: 1px solid var(--gf-border);
   border-radius: 8px;
-  padding: 16px;
+  padding: 16px 48px 16px 16px; /* 우측은 복사 버튼(ProseHtml)과 첫 줄이 겹치지 않도록 확보 */
   margin: 24px 0;
   overflow-x: auto;
 }

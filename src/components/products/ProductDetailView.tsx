@@ -7,6 +7,7 @@ import { PurchaseOptionsPanel } from "@/components/products/PurchaseOptionsPanel
 import { PurchaseOptionProvider } from "@/components/products/PurchaseOptionContext";
 import { ProductOptionsSection } from "@/components/products/ProductOptionsSection";
 import { CodePreviewSectionLazy } from "@/components/products/CodePreviewSectionLazy";
+import { ProseHtml } from "@/components/ui/ProseHtml";
 import { ProductVisitNav } from "@/components/products/ProductVisitNav";
 import { ReviewSection } from "@/components/products/ReviewSection";
 import { ReviewSectionSkeleton } from "@/components/products/ReviewSectionSkeleton";
@@ -45,7 +46,7 @@ export function ProductDetailView({
       <div className="mx-auto flex max-w-[1200px] flex-col gap-10 pb-6">
         {/* 상세 콘텐츠(관리자 에디터 본문): 화면 전체 너비, 없으면 렌더링 안 됨 */}
         {hasContentHtml && (
-          <div className="prose-gf" dangerouslySetInnerHTML={{ __html: sanitizedContentHtml }} />
+          <ProseHtml html={sanitizedContentHtml} />
         )}
 
         {/* 구매 옵션(왼쪽) + 상품 정보(오른쪽) */}

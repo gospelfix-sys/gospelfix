@@ -3,6 +3,7 @@ import { NewsItem } from "@/types/news.types";
 import { cn } from "@/lib/utils";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import NewsImageGallery from "@/components/news/NewsImageGallery";
+import { ProseHtml } from "@/components/ui/ProseHtml";
 
 const CATEGORY_COLOR: Record<string, string> = {
   업데이트: "bg-blue-50 text-blue-600",
@@ -53,7 +54,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
       <div className="border-t gf-border mb-10" />
 
       {/* 본문 */}
-      <div className="prose-gf max-w-none" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+      <ProseHtml html={contentHtml} className="max-w-none" />
 
       {/* 이미지 갤러리 */}
       <NewsImageGallery
