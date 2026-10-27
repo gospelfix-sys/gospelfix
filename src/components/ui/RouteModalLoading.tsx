@@ -7,10 +7,11 @@ import {
   ROUTE_MODAL_BACKDROP_CLASS,
   ROUTE_MODAL_BODY_CLASS,
   ROUTE_MODAL_FADE_TRANSITION,
-  ROUTE_MODAL_PANEL_CLASS,
   ROUTE_MODAL_PANEL_HIDDEN,
   ROUTE_MODAL_PANEL_SHOWN,
+  type RouteModalTheme,
   registerRouteModalOverlaySource,
+  routeModalPanelClass,
 } from "@/components/ui/routeModalBackdrop";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArticleSkeleton } from "@/components/skeletons/ArticleSkeleton";
@@ -28,7 +29,10 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
  * 복원하므로, 여기서 먼저 잠그면 body가 fixed로 바뀐 뒤의 scrollY(0)를 RouteModal이 저장해
  * 닫을 때 스크롤 위치가 맨 위로 튄다.
  */
-export function RouteModalLoading({ label = "불러오는 중" }: RouteModalLoadingProps) {
+export function RouteModalLoading({
+  label = "불러오는 중",
+  theme = "light",
+}: RouteModalLoadingProps) {
   const [mounted, setMounted] = React.useState(false);
   // 스타일로 바인딩하지 않고(인라인 style 금지) 애니메이션 진행값만 기록해 RouteModal에 넘긴다.
   const overlayRef = React.useRef({
@@ -61,7 +65,7 @@ export function RouteModalLoading({ label = "불러오는 중" }: RouteModalLoad
         }}
       />
       <motion.div
-        className={ROUTE_MODAL_PANEL_CLASS}
+        className={routeModalPanelClass(theme)}
         initial={ROUTE_MODAL_PANEL_HIDDEN}
         animate={ROUTE_MODAL_PANEL_SHOWN}
         transition={ROUTE_MODAL_FADE_TRANSITION}
@@ -98,4 +102,6 @@ export function RouteModalLoadingPreload() {
 interface RouteModalLoadingProps {
   /** 스크린리더에 읽힐 상태 문구 */
   label?: string;
+  /** 실제 모달과 같은 테마여야 교체 순간 색이 튀지 않는다 */
+  theme?: RouteModalTheme;
 }

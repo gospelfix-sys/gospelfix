@@ -10,12 +10,15 @@ import {
   ROUTE_MODAL_BACKDROP_CLASS,
   ROUTE_MODAL_BODY_CLASS,
   ROUTE_MODAL_FADE_TRANSITION,
-  ROUTE_MODAL_PANEL_CLASS,
   ROUTE_MODAL_PANEL_HIDDEN,
   ROUTE_MODAL_PANEL_SHOWN,
+  type RouteModalTheme,
   clearRouteModalOverlaySnapshot,
   readRouteModalOverlayState,
+  routeModalCloseButtonClass,
+  routeModalPanelClass,
 } from "@/components/ui/routeModalBackdrop";
+import { cn } from "@/lib/utils";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 
 const FADE_TRANSITION = ROUTE_MODAL_FADE_TRANSITION;
@@ -45,9 +48,11 @@ export function useRouteModalClose(): (() => void) | null {
 export default function RouteModal({
   children,
   ariaLabel,
+  theme = "light",
 }: {
   children: React.ReactNode;
   ariaLabel: string;
+  theme?: RouteModalTheme;
 }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
@@ -147,7 +152,7 @@ export default function RouteModal({
               role="dialog"
               aria-modal="true"
               aria-label={ariaLabel}
-              className={ROUTE_MODAL_PANEL_CLASS}
+              className={routeModalPanelClass(theme)}
               initial={{ opacity: initialOverlay.panelOpacity, y: initialOverlay.panelY }}
               animate={ROUTE_MODAL_PANEL_SHOWN}
               exit={ROUTE_MODAL_PANEL_HIDDEN}
@@ -160,7 +165,10 @@ export default function RouteModal({
                 size="icon-sm"
                 onClick={() => setOpen(false)}
                 aria-label="뒤로가기"
-                className="absolute bottom-6 right-4 z-10 size-[60px] rounded-xl bg-black text-white hover:bg-black hover:text-white hover:opacity-100 dark:hover:bg-black"
+                className={cn(
+                  "absolute bottom-6 right-4 z-10 size-[60px] rounded-xl",
+                  routeModalCloseButtonClass(theme),
+                )}
               >
                 <ArrowLeft size={28} />
               </Button>

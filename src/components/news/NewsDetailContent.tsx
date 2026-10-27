@@ -6,9 +6,9 @@ import NewsImageGallery from "@/components/news/NewsImageGallery";
 import { ProseHtml } from "@/components/ui/ProseHtml";
 
 const CATEGORY_COLOR: Record<string, string> = {
-  업데이트: "bg-blue-50 text-blue-600",
+  업데이트: "bg-blue-500/15 text-blue-400",
   "신규 템플릿": "bg-gf-orange-bg text-gf-orange",
-  이벤트: "bg-green-50 text-green-600",
+  이벤트: "bg-green-500/15 text-green-400",
 };
 
 function formatDate(iso: string) {
@@ -33,7 +33,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
           <span
             className={cn(
               "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold",
-              CATEGORY_COLOR[news.category] ?? "bg-gray-100 text-gray-600",
+              CATEGORY_COLOR[news.category] ?? "bg-gf-surface text-gf-gray1",
             )}
           >
             <Tag width={10} height={10} />

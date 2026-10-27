@@ -17,7 +17,7 @@ export default async function BlogDetailModal({ params }: Props) {
   if (!news) notFound();
 
   return (
-    <RouteModal ariaLabel={news.title}>
+    <RouteModal ariaLabel={news.title} theme="dark">
       <div className="mx-auto max-w-3xl">
         <NewsDetailContent news={news} />
 

@@ -14,7 +14,7 @@ const CHECK_ICON = `<svg ${SVG_ATTRS} class="hidden text-gf-orange group-data-[c
 
 const COPY_BUTTON_CLASS = cn(
   buttonVariants({ variant: "outline", size: "icon-sm" }),
-  "absolute right-2 top-2 bg-white text-gf-gray1 hover:bg-white",
+  "absolute right-2 top-2 bg-gf-white text-gf-gray1 hover:bg-gf-white",
 );
 const COPY_BUTTON_HTML = `<button type="button" data-copy-code class="${COPY_BUTTON_CLASS}" aria-label="코드 복사">${COPY_ICON}${CHECK_ICON}</button>`;
 
