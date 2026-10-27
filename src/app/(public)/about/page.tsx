@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Bot, Globe, Calculator, HelpCircle, Rocket, RefreshCw } from "lucide-react";
-import { QuoteFloatingButton } from "@/components/main/QuoteFloatingButton";
 
 export const metadata: Metadata = {
   title: "소개 | GOSPELFIX",
@@ -298,7 +297,6 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
-      <QuoteFloatingButton />
     </div>
   );
 }

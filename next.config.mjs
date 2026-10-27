@@ -14,6 +14,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // 문의하기(견적) 기능 삭제 후 남은 외부 링크를 홈으로 돌린다. 기능이 되살아날 수 있어
+        // 브라우저에 캐시되는 영구 리다이렉트는 쓰지 않는다.
+        source: "/quote/:path*",
+        destination: "/",
+        permanent: false,
+      },
+      {
         source: "/mall",
         destination: "/",
         permanent: true,

@@ -29,7 +29,7 @@
 ## Phase 1: 기반 인프라 — 완료
 
 - [x] Next.js 14 App Router 세팅
-- [x] Recoil 상태 관리 (`authAtom`, `userAtom`, `uiAtom`, `quoteAtom`)
+- [x] Recoil 상태 관리 (`authAtom`, `userAtom`, `uiAtom`)
 - [x] `gospelfix.cms.api` BFF 연동 구조 확립 (`cmsApiFetch()` 서버 전용, 브라우저는 이 앱의 `/api/*`만 호출)
 - [x] Tailwind v3 + shadcn(base-nova) 디자인 시스템, 브랜드 컬러 토큰
 
@@ -42,7 +42,7 @@
 - [x] 상품 상세(`/detail/[slug]`) — 디바이스 프리뷰, 구매 옵션, 리뷰
 - [x] 구매 흐름 — 주문 생성 → 무료 상품 즉시완료 / 유료 상품 계좌이체 안내(QR+계좌번호) → 입금 알림 → 관리자 수동 확인 대기
 - [x] 마이페이지(`/dashboard`) — 구매 내역 + 다운로드
-- [x] 커스텀 견적 마법사(`/quote`) — 5단계, `sessionStorage` 상태 유지
+- [x] ~~커스텀 견적 마법사(`/quote`)~~ — 제거됨(2026-10-27)
 - [x] 블로그(`/blog`, `/blog/[slug]`) — Lexical HTML 렌더링
 - [x] 리뷰 — 구매 검증 후 작성, 공개 조회
 - [x] 이용약관/개인정보처리방침 정적 페이지

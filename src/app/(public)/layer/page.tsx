@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Truck, Coffee, Stethoscope, GraduationCap, LifeBuoy } from "lucide-react";
-import { QuoteFloatingButton } from "@/components/main/QuoteFloatingButton";
 import { StatsSection } from "@/components/main/StatsSection";
 import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
@@ -104,12 +103,6 @@ export default async function OfficialHomePage() {
           >
             솔루션 보기
           </Link>
-          <Link
-            href="/quote"
-            className="px-7 py-3.5 rounded-full bg-gf-black text-gf-orange text-sm font-bold no-underline flex items-center justify-center gap-2"
-          >
-            AI로 견적 받기
-          </Link>
         </div>
 
         {/* 모다 크로스링크 */}
@@ -170,7 +163,6 @@ export default async function OfficialHomePage() {
       </section>
 
       <StatsSection />
-      <QuoteFloatingButton />
     </div>
   );
 }
