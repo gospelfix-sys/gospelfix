@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mrs_Saint_Delafield } from "next/font/google";
 import {
   animate,
   motion,
@@ -11,15 +10,6 @@ import {
   type AnimationPlaybackControls,
 } from "motion/react";
 import { cn } from "@/lib/utils";
-
-// 가늘고 기울어진 스펜서리안 필기체. 히어로 한 곳에서만 쓰므로 루트 레이아웃이 아니라 이 파일에서
-// 로드하고, CSS 변수로 이 컴포넌트 범위에만 적용한다(다른 페이지 번들·폰트 프리로드에 영향 없음).
-const scriptFont = Mrs_Saint_Delafield({
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-hero-script",
-});
 
 // 타자기 리듬: 쓰기는 또박또박, 지우기는 그보다 빠르게(사용자가 다음 문구를 기다리지 않게).
 const TYPE_SECONDS_PER_CHAR = 0.08;
@@ -115,16 +105,13 @@ export function HeroTypingTitle({ label, script, phrases, className }: HeroTypin
   const isBlinking = phase === "holding" && !shouldReduceMotion;
 
   return (
-    <span
-      aria-hidden="true"
-      className={cn("flex flex-col items-center", scriptFont.variable, className)}
-    >
+    <span aria-hidden="true" className={cn("flex flex-col items-center", className)}>
       <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gf-gray2 sm:text-xs">
         {label}
       </span>
 
-      {/* 필기체 꼬리가 아래 대문자 줄 위로 걸치도록 음수 margin으로 겹치고, 앞에 그린다 */}
-      <span className="relative z-10 -mb-5 mt-2 whitespace-nowrap font-[family-name:var(--font-hero-script)] text-6xl font-normal leading-none text-gf-orange sm:-mb-7 sm:text-7xl lg:-mb-10 lg:text-9xl">
+      {/* 이탤릭 글자가 아래 대문자 줄 위로 살짝 걸치도록 음수 margin으로 겹치고, 앞에 그린다 */}
+      <span className="relative z-10 -mb-2 mt-2 whitespace-nowrap font-playfair text-4xl font-bold italic leading-none text-gf-orange sm:-mb-3 sm:text-5xl lg:-mb-4 lg:text-7xl">
         {script}
       </span>
 
