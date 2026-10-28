@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getNewsBySlug } from "@/lib/api/news";
+import { getAdjacentNews, getNewsBySlug } from "@/lib/api/news";
 import NewsDetailContent from "@/components/news/NewsDetailContent";
+import AdjacentNewsNav from "@/components/news/AdjacentNewsNav";
 import BackToBlogButton from "@/components/news/BackToBlogButton";
 import { LayerShell } from "@/components/layer/LayerShell";
 
@@ -34,11 +35,15 @@ export default async function BlogDetailPage({ params }: Props) {
 
   if (!news) notFound();
 
+  const adjacent = await getAdjacentNews(slug);
+
   return (
     <LayerShell>
       <article className="px-6 lg:px-[60px] pt-14 pb-14">
         <div className="mx-auto max-w-3xl">
           <NewsDetailContent news={news} />
+
+          <AdjacentNewsNav prev={adjacent.prev} next={adjacent.next} />
 
           {/* 하단 네비게이션 */}
           <div className="mt-14 pt-8 border-t gf-border flex justify-center">
