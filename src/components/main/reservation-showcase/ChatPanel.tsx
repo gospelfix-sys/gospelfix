@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,11 @@ import { Chip } from "@/components/ui/Chip";
 import { Input } from "@/components/ui/input";
 import {
   detectService,
+  getDateOptions,
+  isValidCustomerName,
+  isValidDesiredTime,
   matchGeneralReply,
+  TIME_OPTIONS,
   type BookingStep,
 } from "@/lib/reservationDemo/chatRules";
 import type { ChatMessage } from "@/types/reservationDemo.types";
@@ -32,6 +36,10 @@ const QUICK_REPLIES = [
   "예약 변경하고 싶어요",
   "예약 취소하고 싶어요",
 ];
+
+const INVALID_DATETIME_REPLY =
+  "날짜와 시간을 알아보지 못했어요. '30일 12시', '내일 오후 3시'처럼 다시 알려주시겠어요?";
+const INVALID_NAME_REPLY = "성함을 알아보지 못했어요. 한글 또는 영문 이름으로 다시 알려주시겠어요?";
 
 interface ReservationConfirmation {
   customerName: string;
@@ -65,10 +73,24 @@ export function ChatPanel({
     desiredTime: "",
   });
   const pendingChangeRef = useRef<{ desiredTime: string }>({ desiredTime: "" });
+  const logRef = useRef<HTMLDivElement>(null);
+  // 날짜 칩을 먼저 고르면 시간 칩이 이어서 나온다 — 시간까지 골라야 한 번에 전송된다.
+  const [pickedDate, setPickedDate] = useState<string | null>(null);
+
+  // 새 말풍선·타이핑 표시가 생길 때마다 맨 아래로 내린다. scrollIntoView는 페이지 전체까지
+  // 스크롤시킬 수 있어, 대화 영역 컨테이너만 직접 스크롤한다. 첫 렌더(인사말만 있는 상태)는
+  // 브랜드 인트로가 보이도록 건너뛴다.
+  useEffect(() => {
+    if (messages.length === INITIAL_MESSAGES.length && !isTyping) return;
+    const log = logRef.current;
+    if (!log) return;
+    log.scrollTo({ top: log.scrollHeight, behavior: "smooth" });
+  }, [messages, isTyping, pickedDate]);
 
   // 입력창 전송과 퀵리플라이 칩 클릭이 같은 전송 로직을 타도록 공통 함수로 뺐다.
   function sendText(text: string) {
     if (!text || isTyping) return;
+    setPickedDate(null);
 
     const userMessage: ChatMessage = { id: `msg-${messageIdRef.current++}`, role: "user", text };
     setMessages((prev) => [...prev, userMessage]);
@@ -80,7 +102,16 @@ export function ChatPanel({
       // 규칙에서만 채워진다 — 대부분의 응답은 한 개 말풍선으로 끝난다.
       let followUp: string | undefined;
 
-      if (bookingStep === "awaiting_datetime") {
+      // 검증 실패 시 단계를 바꾸지 않아, 같은 질문을 다시 받는다.
+      const asksDateTime =
+        bookingStep === "awaiting_datetime" || bookingStep === "awaiting_change_datetime";
+      const asksName = bookingStep === "awaiting_name" || bookingStep === "awaiting_change_name";
+
+      if (asksDateTime && !isValidDesiredTime(text)) {
+        reply = INVALID_DATETIME_REPLY;
+      } else if (asksName && !isValidCustomerName(text)) {
+        reply = INVALID_NAME_REPLY;
+      } else if (bookingStep === "awaiting_datetime") {
         pendingBookingRef.current.desiredTime = text;
         reply = "성함이 어떻게 되세요?";
         setBookingStep("awaiting_name");
@@ -153,10 +184,17 @@ export function ChatPanel({
   // 인사말 2개 이후로 아직 아무 대화도 없을 때만 노출 — 대화가 시작되면 칩 대신
   // 문맥에 맞는 답변 흐름에 집중하게 한다.
   const showQuickReplies = messages.length === INITIAL_MESSAGES.length && !isTyping;
+  // 예약·변경 흐름에서 일시를 물을 때는 직접 입력 대신 고를 수 있게 칩을 함께 보여준다.
+  const showDateTimeOptions =
+    (bookingStep === "awaiting_datetime" || bookingStep === "awaiting_change_datetime") &&
+    !isTyping;
+  const optionChipClassName =
+    "shrink-0 border-gf-border bg-white px-3.5 py-2 text-xs font-semibold text-gf-black hover:border-gf-orange hover:text-gf-orange";
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div
+        ref={logRef}
         role="log"
         aria-live="polite"
         className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-4"
@@ -201,14 +239,50 @@ export function ChatPanel({
         {showQuickReplies && (
           <div className="flex flex-wrap gap-2 pt-1">
             {QUICK_REPLIES.map((item) => (
-              <Chip
-                key={item}
-                onClick={() => sendText(item)}
-                className="shrink-0 border-gf-border bg-white px-3.5 py-2 text-xs font-semibold text-gf-black hover:border-gf-orange hover:text-gf-orange"
-              >
+              <Chip key={item} onClick={() => sendText(item)} className={optionChipClassName}>
                 {item}
               </Chip>
             ))}
+          </div>
+        )}
+
+        {showDateTimeOptions && (
+          <div className="flex flex-col gap-2 pt-1">
+            <p className="text-xs text-gf-gray2">
+              {pickedDate ? `${pickedDate} · 시간을 골라주세요` : "날짜를 골라주세요"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {pickedDate
+                ? TIME_OPTIONS.map((time) => (
+                    <Chip
+                      key={time}
+                      onClick={() => sendText(`${pickedDate} ${time}`)}
+                      className={optionChipClassName}
+                    >
+                      {time}
+                    </Chip>
+                  ))
+                : getDateOptions().map((date) => (
+                    <Chip
+                      key={date}
+                      onClick={() => setPickedDate(date)}
+                      className={optionChipClassName}
+                    >
+                      {date}
+                    </Chip>
+                  ))}
+            </div>
+            {pickedDate && (
+              <Button
+                type="button"
+                variant="link"
+                size="xs"
+                onClick={() => setPickedDate(null)}
+                className="h-auto self-start p-0 text-xs text-gf-gray2"
+              >
+                날짜 다시 고르기
+              </Button>
+            )}
           </div>
         )}
       </div>

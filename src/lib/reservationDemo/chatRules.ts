@@ -125,6 +125,38 @@ export function matchGeneralReply(input: string): GeneralReplyResult {
   };
 }
 
+export const TIME_OPTIONS = ["오전 10시", "오전 11시", "오후 2시", "오후 4시", "오후 6시"];
+
+const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"];
+const DATE_OPTION_COUNT = 5;
+
+// 선택형 날짜 칩 — 오늘은 제외하고 내일부터 며칠을 보여준다(당일 예약은 받지 않는 데모 정책).
+// 라벨은 "10월 29일(목)" 형태라 isValidDesiredTime 검증도 그대로 통과한다.
+export function getDateOptions(base: Date = new Date()): string[] {
+  return Array.from({ length: DATE_OPTION_COUNT }, (_, index) => {
+    const date = new Date(base);
+    date.setDate(base.getDate() + index + 1);
+    return `${date.getMonth() + 1}월 ${date.getDate()}일(${WEEKDAY_LABELS[date.getDay()]})`;
+  });
+}
+
+const DATE_TIME_HINT =
+  /\d|오늘|내일|모레|오전|오후|아침|점심|저녁|주말|이번\s*주|다음\s*주|[월화수목금토일]요일/;
+
+// 희망 일시는 자유 입력이라 형식을 강제하진 않되, "30dlf"처럼 영문 오타가 섞이거나
+// 날짜·시간 단서가 전혀 없는 값은 걸러낸다. am/pm만 영문으로 허용한다.
+export function isValidDesiredTime(input: string): boolean {
+  const text = input.trim();
+  if (/[a-z]/i.test(text.replace(/(?<![a-z])(am|pm)(?![a-z])/gi, ""))) return false;
+  return DATE_TIME_HINT.test(text);
+}
+
+// 성함은 한글 2~10자 또는 영문 2~30자만 허용한다. 숫자·자음/모음 단독("ㅇㅇ")은 제외.
+export function isValidCustomerName(input: string): boolean {
+  const text = input.trim();
+  return /^[가-힣]{2,10}$/.test(text) || /^[A-Za-z][A-Za-z .'-]{1,29}$/.test(text);
+}
+
 // "가맹 상담 예약해주세요"처럼 트리거 메시지에 서비스명이 이미 포함돼 있으면 미리 잡아둔다.
 export function detectService(input: string): string | null {
   return RESERVATION_SERVICES.find((service) => input.includes(service)) ?? null;
