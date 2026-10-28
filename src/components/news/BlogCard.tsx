@@ -16,13 +16,13 @@ export function BlogCard({ news }: BlogCardProps) {
       scroll={false}
       className="group flex flex-col gap-3 no-underline"
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gf-surface">
+      <div className="relative aspect-[592/360] overflow-hidden rounded-2xl bg-gf-surface">
         {news.thumbnail_url ? (
           <Image
             src={news.thumbnail_url}
             alt={news.title}
             fill
-            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
