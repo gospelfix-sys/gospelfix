@@ -1,11 +1,4 @@
-import {
-  BookOpen,
-  CloudDownload,
-  Home,
-  Info,
-  Shapes,
-  type LucideIcon,
-} from "lucide-react";
+import { BookOpen, CloudDownload, Home, Info, type LucideIcon } from "lucide-react";
 
 // 활성 판정에 필요한 현재 위치 정보
 export interface LayerNavContext {
@@ -32,26 +25,20 @@ export const LAYER_NAV_ITEMS: LayerNavItem[] = [
       pathname === "/" && category === "all" && price === "",
   },
   {
-    href: "/free-resources",
-    label: "FREE RESOURCES",
+    href: "/resources",
+    label: "RESOURCES",
     icon: CloudDownload,
-    isActive: ({ pathname }) => pathname === "/free-resources",
-  },
-  {
-    href: "/creator",
-    label: "CREATOR",
-    icon: Shapes,
-    isActive: ({ pathname }) => pathname === "/creator",
+    isActive: ({ pathname }) => pathname === "/resources",
   },
   {
     href: "/blog",
-    label: "블로그",
+    label: "BLOG",
     icon: BookOpen,
     isActive: ({ pathname }) => pathname === "/blog" || pathname.startsWith("/blog/"),
   },
   {
     href: "/introduce",
-    label: "소개",
+    label: "ABOUT",
     icon: Info,
     isActive: ({ pathname }) => pathname === "/introduce",
   },

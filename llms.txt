@@ -44,7 +44,7 @@ src/app/
 │   ├── detail/[slug]/    소재 상세 (목록에서는 @modal 인터셉트로 모달, 직접 진입하면 풀 페이지)
 │   ├── blog/, blog/[slug]/  블로그 (상세도 @modal 인터셉트)
 │   ├── layer/, introduce/, about/, upload/(작품 업로드 에디터)
-│   ├── creator/, free-resources/, guide/   현재 "콘텐츠를 준비 중입니다" 자리표시 페이지
+│   ├── resources/, guide/  현재 "콘텐츠를 준비 중입니다" 자리표시 페이지
 │   └── @modal/           병렬 라우트: (.)detail/[slug], (.)blog/[slug] → RouteModal
 ├── (mypage)/mypage/      orders, products, reviews, settings (force-dynamic 서버 레이아웃, 로그인 필요)
 └── api/                  BFF Route Handler (아래 참고)

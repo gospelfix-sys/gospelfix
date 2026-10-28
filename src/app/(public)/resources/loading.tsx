@@ -4,11 +4,11 @@ import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
 
 // 사이드바/상단바는 실제 LayerShell(LayerShellLoading)을 그대로 재사용한다 — 손으로 맞춘 가짜 셸은 실제
 // 레이아웃이 바뀔 때마다 따로 어긋나는 문제가 있다((public)/loading.tsx와 동일한 관례).
-export default function CreatorLoading() {
+export default function ResourcesLoading() {
   return (
     <LayerShellLoading>
       <SkeletonRegion>
-        <ComingSoonSkeleton titleWidth="w-40" />
+        <ComingSoonSkeleton titleWidth="w-56" />
       </SkeletonRegion>
     </LayerShellLoading>
   );

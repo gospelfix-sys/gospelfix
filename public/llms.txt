@@ -12,7 +12,7 @@
 - [소개](https://gospelfix.vercel.app/introduce): 서비스 소개
 - [마이페이지](https://gospelfix.vercel.app/mypage): 주문 내역, 내 작품, 리뷰, 계정 설정 (로그인 필요)
 
-`/free-resources`(무료 리소스), `/creator`(크리에이터), `/guide`(이용가이드)는 현재 콘텐츠를 준비 중인 페이지입니다.
+`/resources`(리소스), `/guide`(이용가이드)는 현재 콘텐츠를 준비 중인 페이지입니다.
 
 로그인과 회원가입은 별도 페이지가 아니라 모달로 열립니다. `/login`, `/register`로 접근하면 홈으로 이동하면서 모달이 열립니다.
 

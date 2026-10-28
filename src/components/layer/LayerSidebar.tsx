@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 // 업로드 에디터용 사이드바는 기존 구성(주요 3개 + 하단 소개)을 유지한다. 블로그는
 // 상단 네비 전용이라 제외 — 항목 정의 자체는 layerNav.ts 단일 상수를 읽는다.
-const SIDEBAR_MAIN_HREFS = ["/", "/free-resources", "/creator"];
+const SIDEBAR_MAIN_HREFS = ["/", "/resources"];
 const SIDEBAR_BOTTOM_HREFS = ["/introduce"];
 const SIDEBAR_MAIN_ITEMS = LAYER_NAV_ITEMS.filter((item) =>
   SIDEBAR_MAIN_HREFS.includes(item.href),

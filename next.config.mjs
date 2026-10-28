@@ -31,6 +31,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/free-resources",
+        destination: "/resources",
+        permanent: true,
+      },
+      {
+        source: "/creator",
+        destination: "/resources",
+        permanent: true,
+      },
+      {
         source: "/growth",
         destination: "/layer",
         permanent: true,

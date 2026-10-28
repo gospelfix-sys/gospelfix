@@ -34,8 +34,7 @@ export default function Footer() {
   // LayerShell(다크 상단 네비) 경로는 푸터도 다크 스코프로 맞춘다.
   const isDarkShell =
     pathname === "/" ||
-    pathname.startsWith("/free-resources") ||
-    pathname.startsWith("/creator") ||
+    pathname.startsWith("/resources") ||
     pathname.startsWith("/introduce") ||
     pathname.startsWith("/blog");
 

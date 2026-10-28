@@ -15,7 +15,7 @@ import { NavPopover } from "@/components/layout/NavPopover";
 import { cn } from "@/lib/utils";
 
 // LayerShell(상단 가로 네비 LayerNavBar)이나 업로드 에디터(LayerSidebar)가 전역 TopBar 대신 렌더링되는 경로.
-const MODA_SHELL_PATHS = ["/upload", "/free-resources", "/creator", "/introduce", "/blog"];
+const MODA_SHELL_PATHS = ["/upload", "/resources", "/introduce", "/blog"];
 // "모다" 섹션 탭 활성 상태를 판단할 때 쓴다. 주의: 이 목록의 경로들은 위 hide 조건에서
 // 이미 걸러져 TopBar 자체가 렌더링되지 않으므로(그리고 "/"·"/detail"도 마찬가지), 아래
 // isLayer는 이 컴포넌트가 실제로 렌더링되는 모든 경로에서 항상 false다 — "모다" 탭은
