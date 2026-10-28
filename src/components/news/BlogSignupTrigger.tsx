@@ -8,12 +8,13 @@ import { authLoadingAtom } from "@/store/atoms/authAtom";
 const SHOWN_STORAGE_KEY = "gf_blog_signup_prompt_shown";
 
 interface BlogSignupTriggerProps {
-  // 가입 후 돌아올 경로
+  // 로그인(또는 가입) 후 돌아올 경로
   next: string;
 }
 
 /**
- * 블로그 본문을 끝까지 읽은 비로그인 사용자에게 회원가입 팝업을 한 번 띄운다.
+ * 블로그 본문을 끝까지 읽은 비로그인 사용자에게 로그인 팝업을 한 번 띄운다. 가입은 팝업 하단의
+ * "회원가입" 링크로 이어진다.
  * 본문 끝에 둔 빈 sentinel이 뷰포트에 들어오면 트리거한다. 모달(내부 div 스크롤)과
  * 풀 페이지(window 스크롤) 모두 root: null로 동일하게 감지된다.
  */
@@ -44,7 +45,7 @@ export default function BlogSignupTrigger({ next }: BlogSignupTriggerProps) {
         } catch {
           // 무시
         }
-        openAuthModal("signup", next);
+        openAuthModal("login", next);
       },
       { threshold: 0 },
     );
