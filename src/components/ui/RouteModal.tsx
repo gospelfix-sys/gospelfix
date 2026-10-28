@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ROUTE_MODAL_BACKDROP_CLASS,
@@ -164,13 +164,13 @@ export default function RouteModal({
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => setOpen(false)}
-                aria-label="뒤로가기"
+                aria-label="닫기"
                 className={cn(
-                  "absolute bottom-6 right-4 z-10 size-[60px] rounded-xl",
+                  "absolute right-8 top-4 z-10 size-[48px] rounded-xl",
                   routeModalCloseButtonClass(theme),
                 )}
               >
-                <ArrowLeft size={28} />
+                <X size={22} />
               </Button>
               <div className={ROUTE_MODAL_BODY_CLASS}>
                 <RouteModalContext.Provider value={() => setOpen(false)}>

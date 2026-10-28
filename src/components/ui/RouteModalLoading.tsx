@@ -78,8 +78,8 @@ export function RouteModalLoading({
           overlayRef.current.panelY = ROUTE_MODAL_PANEL_SHOWN.y;
         }}
       >
-        {/* RouteModal의 뒤로가기 버튼 자리. 로딩 중에는 누를 대상이 없으므로 자리표시만 둔다. */}
-        <Skeleton className="absolute bottom-6 right-4 z-10 size-[60px] rounded-xl" />
+        {/* RouteModal의 닫기 버튼 자리. 로딩 중에는 누를 대상이 없으므로 자리표시만 둔다. */}
+        <Skeleton className="absolute right-8 top-4 z-10 size-[48px] rounded-xl" />
         <SkeletonRegion label={label} className={ROUTE_MODAL_BODY_CLASS}>
           <ArticleSkeleton />
         </SkeletonRegion>
