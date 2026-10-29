@@ -64,12 +64,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
-    // 카카오 신규가입은 signUp()을 거치지 않는 풀 리다이렉트라, callback/route.ts가 실어 보낸
+    // 소셜(카카오·구글) 신규가입은 signUp()을 거치지 않는 풀 리다이렉트라, lib/cmsApi/oauth.ts가 실어 보낸
     // 이 쿼리 플래그로 가입 축하 쿠폰 안내를 대신 트리거한다. 새로고침 시 재발급 안내가 다시
     // 뜨지 않도록 확인 즉시 URL에서 플래그를 제거한다.
     const params = new URLSearchParams(window.location.search);
-    if (params.get("kakaoNewUser") !== "1") return;
-    params.delete("kakaoNewUser");
+    if (params.get("newUser") !== "1") return;
+    params.delete("newUser");
     const cleanedSearch = params.toString();
     window.history.replaceState(
       null,

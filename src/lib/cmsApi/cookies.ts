@@ -4,7 +4,7 @@
 export const ACCESS_TOKEN_COOKIE = "gf_at";
 export const REFRESH_TOKEN_COOKIE = "gf_rt";
 export const EXPIRES_AT_COOKIE = "gf_exp";
-export const KAKAO_OAUTH_STATE_COOKIE = "gf_kakao_oauth";
+export const OAUTH_STATE_COOKIE = "gf_oauth";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -15,8 +15,9 @@ export const baseCookieOptions = {
   path: "/",
 };
 
-// 카카오 인가 요청 ~ 콜백 왕복 도중에만 필요한 CSRF state 쿠키. 5분이면 충분한 단발성 쿠키다.
-export const kakaoOAuthStateCookieOptions = {
+// 소셜 로그인 인가 요청 ~ 콜백 왕복 도중에만 필요한 CSRF state 쿠키(카카오·구글 공용).
+// 5분이면 충분한 단발성 쿠키다.
+export const oauthStateCookieOptions = {
   ...baseCookieOptions,
   maxAge: 300,
 };

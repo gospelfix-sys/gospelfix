@@ -6,10 +6,12 @@ import { Mail, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import AuthDivider from "./AuthDivider";
+import AuthSwitchLink from "./AuthSwitchLink";
 import KakaoLoginButton from "./KakaoLoginButton";
 
 export default function LoginForm() {
-  const { signIn, authModalNext, authModalError, closeAuthModal, openAuthModal } = useAuth();
+  const { signIn, authModalNext, authModalError, closeAuthModal, switchAuthModalView } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(() => authModalError ?? "");
@@ -71,17 +73,14 @@ export default function LoginForm() {
         </Button>
       </form>
 
-      <KakaoLoginButton />
+      <div className="mt-1 flex w-full flex-col gap-3">
+        <AuthDivider label="또는" />
+        <KakaoLoginButton />
+      </div>
 
       <p className="mt-5 text-sm text-gf-gray2">
         계정이 없으신가요?{" "}
-        <button
-          type="button"
-          onClick={() => openAuthModal("signup")}
-          className="font-semibold text-gf-orange underline-offset-4 hover:underline outline-none"
-        >
-          회원가입
-        </button>
+        <AuthSwitchLink onClick={() => switchAuthModalView("signup")}>회원가입</AuthSwitchLink>
       </p>
     </div>
   );

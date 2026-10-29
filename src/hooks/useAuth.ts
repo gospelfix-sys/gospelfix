@@ -116,15 +116,12 @@ export function useAuth() {
 
   const signInWithOAuth = useCallback(
     (provider: OAuthProvider) => {
-      if (provider !== "kakao") {
-        throw new Error(`${provider} 소셜 로그인은 현재 준비 중입니다.`);
-      }
       const params = new URLSearchParams({
         next: authModal.next,
         view: authModal.view === "signup" ? "signup" : "login",
       });
       if (authModal.referralCode) params.set("referralCode", authModal.referralCode);
-      window.location.href = `/api/auth/kakao?${params.toString()}`;
+      window.location.href = `/api/auth/${provider}?${params.toString()}`;
     },
     [authModal.next, authModal.referralCode, authModal.view],
   );
@@ -144,9 +141,19 @@ export function useAuth() {
     [router, resetAuthUser, resetUserProfile, resetSignupCoupon],
   );
 
+  // 외부 진입점(헤더·구매 버튼·/login 등)은 view 값과 무관하게 항상 소셜 첫 화면으로 연다.
+  // 이메일 화면은 모달 안에서 switchAuthModalView로만 도달하므로 호출부를 고칠 필요가 없다.
   const openAuthModal = useCallback(
-    (view: AuthModalView, next?: string, referralCode?: string, error?: string) => {
-      setAuthModal((prev) => ({ view, next: next ?? prev.next, referralCode, error }));
+    (_view: AuthModalView, next?: string, referralCode?: string, error?: string) => {
+      setAuthModal((prev) => ({ view: "social", next: next ?? prev.next, referralCode, error }));
+    },
+    [setAuthModal],
+  );
+
+  /** 모달이 열린 상태에서 화면만 전환한다(소셜 → 이메일 로그인, 로그인 ↔ 회원가입). */
+  const switchAuthModalView = useCallback(
+    (view: Exclude<AuthModalView, null>) => {
+      setAuthModal((prev) => ({ ...prev, view, error: undefined }));
     },
     [setAuthModal],
   );
@@ -171,6 +178,7 @@ export function useAuth() {
     authModalReferralCode: authModal.referralCode,
     authModalError: authModal.error,
     openAuthModal,
+    switchAuthModalView,
     closeAuthModal,
   };
 }

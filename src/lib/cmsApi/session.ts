@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
+import type { OAuthProvider } from "@/types/auth.types";
 import {
   ACCESS_TOKEN_COOKIE,
   REFRESH_TOKEN_COOKIE,
   EXPIRES_AT_COOKIE,
-  KAKAO_OAUTH_STATE_COOKIE,
+  OAUTH_STATE_COOKIE,
   baseCookieOptions,
-  kakaoOAuthStateCookieOptions,
+  oauthStateCookieOptions,
 } from "./cookies";
 
 export interface CmsSession {
@@ -14,7 +15,8 @@ export interface CmsSession {
   expiresAt: number; // unix seconds
 }
 
-export interface KakaoOAuthState {
+export interface OAuthState {
+  provider: OAuthProvider;
   state: string;
   next: string;
   view: "login" | "signup";
@@ -58,20 +60,20 @@ export async function clearSessionCookies(): Promise<void> {
   cookieStore.delete(EXPIRES_AT_COOKIE);
 }
 
-/** 카카오 인가 요청 직전에 CSRF state와 콜백 후 필요한 정보(next/view/referralCode)를 저장한다. */
-export async function setKakaoOAuthStateCookie(value: KakaoOAuthState): Promise<void> {
+/** 소셜 인가 요청 직전에 CSRF state와 콜백 후 필요한 정보(provider/next/view/referralCode)를 저장한다. */
+export async function setOAuthStateCookie(value: OAuthState): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set(KAKAO_OAUTH_STATE_COOKIE, JSON.stringify(value), kakaoOAuthStateCookieOptions);
+  cookieStore.set(OAUTH_STATE_COOKIE, JSON.stringify(value), oauthStateCookieOptions);
 }
 
 /** 콜백에서 state 쿠키를 한 번 읽고 즉시 삭제한다(재사용 방지). */
-export async function consumeKakaoOAuthStateCookie(): Promise<KakaoOAuthState | null> {
+export async function consumeOAuthStateCookie(): Promise<OAuthState | null> {
   const cookieStore = await cookies();
-  const raw = cookieStore.get(KAKAO_OAUTH_STATE_COOKIE)?.value;
-  cookieStore.delete(KAKAO_OAUTH_STATE_COOKIE);
+  const raw = cookieStore.get(OAUTH_STATE_COOKIE)?.value;
+  cookieStore.delete(OAUTH_STATE_COOKIE);
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as KakaoOAuthState;
+    return JSON.parse(raw) as OAuthState;
   } catch {
     return null;
   }

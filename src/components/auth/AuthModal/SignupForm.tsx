@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
+import AuthDivider from "./AuthDivider";
+import AuthSwitchLink from "./AuthSwitchLink";
 import KakaoLoginButton from "./KakaoLoginButton";
 
 const CODE_TTL_SECONDS = 180;
@@ -35,7 +37,7 @@ export default function SignupForm() {
     sendEmailCode,
     verifyEmailCode,
     closeAuthModal,
-    openAuthModal,
+    switchAuthModalView,
     authModalReferralCode,
     authModalError,
   } = useAuth();
@@ -170,7 +172,11 @@ export default function SignupForm() {
           <br />
           링크를 클릭하면 가입이 완료됩니다.
         </p>
-        <Button variant="outline" className="mt-6 w-full" onClick={() => openAuthModal("login")}>
+        <Button
+          variant="outline"
+          className="mt-6 w-full"
+          onClick={() => switchAuthModalView("login")}
+        >
           로그인으로 이동
         </Button>
       </div>
@@ -366,17 +372,14 @@ export default function SignupForm() {
         </Button>
       </form>
 
-      <KakaoLoginButton />
+      <div className="mt-1 flex w-full flex-col gap-3">
+        <AuthDivider label="또는" />
+        <KakaoLoginButton />
+      </div>
 
       <p className="mt-5 text-sm text-gf-gray2">
         이미 계정이 있으신가요?{" "}
-        <button
-          type="button"
-          onClick={() => openAuthModal("login")}
-          className="font-semibold text-gf-orange underline-offset-4 hover:underline outline-none"
-        >
-          로그인
-        </button>
+        <AuthSwitchLink onClick={() => switchAuthModalView("login")}>로그인</AuthSwitchLink>
       </p>
     </div>
   );

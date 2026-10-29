@@ -56,11 +56,12 @@ Client Component ─ axiosInstance ─┘
 
 ### 인증
 
-- 쿠키(`src/lib/cmsApi/cookies.ts`): `gf_at`(access), `gf_rt`(refresh, 30일), `gf_exp`(만료 unix초), `gf_kakao_oauth`(state, 5분). httpOnly/sameSite=lax. 이 파일은 Edge middleware도 import하므로 `next/headers`를 import하면 안 된다. 서버 쿠키 헬퍼는 `session.ts`.
+- 쿠키(`src/lib/cmsApi/cookies.ts`): `gf_at`(access), `gf_rt`(refresh, 30일), `gf_exp`(만료 unix초), `gf_oauth`(소셜 로그인 state·provider, 5분). httpOnly/sameSite=lax. 이 파일은 Edge middleware도 import하므로 `next/headers`를 import하면 안 된다. 서버 쿠키 헬퍼는 `session.ts`.
 - `src/middleware.ts`: 보호 경로는 `/mypage` 뿐. 만료 300초 미만이면 cms.api `/auth/refresh`를 직접 호출(1.5초 타임아웃). matcher가 `/api`를 제외하는 이유는 `serverFetch` 자기호출이 중복 refresh를 일으키기 때문.
 - 그 외 refresh는 `/api/auth/refresh`(AuthProvider가 마운트 시 fire-and-forget 호출).
 - `/login`, `/register`는 페이지가 아니라 `openAuthModal()`을 열고 `/`로 `replace`한다. `?next=`는 `sanitizeInternalPath`로 검증.
-- 카카오 로그인은 `/api/auth/kakao` → 콜백. scope는 `account_email`만.
+- 소셜 로그인은 `/api/auth/{kakao,google}` → `/api/auth/{provider}/callback`이며 시작·콜백 로직은 `src/lib/cmsApi/oauth.ts`에 provider 설정으로 공유한다. 카카오 scope는 `account_email`만, 구글은 `openid email profile`. 실패는 `/login?oauthError=&provider=`로 돌아와 모달에 표시되고, 신규가입은 `?newUser=1`로 쿠폰 안내를 트리거한다.
+- 로그인 모달은 구글·카카오 소셜 화면(`social`)이 첫 화면이고, "다른 방법으로 로그인"으로 기존 이메일 화면(`login`/`signup`)에 간다. `openAuthModal`은 view와 무관하게 항상 소셜 화면을 열고, 모달 안 전환은 `switchAuthModalView`를 쓴다.
 
 ### 라우트/레이아웃
 
