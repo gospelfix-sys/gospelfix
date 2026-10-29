@@ -2,4 +2,5 @@
 - [Motion value sequencing pitfalls](project_motion_value_sequencing_pitfalls.md) — animate onUpdate가 delay 중에도 호출, MotionValue 자식 SSR 출력, 루프 cleanup
 - [Route modal loading pitfalls](project_route_modal_loading_pitfalls.md) — loading.tsx 클라이언트 청크 suspend로 바깥 스켈레톤 1프레임 노출, backdrop opacity 이어받기 구조
 - [Dialog content transition](project_dialog_content_transition.md) — 모달 내 뷰 전환: 닫힘 중 null 뷰 유지, popLayout+높이 측정, 포커스 링 잘림 상쇄
+- [Section toggle motion](project_section_toggle_motion.md) — 토글은 경로로 활성 안 바뀜(pending 반영), fixed 헤더 layoutId 함정, 세그먼트 스프링 프리셋
 - [Loading skeleton structure](project_loading_skeleton_structure.md) — 정적 Skeleton+SkeletonPulse 구조, Preload 트릭 실패, LayerShellLoading fallback
