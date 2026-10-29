@@ -12,18 +12,18 @@ import { useCart } from "@/hooks/useCart";
 import { cartItemCountSelector } from "@/store/selectors/cartSelector";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { NavPopover } from "@/components/layout/NavPopover";
+import {
+  MODA_SHELL_PATHS,
+  SectionToggle,
+  isModaSection,
+} from "@/components/layout/SectionToggle";
 import { cn } from "@/lib/utils";
 
-// LayerShell(상단 가로 네비 LayerNavBar)이나 업로드 에디터(LayerSidebar)가 전역 TopBar 대신 렌더링되는 경로.
-const MODA_SHELL_PATHS = ["/upload", "/resources", "/introduce", "/blog"];
-// "모다" 섹션 탭 활성 상태를 판단할 때 쓴다. 주의: 이 목록의 경로들은 위 hide 조건에서
-// 이미 걸러져 TopBar 자체가 렌더링되지 않으므로(그리고 "/"·"/detail"도 마찬가지), 아래
-// isLayer는 이 컴포넌트가 실제로 렌더링되는 모든 경로에서 항상 false다 — "모다" 탭은
-// 구조상 활성 표시될 일이 없고, CompactNav의 장바구니 버튼도 항상 숨겨진다(의도된 동작:
-// 모다 섹션 안에서는 LayerNavBar의 장바구니 버튼을 대신 쓴다). 상수/분기를 남겨둔 건
-// 나중에 "모다" 섹션 중 LayerShell을 쓰지 않는 페이지가 다시 생길 경우를 위한 확장
-// 지점이라서다.
-const MODA_ACTIVE_PATHS = ["/upload"];
+// 주의: 모다 섹션 경로(MODA_SHELL_PATHS, "/")는 아래 hide 조건에서 이미 걸러져 TopBar 자체가
+// 렌더링되지 않으므로, CompactNav의 isLayer는 이 컴포넌트가 실제로 렌더링되는 모든 경로에서
+// 항상 false다 — 장바구니 버튼도 항상 숨겨진다(의도된 동작: 모다 섹션 안에서는 LayerNavBar의
+// 장바구니 버튼을 대신 쓴다). 분기를 남겨둔 건 모다 섹션 중 LayerShell을 쓰지 않는 페이지가
+// 다시 생길 경우를 위한 확장 지점이라서다.
 // 이 픽셀 구간(0~SCROLL_MORPH_RANGE) 동안 스크롤 값에 비례해 넓은 헤더가 압축 알약으로 좁아진다
 const SCROLL_MORPH_RANGE = 300;
 const WIDE_WIDTH = 1280;
@@ -121,13 +121,9 @@ function MorphingHeader() {
 
 /** 넓은 상태: 로고 + 카테고리 메뉴 + 로그인/회원가입. */
 function WideContent() {
-  const pathname = usePathname();
   const user = useRecoilValue(authUserAtom);
   const loading = useRecoilValue(authLoadingAtom);
   const { signOut, openAuthModal } = useAuth();
-
-  const isLayer = pathname === "/" || MODA_ACTIVE_PATHS.some((p) => pathname.startsWith(p));
-  const isOfficial = !isLayer;
 
   async function handleSignOut() {
     await signOut("/");
@@ -144,27 +140,8 @@ function WideContent() {
           <span className="font-kr text-gf-orange">FIX</span>
         </Link>
 
-        {/* 카테고리 메뉴 — 좁은 화면에서는 로고/로그인 버튼과 함께 있으면 넘치므로 데스크톱에서만 노출 */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            href="/layer"
-            className={cn(
-              "text-sm font-bold no-underline transition-colors",
-              isOfficial ? "text-white" : "text-white/60 hover:text-white",
-            )}
-          >
-            에이전시
-          </Link>
-          <Link
-            href="/"
-            className={cn(
-              "text-sm font-bold no-underline transition-colors",
-              isLayer ? "text-white" : "text-white/60 hover:text-white",
-            )}
-          >
-            모다
-          </Link>
-        </nav>
+        {/* 섹션 토글 — 좁은 화면에서는 로고/로그인 버튼과 함께 있으면 넘치므로 데스크톱에서만 노출 */}
+        <SectionToggle className="hidden md:grid" />
       </div>
 
       {!loading && (
@@ -219,9 +196,8 @@ function CompactNav({ className }: { className?: string }) {
   const { openCart } = useCart();
   const cartItemCount = useRecoilValue(cartItemCountSelector);
 
-  const isLayer = pathname === "/" || MODA_ACTIVE_PATHS.some((p) => pathname.startsWith(p));
-  const isOfficial = !isLayer;
-  const section = isOfficial ? "official" : "layer";
+  const isLayer = isModaSection(pathname);
+  const section = isLayer ? "layer" : "official";
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -248,33 +224,7 @@ function CompactNav({ className }: { className?: string }) {
     >
       <div className="flex items-center gap-2.5 px-3 py-2 sm:px-5">
         {/* 섹션 탭 */}
-        <div className="flex items-center gap-1 shrink-0 bg-gf-orange/10 rounded-xl p-1">
-          <Link
-            href="/layer"
-            onClick={() => setMenuOpen(false)}
-            className={cn(
-              "text-sm font-bold px-4 h-9 flex items-center rounded-lg transition-all duration-200",
-              isOfficial
-                ? "bg-white text-gf-orange shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
-                : "text-white/60 hover:text-white",
-            )}
-          >
-            에이전시
-          </Link>
-          <div className="w-px h-6 bg-white/20 shrink-0 mx-2" />
-          <Link
-            href="/"
-            onClick={() => setMenuOpen(false)}
-            className={cn(
-              "text-sm font-bold px-4 h-9 flex items-center rounded-lg transition-all duration-200",
-              isLayer
-                ? "bg-white text-gf-orange shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
-                : "text-white/60 hover:text-white",
-            )}
-          >
-            모다
-          </Link>
-        </div>
+        <SectionToggle onNavigate={() => setMenuOpen(false)} />
 
         {/* 장바구니 버튼 — 모다 섹션에서만 노출 */}
         {isLayer && (

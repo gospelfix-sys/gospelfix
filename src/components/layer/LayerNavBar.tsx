@@ -9,6 +9,7 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { HeaderProfileMenu } from "@/components/layer/HeaderProfileMenu";
+import { SectionToggle } from "@/components/layout/SectionToggle";
 import { LAYER_NAV_ITEMS } from "@/components/layer/layerNav";
 import { authUserAtom, authLoadingAtom } from "@/store/atoms/authAtom";
 import { userProfileAtom } from "@/store/atoms/userAtom";
@@ -77,7 +78,8 @@ function LayerNavLinks({ variant, onNavigate }: LayerNavLinksProps) {
               variant === "bar"
                 ? cn(
                     "whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold",
-                    active ? "text-gf-black" : "text-gf-gray2 hover:text-gf-black",
+                    // 검은 알약 헤더 위에서 쓰므로 다크 스코프 토큰이 아닌 white 계열을 쓴다
+                    active ? "text-white" : "text-white/60 hover:text-white",
                   )
                 : cn(
                     "flex items-center gap-3 rounded-xl border px-3 py-3 text-base font-bold",
@@ -127,7 +129,9 @@ export function LayerNavBar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-gf-border bg-gf-bg px-4 lg:px-8">
+      {/* 화면 위에 떠 있는 검은 알약 헤더(/layer 넓은 상태와 동일). fixed라 문서 흐름에서 빠지므로
+          콘텐츠 상단 여백은 LayerShell이 한 번만 확보한다. */}
+      <header className="fixed left-1/2 top-[20px] z-30 flex h-16 w-[1280px] max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center rounded-2xl bg-black px-4 shadow-[0_1px_20px_rgba(0,0,0,0.25)] sm:px-6 lg:px-8 xl:px-[60px]">
         {/* popLayout: 나가는 쪽을 레이아웃에서 빼 두 상태가 같은 자리에서 교차 페이드한다.
             새 쪽이 클릭과 같은 렌더에 마운트되어 autoFocus(모바일 키보드)도 그대로 동작한다. */}
         <AnimatePresence mode="popLayout" initial={false}>
@@ -142,11 +146,11 @@ export function LayerNavBar() {
               className="flex w-full items-center gap-2"
             >
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gf-gray2" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" />
                 <Input
                   autoFocus
                   placeholder="검색어를 입력해주세요"
-                  className="h-10 rounded-full pl-9"
+                  className="h-10 rounded-full border-white/20 bg-white/10 pl-9 text-white placeholder:text-white/50"
                 />
               </div>
               <Button
@@ -154,7 +158,7 @@ export function LayerNavBar() {
                 aria-label="검색 닫기"
                 variant="ghost"
                 size="icon-lg"
-                className="shrink-0 rounded-full text-gf-gray2"
+                className="shrink-0 rounded-full text-white/70 hover:bg-white/10 hover:text-white"
               >
                 <X width={18} height={18} />
               </Button>
@@ -171,14 +175,17 @@ export function LayerNavBar() {
               <Link
                 href="/"
                 aria-label="홈으로 이동"
-                className="flex shrink-0 items-center gap-0.5 text-lg font-black tracking-[-0.03em] no-underline text-gf-black"
+                className="flex shrink-0 items-center gap-0.5 text-lg font-black tracking-[-0.03em] no-underline text-white"
               >
                 <span className="font-kr">GOSPEL</span>
                 <span className="font-kr text-gf-orange">FIX</span>
               </Link>
 
+              {/* 섹션 토글 — 좁은 화면에서는 넘치므로 md 이상에서만 노출(모바일은 드로어 안에 둔다) */}
+              <SectionToggle className="hidden md:grid" />
+
               {/* 데스크톱 네비 링크 */}
-              <nav className="ml-4 hidden items-center gap-1 lg:flex">
+              <nav className="hidden items-center gap-1 lg:flex">
                 <Suspense fallback={null}>
                   <LayerNavLinks variant="bar" />
                 </Suspense>
@@ -189,7 +196,7 @@ export function LayerNavBar() {
                   onClick={() => setSearchOpen(true)}
                   aria-label="검색 열기"
                   size="icon"
-                  className="h-10 w-10 shrink-0 rounded-full bg-gf-white text-gf-black shadow-none hover:bg-gf-orange-bg"
+                  className="h-10 w-10 shrink-0 rounded-full bg-white/10 text-white shadow-none hover:bg-white/20"
                 >
                   <Search width={18} height={18} strokeWidth={2.5} />
                 </Button>
@@ -222,12 +229,23 @@ export function LayerNavBar() {
                 )}
 
                 {!loading && !user && (
-                  <Button
-                    onClick={() => openAuthModal("login")}
-                    className="rounded-full bg-white px-5 text-black hover:bg-white/90"
-                  >
-                    로그인
-                  </Button>
+                  <>
+                    <Button
+                      variant="ghost"
+                      onClick={() => openAuthModal("login")}
+                      className="text-white hover:bg-white/10 hover:text-white"
+                    >
+                      로그인
+                    </Button>
+                    {/* 모바일은 폭이 부족해 회원가입을 드로어로 넘긴다 */}
+                    <Button
+                      variant="default"
+                      onClick={() => openAuthModal("signup")}
+                      className="hidden sm:inline-flex"
+                    >
+                      회원가입
+                    </Button>
+                  </>
                 )}
 
                 {!loading && user && (
@@ -236,11 +254,11 @@ export function LayerNavBar() {
                       onClick={openCart}
                       aria-label="장바구니 열기"
                       size="icon"
-                      className="relative h-10 w-10 rounded-full bg-gf-white text-gf-black shadow-none hover:bg-gf-orange-bg"
+                      className="relative h-10 w-10 rounded-full bg-white/10 text-white shadow-none hover:bg-white/20"
                     >
                       <ShoppingCart width={18} height={18} strokeWidth={2.5} />
                       {cartItemCount > 0 && (
-                        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gf-orange px-1 text-[11px] font-bold text-white ring-2 ring-gf-bg">
+                        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gf-orange px-1 text-[11px] font-bold text-white ring-2 ring-black">
                           {cartItemCount}
                         </span>
                       )}
@@ -255,7 +273,7 @@ export function LayerNavBar() {
                   aria-label="메뉴 열기"
                   variant="ghost"
                   size="icon-lg"
-                  className="shrink-0 rounded-full text-gf-gray2 lg:hidden"
+                  className="shrink-0 rounded-full text-white hover:bg-white/10 hover:text-white lg:hidden"
                 >
                   <Menu width={18} height={18} />
                 </Button>
@@ -303,9 +321,23 @@ export function LayerNavBar() {
                 <span className="font-kr text-gf-orange">FIX</span>
               </Link>
               <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto px-3 pb-6">
+                {/* 모바일 바에는 섹션 토글이 없으므로 드로어 상단에 둔다 */}
+                <SectionToggle className="mb-2 self-start md:hidden" onNavigate={closeDrawer} />
                 <Suspense fallback={null}>
                   <LayerNavLinks variant="drawer" onNavigate={closeDrawer} />
                 </Suspense>
+                {!loading && !user && (
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      closeDrawer();
+                      openAuthModal("signup");
+                    }}
+                    className="mt-3 sm:hidden"
+                  >
+                    회원가입
+                  </Button>
+                )}
               </nav>
             </motion.div>
           </motion.div>

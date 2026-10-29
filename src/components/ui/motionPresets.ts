@@ -14,3 +14,11 @@ export const POPOVER_EXIT_TRANSITION = { duration: 0.15, ease: "easeIn" } satisf
 // 탭·프레스 즉각 피드백
 export const PRESS_TRANSITION = { duration: 0.15, ease: "easeOut" } satisfies Transition;
 export const PRESS_SCALE = 0.96;
+
+// 세그먼트 토글·탭의 활성 배경이 항목 사이를 미끄러지는 이동(layoutId). 사용자 조작에 대한
+// 반응이라 스프링을 쓰되 바운스는 없다(약 0.3초 안에 정착).
+export const SEGMENT_INDICATOR_TRANSITION = {
+  type: "spring",
+  stiffness: 400,
+  damping: 34,
+} satisfies Transition;

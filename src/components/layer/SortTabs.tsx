@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
-import { PRESS_SCALE, PRESS_TRANSITION } from "@/components/ui/motionPresets";
+import {
+  PRESS_SCALE,
+  PRESS_TRANSITION,
+  SEGMENT_INDICATOR_TRANSITION,
+} from "@/components/ui/motionPresets";
 
 interface SortOption {
   value: string;
@@ -19,8 +23,6 @@ const SORT_OPTIONS: SortOption[] = [
 ];
 const DEFAULT_SORT = "recommended";
 
-// 활성 배경이 세그먼트 사이를 미끄러지듯 이동한다. 탭 조작에 대한 반응이라 스프링(바운스 없음).
-const INDICATOR_TRANSITION = { type: "spring", stiffness: 400, damping: 34 } as const;
 // 탭 피드백은 라벨에만 준다 — 버튼 전체를 줄이면 인디케이터의 layout 측정이 함께 틀어진다.
 const labelVariants: Variants = {
   tap: { scale: PRESS_SCALE, transition: PRESS_TRANSITION },
@@ -80,7 +82,7 @@ export function SortTabs() {
             {isActive && (
               <motion.span
                 layoutId="sort-tabs-indicator"
-                transition={INDICATOR_TRANSITION}
+                transition={SEGMENT_INDICATOR_TRANSITION}
                 className="absolute inset-0 rounded-full bg-white"
               />
             )}

@@ -11,7 +11,9 @@ interface LayerShellProps {
 export function LayerShell({ children }: LayerShellProps) {
   return (
     <ReducedMotionConfig>
-      <div className="gf-dark min-h-dvh bg-gf-bg">
+      {/* LayerNavBar는 fixed 알약(top 20px + h 64px)이라 흐름에서 빠진다. 아래 pt는 그만큼 + 12px 여백을
+          확보하는 값이며, LayerShellLoading의 fallback과 반드시 같은 값을 유지한다. */}
+      <div className="gf-dark min-h-dvh bg-gf-bg pt-24">
         <LayerNavBar />
         {children}
       </div>
