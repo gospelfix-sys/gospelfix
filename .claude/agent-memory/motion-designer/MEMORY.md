@@ -1,4 +1,5 @@
 - [Home layer motion](project_home_layer_motion.md) — 홈 loading↔page 교체로 셸 재마운트(등장 재생 함정), MotionConfig 범위, motionPresets 위치
 - [Motion value sequencing pitfalls](project_motion_value_sequencing_pitfalls.md) — animate onUpdate가 delay 중에도 호출, MotionValue 자식 SSR 출력, 루프 cleanup
 - [Route modal loading pitfalls](project_route_modal_loading_pitfalls.md) — loading.tsx 클라이언트 청크 suspend로 바깥 스켈레톤 1프레임 노출, backdrop opacity 이어받기 구조
+- [Dialog content transition](project_dialog_content_transition.md) — 모달 내 뷰 전환: 닫힘 중 null 뷰 유지, popLayout+높이 측정, 포커스 링 잘림 상쇄
 - [Loading skeleton structure](project_loading_skeleton_structure.md) — 정적 Skeleton+SkeletonPulse 구조, Preload 트릭 실패, LayerShellLoading fallback
