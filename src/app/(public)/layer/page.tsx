@@ -87,15 +87,12 @@ export default async function OfficialHomePage() {
         </h1>
 
         {/* 설명 */}
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center">
           <p className="text-gf-black text-base font-bold">
-            밤에 온 문의를, 아침까지 기다리게 하지 마세요.
+            잠든 사이에도 고객을 응대하는 챗봇이 달린 홈페이지·쇼핑몰
           </p>
-          <p className="text-gf-gray2 max-w-sm leading-relaxed text-center">
-            업종에 맞는 AI 홈페이지, 오늘 구매하면{" "}
-            <strong className="text-gf-black font-bold">내일 바로 오픈.</strong>
-            <br />
-            AI 챗봇이 24시간 예약과 문의에 응대하는 동안, 대표님은 사장님 일에만 집중하세요.
+          <p className="text-gf-gray2 leading-relaxed text-center sm:whitespace-nowrap">
+            첫 사업이라면 가스펄픽스가 처음부터 끝까지 만들어 드립니다.
           </p>
         </div>
 
