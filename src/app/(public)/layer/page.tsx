@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Truck, Coffee, Stethoscope, GraduationCap, LifeBuoy } from "lucide-react";
+import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
 import { StatsSection } from "@/components/main/StatsSection";
 import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
@@ -14,6 +15,9 @@ export const metadata: Metadata = {
   title: "GOSPELFIX | 공식홈페이지",
   description: "GOSPELFIX 공식홈페이지입니다. 블로그와 교육 콘텐츠를 제공합니다.",
 };
+
+// 히어로 알약 안에서 순서대로 롤링되는 단어. 가장 긴 단어 기준으로 알약 너비가 정해진다
+const HERO_ROLLING_WORDS = ["홈페이지", "쇼핑몰", "랜딩페이지"] as const;
 
 const AUDIENCE = [
   {
@@ -73,13 +77,13 @@ export default async function OfficialHomePage() {
 
         {/* 헤드라인 */}
         <h1 className="text-6xl sm:text-8xl font-black tracking-tight text-gf-black leading-none uppercase">
-          YOUR
+          24시간
           <br />
-          DIGITAL
+          예약받는
           <br />
-          <span className="font-playfair text-gf-orange normal-case">presence</span>
+          <HeroRollingWord words={HERO_ROLLING_WORDS} />
           <br />
-          FIXED.
+          OPEN.
         </h1>
 
         {/* 설명 */}
