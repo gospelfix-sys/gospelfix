@@ -63,9 +63,10 @@ export function HeroRollingWord({ words, className }: HeroRollingWordProps) {
   return (
     // overflow-clip: 테두리 안쪽(둥근 모서리 포함)에서 단어를 잘라 낸다. overflow-hidden과 달리
     // inline 요소의 baseline을 바꾸지 않아 h1 줄 높이가 그대로 유지된다
+    // my-2: h1이 leading-none이라 위·아래 줄 글자와 테두리가 붙어 보여서, 알약 바깥에 세로 여백을 둔다
     <span
       className={cn(
-        "inline-grid overflow-clip whitespace-nowrap rounded-full border-4 border-gf-orange px-10 py-4 text-5xl text-gf-orange sm:text-7xl",
+        "my-2 inline-grid overflow-clip whitespace-nowrap rounded-full border-4 border-gf-orange px-10 py-4 text-5xl text-gf-orange sm:text-7xl",
         className,
       )}
     >
