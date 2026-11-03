@@ -380,15 +380,10 @@
 }
 
 /* CMS 본문(dangerouslySetInnerHTML)의 빈 문단은 줄바꿈 용도이므로 고정 여백만 부여한다.
-   에디터가 빈 줄을 <p></p> 또는 <p><br></p>로 저장하는 두 경우를 모두 잡는다. */
-.prose-gf p:empty,
-.prose-gf p:has(> br:only-child) {
+   <p><br></p>는 ProseHtml이 <p></p>로 정규화해 넘긴다. */
+.prose-gf p:empty {
   height: 0;
   margin: 0 0 32px;
-}
-
-.prose-gf p:has(> br:only-child) > br {
-  display: none;
 }
 
 /* Tailwind preflight가 h1~h6/ul/ol/li의 기본 스타일(font-size, list-style, 여백)을 초기화하므로,

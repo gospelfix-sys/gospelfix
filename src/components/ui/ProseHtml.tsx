@@ -30,6 +30,13 @@ function addCodeCopyButtons(html: string): string {
   );
 }
 
+// 에디터가 빈 줄을 <p><br></p>로 저장하면 <p></p>로 바꿔 .prose-gf의 p:empty 간격 규칙이 받게 한다.
+// CSS :only-child는 텍스트 노드를 세지 않아 "텍스트 + 끝의 <br>" 문단까지 높이 0으로 접어 다음
+// 헤딩과 겹치므로, 선택자 대신 문자열 단계에서 텍스트 없는 문단만 골라낸다.
+function normalizeEmptyParagraphs(html: string): string {
+  return html.replace(/<p(\s[^>]*)?>\s*<br\s*\/?>\s*<\/p>/gi, "<p$1></p>");
+}
+
 const resetTimers = new WeakMap<HTMLButtonElement, number>();
 
 interface ProseHtmlProps {
@@ -39,7 +46,7 @@ interface ProseHtmlProps {
 
 // sanitize된 CMS 본문 HTML을 렌더링하고, 본문 안의 <pre> 블록마다 우측 상단에 복사 버튼을 붙인다.
 export function ProseHtml({ html, className }: ProseHtmlProps) {
-  const htmlWithButtons = useMemo(() => addCodeCopyButtons(html), [html]);
+  const htmlWithButtons = useMemo(() => addCodeCopyButtons(normalizeEmptyParagraphs(html)), [html]);
 
   async function handleClick(event: MouseEvent<HTMLDivElement>) {
     const button = (event.target as Element).closest<HTMLButtonElement>("[data-copy-code]");
