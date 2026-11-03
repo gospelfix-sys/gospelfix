@@ -69,6 +69,7 @@ type: feedback
 
 ### 15. 서버/클라이언트 경계의 무거운 라이브러리
 - `sanitize-html` 같은 서버향 파서는 `"use client"` 컴포넌트 안에서 import하지 않는다. async Server Component에서 먼저 처리하고 결과만 prop으로 넘긴다(`PortfolioSwiper.tsx`는 호출부에서 사전 살균된 값만 받도록 정리됨). 사용자·관리자 HTML은 `lib/sanitizeHtml.ts`(`sanitizeContentHtml`)를 거치며, `a`의 `rel`/`target`은 강제 덮어쓴다. `<img src>`를 정규식으로 따로 뽑아 쓰면 스킴 검증을 우회하니 일관되게 검증한다. 외부 URL(`demo_url` 등)을 `href`/`src`에 쓸 때는 `https?` 화이트리스트로 프로토콜을 검증한다.
+- `sanitizeContentHtml` 소비자는 `.prose-gf`(ProseHtml: NewsDetailContent, ProductDetailView)만이 아니다. `/layer`의 `PortfolioSwiper`(`.description`, prose-gf 아님)도 쓴다. 이 함수의 출력을 바꾸는(예: `<p><br></p>`→`<p></p>` 정규화) 변경은 `.prose-gf` 전용 CSS 보완이 다른 소비자에는 없어 회귀가 난다. 출력 변경 시 소비자 전수 확인.
 
 ### 16. 상세 페이지 grid 안/밖 섹션 배치
 - sticky 사이드 패널이 있는 grid의 형제 섹션(grid 뒤에 오는 `ReviewSection` 등)은 패널 높이 때문에 빈 공간이 생길 수 있다. 섹션을 grid 안/밖으로 옮기는 diff는 두 컬럼 높이 차에서 빈 공간이 생기는지 본다.
