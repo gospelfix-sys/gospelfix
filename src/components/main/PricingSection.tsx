@@ -10,13 +10,13 @@ export function PricingSection() {
   const activeTab = PRICING_TABS.find((tab) => tab.key === activeKey) ?? PRICING_TABS[0];
 
   return (
-    <section className="bg-gf-bg px-6 pt-20 pb-24">
+    <section id="pricing" className="bg-gf-bg px-6 pt-20 pb-24">
       <div className="mx-auto max-w-5xl">
         <div className="mb-10 text-center">
           <span className="gf-section-label">Pricing</span>
           <h2 className="gf-section-title">구축부터 유지보수까지, 단계별로 선택하세요</h2>
           <p className="mt-2 text-sm text-gf-gray2">
-            {activeTab.caption} 모든 가격은 부가세 별도입니다.
+            {activeTab.caption} 모든 가격은 세전(부가세 별도)입니다.
           </p>
         </div>
 
@@ -62,9 +62,17 @@ export function PricingSection() {
                     </span>
                   )}
                 </div>
-                <p className="text-gf-black">
-                  <span className="text-3xl font-black tracking-tight">{plan.price}</span>
-                  <span className="ml-1 text-sm font-medium text-gf-gray2">{plan.priceUnit}</span>
+                <p className="flex flex-wrap items-baseline gap-x-1 text-gf-black">
+                  <span
+                    className={cn(
+                      "text-3xl font-black tracking-tight",
+                      plan.recommended && "text-gf-orange",
+                    )}
+                  >
+                    {plan.price}
+                  </span>
+                  <span className="text-sm font-medium text-gf-gray2">{plan.priceUnit}</span>
+                  <span className="ml-1 text-xs font-medium text-gf-gray2">세전 (부가세 별도)</span>
                 </p>
               </div>
 
