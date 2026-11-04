@@ -56,7 +56,7 @@ export default async function OfficialHomePage() {
         {/* 배지 */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gf-border text-gf-black text-sm font-bold shadow-sm">
           <span className="w-2 h-2 rounded-full bg-gf-orange shrink-0" />
-          GOSPELFIX — 예약 문의를 놓치지 않는 AI 시스템
+          GOSPELFIX — 예약 문의를 놓치지 않는 챗봇 시스템
         </div>
 
         {/* 헤드라인 */}
