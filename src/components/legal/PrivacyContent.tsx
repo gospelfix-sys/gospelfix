@@ -31,8 +31,15 @@ export default function PrivacyContent() {
             <li className="flex gap-2">
               <span className="shrink-0">•</span>
               <span>
+                <strong className="text-gf-black">견적 상담 신청 시</strong>: 이름, 연락처(휴대전화번호),
+                선택한 상담 항목(대상·홈페이지 형태·응대·브랜딩·유지보수·필요 기능)
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span className="shrink-0">•</span>
+              <span>
                 <strong className="text-gf-black">자동 수집</strong>: 접속 기기·브라우저 정보
-                (User-Agent), 방문 일시
+                (User-Agent), 접속 IP, 유입 경로(Referer), 방문 일시
               </span>
             </li>
           </ul>
@@ -53,6 +60,10 @@ export default function PrivacyContent() {
             <li className="flex gap-2">
               <span className="shrink-0">•</span>
               <span>서비스 이용 관련 공지·안내 발송</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="shrink-0">•</span>
+              <span>견적 상담 신청 접수 및 상담·견적 안내 연락</span>
             </li>
             <li className="flex gap-2">
               <span className="shrink-0">•</span>
@@ -90,6 +101,12 @@ export default function PrivacyContent() {
                   </td>
                 </tr>
                 <tr>
+                  <td className="px-4 py-3 text-gf-gray1 border border-gf-line">견적 상담 정보</td>
+                  <td className="px-4 py-3 text-gf-gray1 border border-gf-line">
+                    상담 목적 달성 시까지 (이용자 요청 시 지체 없이 파기)
+                  </td>
+                </tr>
+                <tr className="bg-gf-surface">
                   <td className="px-4 py-3 text-gf-gray1 border border-gf-line">접속 로그</td>
                   <td className="px-4 py-3 text-gf-gray1 border border-gf-line">
                     통신비밀보호법에 따라 3개월
