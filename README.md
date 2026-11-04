@@ -4,7 +4,7 @@
 
 CI 로고, 목업, 홈페이지, 대시보드, 이커머스 템플릿, 광고 소재(PSD·AI)까지 — 브랜딩에 필요한 디자인 파일을 구매하고 즉시 다운로드하세요.
 
-🌐 **라이브 서비스**: https://gospelfix.vercel.app
+🌐 **라이브 서비스**: https://gospelfix-ashy.vercel.app
 
 ---
 

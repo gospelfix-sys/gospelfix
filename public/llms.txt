@@ -6,11 +6,11 @@
 
 ## 주요 페이지
 
-- [소재 마켓](https://gospelfix.vercel.app/): 전체 디자인 소재 목록과 카테고리 탐색
-- [소재 상세](https://gospelfix.vercel.app/detail/[slug]): 소재 소개, 코드·이미지 미리보기, 구매 옵션, 리뷰
-- [블로그](https://gospelfix.vercel.app/blog): 소식과 제작 이야기 (상세는 `/blog/[slug]`)
-- [소개](https://gospelfix.vercel.app/introduce): 서비스 소개
-- [마이페이지](https://gospelfix.vercel.app/mypage): 주문 내역, 내 작품, 리뷰, 계정 설정 (로그인 필요)
+- [소재 마켓](https://gospelfix-ashy.vercel.app/): 전체 디자인 소재 목록과 카테고리 탐색
+- [소재 상세](https://gospelfix-ashy.vercel.app/detail/[slug]): 소재 소개, 코드·이미지 미리보기, 구매 옵션, 리뷰
+- [블로그](https://gospelfix-ashy.vercel.app/blog): 소식과 제작 이야기 (상세는 `/blog/[slug]`)
+- [소개](https://gospelfix-ashy.vercel.app/introduce): 서비스 소개
+- [마이페이지](https://gospelfix-ashy.vercel.app/mypage): 주문 내역, 내 작품, 리뷰, 계정 설정 (로그인 필요)
 
 `/resources`(리소스), `/guide`(이용가이드)는 현재 콘텐츠를 준비 중인 페이지입니다.
 
@@ -33,4 +33,4 @@
 
 ## Optional
 
-- [Vercel 배포](https://gospelfix.vercel.app): 프로덕션 환경
+- [Vercel 배포](https://gospelfix-ashy.vercel.app): 프로덕션 환경
