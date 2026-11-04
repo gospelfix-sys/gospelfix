@@ -7,8 +7,10 @@ import CartProvider from "@/components/cart/CartProvider";
 import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
 import { Toaster } from "@/components/ui/sonner";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://gospelfix.vercel.app";
+const DEFAULT_SITE_URL = "https://gospelfix-ashy.vercel.app";
+
+// 빈 문자열·끝 슬래시까지 걸러서 metadataBase가 깨지지 않게 한다
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL).replace(/\/+$/, "");
 
 export const metadata: Metadata = {
   title: "GOSPELFIX",
