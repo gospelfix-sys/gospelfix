@@ -83,8 +83,6 @@ export default function AboutPage() {
             <br />한 번에 만듭니다.
           </h1>
           <p className="text-gf-gray2 leading-relaxed mt-2">
-            가게의 브랜딩부터 예약 문의 응대까지, 한 번에 만듭니다.
-            <br className="hidden sm:block" />
             로고와 홈페이지, 24시간 응대 챗봇까지 업종에 맞게 설계해 예약과 문의를 놓치지 않도록
             도와드립니다.
           </p>
