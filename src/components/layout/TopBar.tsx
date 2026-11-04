@@ -42,8 +42,8 @@ export default function TopBar() {
   )
     return null;
 
-  // 에이전시 홈(/layer)은 헤더 자체를 숨긴다(넓은 헤더·압축 알약 모두).
-  if (pathname === "/layer") return null;
+  // 에이전시 홈(/layer)과 서비스 소개(/about)는 헤더 자체를 숨긴다(넓은 헤더·압축 알약 모두).
+  if (pathname === "/layer" || pathname === "/about") return null;
 
   // 히어로 배너가 있어 헤더가 콘텐츠 위에 겹쳐도 안전한 /about만 스크롤에 따라
   // 넓은 헤더 → 압축 알약으로 연속 전환된다. 그 외 페이지는 처음부터 압축 알약
