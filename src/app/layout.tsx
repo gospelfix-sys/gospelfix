@@ -13,15 +13,15 @@ const SITE_URL =
 export const metadata: Metadata = {
   title: "GOSPELFIX",
   description:
-    "AI가 탑재된 웹 템플릿을 구매하고 바로 서비스를 오픈하세요. 랜딩페이지, 대시보드, 이커머스 — 구매 즉시 바로 런칭할 수 있습니다.",
+    "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: "/logo.webp",
   },
   openGraph: {
-    title: "GOSPELFIX — AI 탑재 웹 템플릿 마켓",
+    title: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
     description:
-      "AI가 탑재된 웹 템플릿을 구매하고 바로 서비스를 오픈하세요. 랜딩페이지, 대시보드, 이커머스 — 구매 즉시 바로 런칭할 수 있습니다.",
+      "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
     url: SITE_URL,
     siteName: "GOSPELFIX",
     images: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         url: "/og-image.v4.jpg",
         width: 1200,
         height: 630,
-        alt: "GOSPELFIX — AI 탑재 웹 템플릿 마켓",
+        alt: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
       },
     ],
     locale: "ko_KR",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GOSPELFIX — AI 탑재 웹 템플릿 마켓",
+    title: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
     description:
-      "AI가 탑재된 웹 템플릿을 구매하고 바로 서비스를 오픈하세요. 랜딩페이지, 대시보드, 이커머스 — 구매 즉시 바로 런칭할 수 있습니다.",
+      "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
     images: ["/og-image.v4.jpg"],
   },
 };
