@@ -27,9 +27,7 @@ export async function submitQuoteChatAction(answers: ChatQuoteAnswers): Promise<
     `브랜딩: ${answers.branding}`,
     `유지보수: ${answers.care}`,
     `필요 기능: ${answers.features.join(", ")}`,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  ].join("\n");
 
   const { id } = await serverFetch<{ id: string }>("/api/quotes", {
     method: "POST",
