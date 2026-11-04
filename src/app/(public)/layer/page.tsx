@@ -1,15 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, Truck, Coffee, Stethoscope, GraduationCap, LifeBuoy } from "lucide-react";
+import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
 import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
-import { StatsSection } from "@/components/main/StatsSection";
 import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
-import BlogSwiper from "@/components/news/BlogSwiper";
 import { serverFetch } from "@/lib/serverFetch";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import { PortfolioListItem } from "@/types/portfolio.types";
-import { NewsListItem } from "@/types/news.types";
 
 export const metadata: Metadata = {
   title: "GOSPELFIX | 공식홈페이지",
@@ -27,12 +24,6 @@ const AUDIENCE = [
       "밤 11시에 온 예약 문의도 AI 챗봇이 즉시 응대합니다. 잠든 사이 놓치는 예약이 없어집니다.",
   },
   {
-    icon: Truck,
-    title: "이사·청소 업체를 운영 중이라면",
-    description:
-      "평수·층수만 입력하면 AI가 바로 견적을 계산해 드립니다. 전화 문의를 기다릴 필요가 없습니다.",
-  },
-  {
     icon: Coffee,
     title: "카페·요식업을 운영 중이라면",
     description: "메뉴 소개부터 예약, 주문 안내까지 AI가 24시간 손님을 맞이합니다.",
@@ -40,26 +31,17 @@ const AUDIENCE = [
   {
     icon: Stethoscope,
     title: "병원·한의원·치과를 운영 중이라면",
-    description:
-      "신뢰감 있는 첫인상과 정확한 안내를 함께 설계합니다. 의료 광고 규정도 꼼꼼히 챙깁니다.",
+    description: "신뢰감 있는 첫인상과 정확한 안내를 함께 설계합니다.",
   },
   {
     icon: GraduationCap,
     title: "학원·교육 기관을 운영 중이라면",
     description: "상담 문의와 수강 신청까지 AI가 안내합니다. 신뢰감을 주는 디자인으로 완성합니다.",
   },
-  {
-    icon: LifeBuoy,
-    title: "아임웹·카페24 같은 플랫폼도 어렵게 느껴진다면",
-    description: "코드 한 줄 몰라도 됩니다. 템플릿을 고르고 결제만 하시면 배포까지 저희가 끝냅니다.",
-  },
 ];
 
 export default async function OfficialHomePage() {
-  const [rawPortfolios, news] = await Promise.all([
-    serverFetch<PortfolioListItem[]>("/api/portfolios"),
-    serverFetch<NewsListItem[]>("/api/news"),
-  ]);
+  const rawPortfolios = await serverFetch<PortfolioListItem[]>("/api/portfolios");
   const portfolios = rawPortfolios.map((item) => ({
     ...item,
     description: item.description ? sanitizeContentHtml(item.description) : item.description,
@@ -127,7 +109,7 @@ export default async function OfficialHomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {AUDIENCE.map((item, i) => {
               const Icon = item.icon;
               return (
@@ -157,13 +139,6 @@ export default async function OfficialHomePage() {
           <p className="px-6 text-gf-gray2 text-sm">준비 중입니다.</p>
         )}
       </section>
-
-      {/* 블로그 */}
-      <section id="blog" className="bg-gf-bg py-14 overflow-hidden">
-        <BlogSwiper news={news} />
-      </section>
-
-      <StatsSection />
     </div>
   );
 }

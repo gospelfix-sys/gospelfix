@@ -33,8 +33,8 @@ export default function LayerLoading() {
             descriptionWidths={["w-72"]}
             className="mb-12 gap-2"
           />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
               <FeatureCardSkeleton key={i} />
             ))}
           </div>
