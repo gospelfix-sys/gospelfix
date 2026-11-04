@@ -12,6 +12,7 @@ type: feedback
 ### 1. raw `<button>` 재발 (Major, 가장 많이 재발)
 - 규칙: 클릭 UI는 `components/ui/button.tsx`(`Button`/`buttonVariants`), 토글·칩은 `ui/Chip.tsx`, 탭은 `ui/Tab.tsx`를 쓴다. 링크 버튼은 `<Link className={buttonVariants()}>`.
 - 재발 징후: 신규·전면 재작성 파일의 닫기(X), 아코디언 더보기, 복사, 옵션 토글, 칩, 팝업 트리거. 같은 디렉토리에 Chip/Button 선례가 있어도 재발한다. `components/ui/` 내부 파일도 예외가 아니다(RouteModal 닫기 버튼 사례).
+- 예외 선례: variants 전파·layoutId가 필요한 `motion.button`은 `CategoryTabs`/`SortTabs`가 "왜 직접 쓰는지" 주석을 달고 허용됨. 주석 없는 `motion.button`(예: `QuoteFloatingButton`)은 Minor로 주석 요청.
 - 방법: 리뷰 시작 때 `grep -rn "<button" src`로 전수 확인. 같은 마크업이 2곳 이상이면 먼저 `ui/`로 추출한다. 단일 위젯 전용 장식 요소(진행바 dot 등)는 Minor로 하향 가능.
 
 ### 2. 인라인 스타일 우회 (Critical)

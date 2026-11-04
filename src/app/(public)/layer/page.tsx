@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
 import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
+import { QuoteFloatingButton } from "@/components/main/QuoteFloatingButton";
 import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
 import { PricingSection } from "@/components/main/PricingSection";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
@@ -82,7 +83,7 @@ export default async function OfficialHomePage() {
         {/* 버튼 */}
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
-            href="/about"
+            href="#pricing"
             className="px-7 py-3.5 rounded-full border border-gf-orange text-gf-orange text-sm font-bold no-underline flex items-center justify-center"
           >
             솔루션 보기
@@ -143,6 +144,7 @@ export default async function OfficialHomePage() {
 
       {/* 가격 — 구축/유지보수 탭 */}
       <PricingSection />
+      <QuoteFloatingButton />
     </div>
   );
 }
