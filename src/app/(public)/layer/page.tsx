@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
 import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
 import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
+import { PricingSection } from "@/components/main/PricingSection";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
 import { serverFetch } from "@/lib/serverFetch";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
@@ -50,7 +51,7 @@ export default async function OfficialHomePage() {
   return (
     <div className="flex flex-col">
       {/* 히어로 */}
-      <section className="min-h-[100vh] flex flex-col items-center justify-center gap-8 px-6 pt-28 pb-12 text-center">
+      <section className="min-h-[100vh] flex flex-col items-center justify-center gap-8 px-6 pt-16 pb-12 text-center">
         {/* 배지 */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gf-border text-gf-black text-sm font-bold shadow-sm">
           <span className="w-2 h-2 rounded-full bg-gf-orange shrink-0" />
@@ -139,6 +140,9 @@ export default async function OfficialHomePage() {
           <p className="px-6 text-gf-gray2 text-sm">준비 중입니다.</p>
         )}
       </section>
+
+      {/* 가격 — 구축/유지보수 탭 */}
+      <PricingSection />
     </div>
   );
 }
