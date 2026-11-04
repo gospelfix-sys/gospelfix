@@ -18,7 +18,7 @@ import {
 import type { ChatMessage } from "@/types/reservationDemo.types";
 
 const BRAND_NAME = "GOSPELFIX";
-const BRAND_TAGLINE = "예약 문의를 놓치지 않는 AI 시스템";
+const BRAND_TAGLINE = "예약 문의를 놓치지 않는 챗봇 시스템";
 
 const INITIAL_MESSAGES: ChatMessage[] = [
   { id: "ai-0", role: "ai", text: `안녕하세요\n${BRAND_NAME} 입니다.` },
