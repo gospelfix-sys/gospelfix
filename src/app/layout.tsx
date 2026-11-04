@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     siteName: "GOSPELFIX",
     images: [
       {
-        url: "/og-image.v4.jpg",
-        width: 1200,
-        height: 630,
+        url: "/og-image.v5.jpg",
+        width: 984,
+        height: 477,
         alt: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
       },
     ],
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
     description:
       "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
-    images: ["/og-image.v4.jpg"],
+    images: ["/og-image.v5.jpg"],
   },
 };
 
