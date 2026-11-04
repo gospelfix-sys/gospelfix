@@ -150,10 +150,10 @@ export default function PrivacyContent() {
             <p>
               이메일:{" "}
               <a
-                href="mailto:support@gospelfix.com"
+                href="mailto:gospelfix.sys@gmail.com"
                 className="text-gf-orange no-underline hover:underline"
               >
-                support@gospelfix.com
+                gospelfix.sys@gmail.com
               </a>
             </p>
           </ContactCard>
