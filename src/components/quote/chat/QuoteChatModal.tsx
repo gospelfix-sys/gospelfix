@@ -305,7 +305,7 @@ export function QuoteChatModal({ open, onOpenChange }: QuoteChatModalProps) {
               onClick={() => setStarted(true)}
               className="h-14 w-full rounded-2xl text-base font-bold"
             >
-              AI 견적 상담 시작하기
+              챗봇 상담 시작하기
             </Button>
           </div>
         ) : step === "result" || step === "done" ? (
