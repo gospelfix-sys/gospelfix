@@ -1,15 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
-import { type ConsentStatus, COOKIE_CONSENT_KEY, parseConsentStatus } from "@/hooks/useCookieConsent";
+import {
+  type ConsentStatus,
+  COOKIE_BANNER_HIDDEN_PATHS,
+  COOKIE_CONSENT_KEY,
+  parseConsentStatus,
+} from "@/hooks/useCookieConsent";
 
 function dispatchConsentEvent(status: ConsentStatus) {
   window.dispatchEvent(new CustomEvent("cookieConsent", { detail: { status } }));
 }
 
 export default function CookieConsentBanner() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -28,7 +35,8 @@ export default function CookieConsentBanner() {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  // 숨김 경로에서도 위 effect는 돌아, 재방문자의 동의 상태 이벤트는 그대로 발행된다
+  if (!visible || COOKIE_BANNER_HIDDEN_PATHS.includes(pathname)) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 bg-black px-4 py-3 sm:px-6 sm:py-4">
