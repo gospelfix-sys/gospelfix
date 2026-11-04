@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import { cn } from "@/lib/utils";
 
+// 이 경로들은 푸터에서 환불정책 링크를 숨긴다(정확 일치).
+const HIDE_REFUND_PATHS = ["/layer", "/about"];
+
 const FOOTER_LINKS = [
   { href: "/about", label: "서비스소개" },
   { href: "/blog", label: "블로그" },
@@ -37,6 +40,8 @@ export default function Footer() {
     pathname.startsWith("/resources") ||
     pathname.startsWith("/introduce") ||
     pathname.startsWith("/blog");
+
+  const showRefund = !HIDE_REFUND_PATHS.includes(pathname);
 
   return (
     <footer
@@ -109,12 +114,14 @@ export default function Footer() {
             >
               개인정보처리방침
             </LegalDialogTrigger>
-            <LegalDialogTrigger
-              type="refund"
-              className="text-gf-gray1 transition-colors hover:text-gf-black"
-            >
-              환불정책
-            </LegalDialogTrigger>
+            {showRefund && (
+              <LegalDialogTrigger
+                type="refund"
+                className="text-gf-gray1 transition-colors hover:text-gf-black"
+              >
+                환불정책
+              </LegalDialogTrigger>
+            )}
           </nav>
         </div>
       </div>

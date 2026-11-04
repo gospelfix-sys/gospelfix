@@ -9,7 +9,6 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { HeaderProfileMenu } from "@/components/layer/HeaderProfileMenu";
-import { SectionToggle } from "@/components/layout/SectionToggle";
 import { LAYER_NAV_ITEMS } from "@/components/layer/layerNav";
 import { authUserAtom, authLoadingAtom } from "@/store/atoms/authAtom";
 import { userProfileAtom } from "@/store/atoms/userAtom";
@@ -181,9 +180,6 @@ export function LayerNavBar() {
                 <span className="font-kr text-gf-orange">FIX</span>
               </Link>
 
-              {/* 섹션 토글 — 좁은 화면에서는 넘치므로 md 이상에서만 노출(모바일은 드로어 안에 둔다) */}
-              <SectionToggle className="hidden md:grid" />
-
               {/* 데스크톱 네비 링크 */}
               <nav className="hidden items-center gap-1 lg:flex">
                 <Suspense fallback={null}>
@@ -321,8 +317,6 @@ export function LayerNavBar() {
                 <span className="font-kr text-gf-orange">FIX</span>
               </Link>
               <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto px-3 pb-6">
-                {/* 모바일 바에는 섹션 토글이 없으므로 드로어 상단에 둔다 */}
-                <SectionToggle className="mb-2 self-start md:hidden" onNavigate={closeDrawer} />
                 <Suspense fallback={null}>
                   <LayerNavLinks variant="drawer" onNavigate={closeDrawer} />
                 </Suspense>

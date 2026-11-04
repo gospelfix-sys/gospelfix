@@ -13,8 +13,8 @@ import { cartItemCountSelector } from "@/store/selectors/cartSelector";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { NavPopover } from "@/components/layout/NavPopover";
 import {
+  HIDE_AUTH_BUTTONS_PATHS,
   MODA_SHELL_PATHS,
-  SectionToggle,
   isModaSection,
 } from "@/components/layout/SectionToggle";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,9 @@ import { cn } from "@/lib/utils";
 const SCROLL_MORPH_RANGE = 300;
 const WIDE_WIDTH = 1280;
 const COMPACT_WIDTH = 460;
+
+// 에이전시 홈(/layer)은 소개 메뉴만 노출한다.
+const LAYER_HOME_PATH = "/layer";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -124,6 +127,7 @@ function WideContent() {
   const user = useRecoilValue(authUserAtom);
   const loading = useRecoilValue(authLoadingAtom);
   const { signOut, openAuthModal } = useAuth();
+  const pathname = usePathname();
 
   async function handleSignOut() {
     await signOut("/");
@@ -140,11 +144,18 @@ function WideContent() {
           <span className="font-kr text-gf-orange">FIX</span>
         </Link>
 
-        {/* 섹션 토글 — 좁은 화면에서는 로고/로그인 버튼과 함께 있으면 넘치므로 데스크톱에서만 노출 */}
-        <SectionToggle className="hidden md:grid" />
+        {/* /layer는 소개 메뉴만 노출한다 */}
+        {pathname === LAYER_HOME_PATH && (
+          <Link
+            href="/about"
+            className="rounded-full px-4 py-1.5 text-sm font-medium no-underline text-white/70 transition-all hover:bg-white/10"
+          >
+            소개
+          </Link>
+        )}
       </div>
 
-      {!loading && (
+      {!loading && (user || !HIDE_AUTH_BUTTONS_PATHS.includes(pathname)) && (
         <div className="flex items-center gap-2">
           {user ? (
             <>
@@ -222,9 +233,16 @@ function CompactNav({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className="flex items-center gap-2.5 px-3 py-2 sm:px-5">
-        {/* 섹션 탭 */}
-        <SectionToggle onNavigate={() => setMenuOpen(false)} />
+      {/* 알약 폭은 메뉴 팝오버가 정하므로, 로고를 왼쪽·버튼을 오른쪽 끝에 둔다 */}
+      <div className="flex items-center justify-between gap-8 px-5 py-2 sm:px-7">
+        <Link
+          href="/"
+          onClick={() => setMenuOpen(false)}
+          className="flex items-center gap-0.5 text-lg font-black tracking-[-0.03em] no-underline text-white"
+        >
+          <span className="font-kr">GOSPEL</span>
+          <span className="font-kr text-gf-orange">FIX</span>
+        </Link>
 
         {/* 장바구니 버튼 — 모다 섹션에서만 노출 */}
         {isLayer && (

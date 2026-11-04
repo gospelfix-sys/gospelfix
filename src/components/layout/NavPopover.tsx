@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { HIDE_AUTH_BUTTONS_PATHS, INTRO_ONLY_MENU_PATHS } from "@/components/layout/SectionToggle";
 import { useAuth } from "@/hooks/useAuth";
 import type { CmsUser } from "@/types/auth.types";
 import { cn } from "@/lib/utils";
@@ -44,7 +45,10 @@ export function NavPopover({
   const searchParams = useSearchParams();
   const { openAuthModal } = useAuth();
 
-  const navItems = section === "official" ? OFFICIAL_NAV_ITEMS : LAYER_NAV_ITEMS;
+  const officialItems = INTRO_ONLY_MENU_PATHS.includes(pathname)
+    ? OFFICIAL_NAV_ITEMS.slice(0, 1)
+    : OFFICIAL_NAV_ITEMS;
+  const navItems = section === "official" ? officialItems : LAYER_NAV_ITEMS;
 
   function isActive(href: string) {
     const [hrefPath, hrefQuery] = href.split("?");
@@ -84,7 +88,7 @@ export function NavPopover({
             );
           })}
 
-          {!loading && (
+          {!loading && (user || !HIDE_AUTH_BUTTONS_PATHS.includes(pathname)) && (
             <>
               <div className="h-px bg-white/10 mx-1.5 my-0.5" />
 
