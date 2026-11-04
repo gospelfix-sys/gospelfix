@@ -29,9 +29,6 @@ const SCROLL_MORPH_RANGE = 300;
 const WIDE_WIDTH = 1280;
 const COMPACT_WIDTH = 460;
 
-// 에이전시 홈(/layer)은 소개 메뉴만 노출한다.
-const LAYER_HOME_PATH = "/layer";
-
 export default function TopBar() {
   const pathname = usePathname();
 
@@ -45,10 +42,13 @@ export default function TopBar() {
   )
     return null;
 
-  // 히어로 배너가 있어 헤더가 콘텐츠 위에 겹쳐도 안전한 에이전시 홈("/layer")과 /about만
-  // 스크롤에 따라 넓은 헤더 → 압축 알약으로 연속 전환된다. 그 외 페이지는 처음부터 압축 알약
+  // 에이전시 홈(/layer)은 헤더 자체를 숨긴다(넓은 헤더·압축 알약 모두).
+  if (pathname === "/layer") return null;
+
+  // 히어로 배너가 있어 헤더가 콘텐츠 위에 겹쳐도 안전한 /about만 스크롤에 따라
+  // 넓은 헤더 → 압축 알약으로 연속 전환된다. 그 외 페이지는 처음부터 압축 알약
   // 상태로 고정 표시한다.
-  const isOverlayHero = pathname === "/layer" || pathname === "/about";
+  const isOverlayHero = pathname === "/about";
 
   if (!isOverlayHero) {
     return <CompactNav className="fixed left-1/2 top-[20px] z-30 w-fit -translate-x-1/2" />;
@@ -143,16 +143,6 @@ function WideContent() {
           <span className="font-kr">GOSPEL</span>
           <span className="font-kr text-gf-orange">FIX</span>
         </Link>
-
-        {/* /layer는 소개 메뉴만 노출한다 */}
-        {pathname === LAYER_HOME_PATH && (
-          <Link
-            href="/about"
-            className="rounded-full px-4 py-1.5 text-sm font-medium no-underline text-white/70 transition-all hover:bg-white/10"
-          >
-            소개
-          </Link>
-        )}
       </div>
 
       {!loading && (user || !HIDE_AUTH_BUTTONS_PATHS.includes(pathname)) && (

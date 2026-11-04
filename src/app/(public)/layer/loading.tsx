@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function LayerLoading() {
   return (
     <SkeletonRegion className="flex flex-col">
-      <section className="flex min-h-[100vh] flex-col items-center justify-center gap-8 px-6 pb-12 pt-28">
+      <section className="flex min-h-[100vh] flex-col items-center justify-center gap-8 px-6 pb-12 pt-16">
         <Skeleton className="h-9 w-72 max-w-full rounded-full" />
         <SectionHeadingSkeleton
           titleWidths={["w-32", "w-48", "w-64", "w-40"]}
