@@ -3,7 +3,7 @@ import type { MockCustomer, MockReservation } from "@/types/reservationDemo.type
 export const RESERVATION_SERVICES = ["가맹 상담", "매장 방문", "본사 미팅", "창업 설명회"];
 
 // 새로고침해도 예약 데이터가 유지되는 걸 보여주기 위한 로컬스토리지 키
-export const RESERVATION_DEMO_STORAGE_KEY = "gospelfix_reservation_demo_v1";
+export const RESERVATION_DEMO_STORAGE_KEY = "gospelfix_reservation_demo_v2";
 
 // 챗봇이 "가맹점 문의"/"창업비용" 질문에 답할 때 참조하는 데이터 — 문구 대신 이 값만
 // 바꾸면 챗봇 답변 전체(가격, 조건)가 함께 갱신된다.
@@ -36,7 +36,7 @@ export const MOCK_RESERVATIONS: MockReservation[] = [
     channel: "chatbot",
     service: "가맹 상담",
     requestedAt: "어제 23:41 접수",
-    desiredTime: "8/18 (화) 15:00",
+    desiredTime: "11/3 (화) 15:00",
     status: "confirmed",
   },
   {
@@ -45,7 +45,7 @@ export const MOCK_RESERVATIONS: MockReservation[] = [
     channel: "form",
     service: "매장 방문",
     requestedAt: "오늘 09:12 접수",
-    desiredTime: "8/19 (수) 11:00",
+    desiredTime: "11/4 (수) 11:00",
     status: "pending",
   },
   {
@@ -54,7 +54,7 @@ export const MOCK_RESERVATIONS: MockReservation[] = [
     channel: "chatbot",
     service: "창업 설명회",
     requestedAt: "오늘 10:30 접수",
-    desiredTime: "8/20 (목) 19:00",
+    desiredTime: "11/5 (목) 19:00",
     status: "changed",
   },
   {
@@ -63,7 +63,7 @@ export const MOCK_RESERVATIONS: MockReservation[] = [
     channel: "form",
     service: "본사 미팅",
     requestedAt: "오늘 13:05 접수",
-    desiredTime: "8/21 (금) 14:00",
+    desiredTime: "11/6 (금) 14:00",
     status: "pending",
   },
   {
@@ -72,7 +72,7 @@ export const MOCK_RESERVATIONS: MockReservation[] = [
     channel: "chatbot",
     service: "가맹 상담",
     requestedAt: "그제 22:58 접수",
-    desiredTime: "8/17 (월) 16:30",
+    desiredTime: "11/2 (월) 16:30",
     status: "cancelled",
   },
 ];
