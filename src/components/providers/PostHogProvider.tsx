@@ -6,7 +6,11 @@ import { useEffect } from "react";
 import PostHogPageView from "@/components/providers/PostHogPageView";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 
-export default function PostHogProvider({ children }: { children: React.ReactNode }) {
+interface PostHogProviderProps {
+  children: React.ReactNode;
+}
+
+export default function PostHogProvider({ children }: PostHogProviderProps) {
   const consentStatus = useCookieConsent();
 
   useEffect(() => {

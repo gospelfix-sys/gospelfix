@@ -13,7 +13,7 @@ export default function SocialLoginView() {
 
   return (
     <div className="flex flex-col items-center">
-      <Image src="/logo.webp" alt="GospelFix" width={48} height={48} className="mb-3 rounded-xl" />
+      <Image src="/logo.webp" alt="GOSPELFIX" width={48} height={48} className="mb-3 rounded-xl" />
       <h2 className="text-xl font-bold text-gf-black">가스펄픽스에 오신 것을 환영합니다</h2>
       <p className="mt-1 mb-6 text-sm text-gf-gray2">간편하게 로그인하고 시작해보세요</p>
 

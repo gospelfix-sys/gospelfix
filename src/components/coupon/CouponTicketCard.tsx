@@ -2,7 +2,12 @@ import { cn } from "@/lib/utils";
 import { getCouponSourceLabel, getCouponStatusLabel, isCouponUsable } from "@/lib/coupon";
 import type { Coupon } from "@/types/coupon.types";
 
-export function CouponTicketCard({ coupon, className }: { coupon: Coupon; className?: string }) {
+interface CouponTicketCardProps {
+  coupon: Coupon;
+  className?: string;
+}
+
+export function CouponTicketCard({ coupon, className }: CouponTicketCardProps) {
   const usable = isCouponUsable(coupon);
 
   return (

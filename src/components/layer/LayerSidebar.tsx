@@ -79,15 +79,13 @@ export function LayerSidebar({ open, onClose }: LayerSidebarProps) {
   );
 }
 
-function SidebarContent({
-  currentCategory,
-  currentPrice,
-  onNavigate,
-}: {
+interface SidebarContentProps {
   currentCategory: string;
   currentPrice: string;
   onNavigate: () => void;
-}) {
+}
+
+function SidebarContent({ currentCategory, currentPrice, onNavigate }: SidebarContentProps) {
   const pathname = usePathname();
   const navContext = { pathname, category: currentCategory, price: currentPrice };
 

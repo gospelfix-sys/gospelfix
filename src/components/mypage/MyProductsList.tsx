@@ -27,7 +27,11 @@ function getStatusBucket(product: SellerProduct): Exclude<StatusFilter, "all"> {
   return "suspended";
 }
 
-export function MyProductsList({ products }: { products: SellerProduct[] }) {
+interface MyProductsListProps {
+  products: SellerProduct[];
+}
+
+export function MyProductsList({ products }: MyProductsListProps) {
   const [filter, setFilter] = useState<StatusFilter>("all");
 
   const counts = useMemo(() => {

@@ -4,7 +4,11 @@ import { Clock } from "lucide-react";
 import { formatRemainingTime } from "@/lib/countdown";
 import { useCountdown } from "@/hooks/useCountdown";
 
-export function DiscountCountdown({ endsAt }: { endsAt: string }) {
+interface DiscountCountdownProps {
+  endsAt: string;
+}
+
+export function DiscountCountdown({ endsAt }: DiscountCountdownProps) {
   const remainingMs = useCountdown(endsAt);
 
   if (remainingMs === null || Number.isNaN(remainingMs) || remainingMs <= 0) return null;

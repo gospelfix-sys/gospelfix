@@ -14,11 +14,11 @@ import { usePurchaseOption } from "@/components/products/PurchaseOptionContext";
 import { WithdrawalNoticeAgreement } from "@/components/widgets/WithdrawalNoticeAgreement";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
-import { ProductPriceState } from "@/lib/discount";
+import type { ProductPriceState } from "@/lib/discount";
 import { formatPrice } from "@/lib/utils";
 import { isAuthenticatedSelector } from "@/store/selectors/authSelector";
-import { getCategoryLabel, Product } from "@/types/product.types";
-import { Coupon } from "@/types/coupon.types";
+import { getCategoryLabel, type Product } from "@/types/product.types";
+import type { Coupon } from "@/types/coupon.types";
 
 const KAKAO_URL = "https://pf.kakao.com/_CqKlX/chat";
 
@@ -40,9 +40,14 @@ interface PurchaseOptionsPanelProps {
   alreadyPurchased: boolean;
 }
 
+interface PrimaryActionRowProps {
+  product: Product;
+  children: React.ReactNode;
+}
+
 // 주요 CTA 버튼(BuyButton 또는 문의 버튼) 옆에 LikeButton을 나란히 배치하는 공통 레이아웃.
 // 무료/문의전용/일반 구매 3개 분기가 CTA만 다르고 이 구조는 동일하므로 여기서 한 번만 정의한다.
-function PrimaryActionRow({ product, children }: { product: Product; children: React.ReactNode }) {
+function PrimaryActionRow({ product, children }: PrimaryActionRowProps) {
   return (
     <div className="flex gap-3">
       <div className="flex-1">{children}</div>

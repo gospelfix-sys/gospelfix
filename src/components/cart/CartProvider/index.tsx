@@ -1,5 +1,3 @@
-"use client";
-
 import CartModal from "@/components/cart/CartModal";
 
 interface CartProviderProps {

@@ -9,14 +9,18 @@ import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PaymentModal from "@/components/products/PaymentModal";
-import { PendingOrder } from "@/types/order.types";
+import type { PendingOrder } from "@/types/order.types";
 
 const STATUS_LABEL: Record<PendingOrder["status"], string> = {
   pending: "입금 대기중",
   pending_confirm: "입금 확인중",
 };
 
-export function PendingOrderCard({ order }: { order: PendingOrder }) {
+interface PendingOrderCardProps {
+  order: PendingOrder;
+}
+
+export function PendingOrderCard({ order }: PendingOrderCardProps) {
   const router = useRouter();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [completingFree, setCompletingFree] = useState(false);

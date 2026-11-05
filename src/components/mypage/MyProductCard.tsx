@@ -19,7 +19,11 @@ const STATUS_STYLES: Record<SellerProduct["status"], { badge: string; dot: strin
   rejected: { badge: "bg-[rgba(220,38,38,0.1)] text-destructive", dot: "bg-destructive" },
 };
 
-export function MyProductCard({ product }: { product: SellerProduct }) {
+interface MyProductCardProps {
+  product: SellerProduct;
+}
+
+export function MyProductCard({ product }: MyProductCardProps) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
 

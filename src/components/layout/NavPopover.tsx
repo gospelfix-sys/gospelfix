@@ -26,6 +26,15 @@ const OFFICIAL_NAV_ITEMS = [
   { href: "/blog", linkHref: "/blog", label: "블로그" },
 ];
 
+interface NavPopoverProps {
+  menuOpen: boolean;
+  setMenuOpen: (v: boolean) => void;
+  user: CmsUser | null;
+  loading: boolean;
+  handleSignOut: () => void;
+  section: "layer" | "official";
+}
+
 export function NavPopover({
   menuOpen,
   setMenuOpen,
@@ -33,14 +42,7 @@ export function NavPopover({
   loading,
   handleSignOut,
   section,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: (v: boolean) => void;
-  user: CmsUser | null;
-  loading: boolean;
-  handleSignOut: () => void;
-  section: "layer" | "official";
-}) {
+}: NavPopoverProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { openAuthModal } = useAuth();

@@ -2,6 +2,10 @@
 
 import { RecoilRoot } from "recoil";
 
-export default function RecoilProvider({ children }: { children: React.ReactNode }) {
+interface RecoilProviderProps {
+  children: React.ReactNode;
+}
+
+export default function RecoilProvider({ children }: RecoilProviderProps) {
   return <RecoilRoot>{children}</RecoilRoot>;
 }

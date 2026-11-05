@@ -33,7 +33,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col items-center">
-      <Image src="/logo.webp" alt="GospelFix" width={48} height={48} className="mb-3 rounded-xl" />
+      <Image src="/logo.webp" alt="GOSPELFIX" width={48} height={48} className="mb-3 rounded-xl" />
       <h2 className="text-xl font-bold text-gf-black">로그인</h2>
       <p className="mt-1 mb-6 text-sm text-gf-gray2">템플릿 마켓에 오신 걸 환영합니다</p>
 

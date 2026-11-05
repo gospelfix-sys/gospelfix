@@ -186,8 +186,12 @@ function WideContent() {
   );
 }
 
+interface CompactNavProps {
+  className?: string;
+}
+
 /** 압축 상태: 에이전시/모다 섹션 탭 + (모다에서만) 장바구니 + 햄버거 메뉴. */
-function CompactNav({ className }: { className?: string }) {
+function CompactNav({ className }: CompactNavProps) {
   const user = useRecoilValue(authUserAtom);
   const loading = useRecoilValue(authLoadingAtom);
   const pathname = usePathname();

@@ -1,5 +1,5 @@
 import { Calendar, Tag } from "lucide-react";
-import { NewsItem } from "@/types/news.types";
+import type { NewsItem } from "@/types/news.types";
 import { cn, formatDate } from "@/lib/utils";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import NewsImageGallery from "@/components/news/NewsImageGallery";
@@ -12,7 +12,11 @@ const CATEGORY_COLOR: Record<string, string> = {
   이벤트: "bg-green-500/15 text-green-400",
 };
 
-export default function NewsDetailContent({ news }: { news: NewsItem }) {
+interface NewsDetailContentProps {
+  news: NewsItem;
+}
+
+export default function NewsDetailContent({ news }: NewsDetailContentProps) {
   const contentHtml = sanitizeContentHtml(news.content);
   // 갤러리는 관리자가 portfolio_images로 별도 첨부한 작업물 사진만 보여준다.
   // content 본문 내 이미지는 sanitize된 본문 안에서 그대로 노출되며 갤러리에는 섞이지 않는다.

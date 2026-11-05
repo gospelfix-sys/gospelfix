@@ -55,8 +55,12 @@ const INITIAL_ANSWERS: ChatAnswers = {
   care: null,
 };
 
+interface ChatBrandHeaderProps {
+  className?: string;
+}
+
 // 대화창 상단 중앙에 브랜드 로고·이름·태그라인을 보여주는 블록 (카카오 채널형 채팅 UI)
-function ChatBrandHeader({ className }: { className?: string }) {
+function ChatBrandHeader({ className }: ChatBrandHeaderProps) {
   return (
     <div className={cn("flex flex-col items-center gap-2 pb-2 pt-6 text-center", className)}>
       <div className="relative h-20 w-20 overflow-hidden rounded-full border border-gf-border bg-gf-black">

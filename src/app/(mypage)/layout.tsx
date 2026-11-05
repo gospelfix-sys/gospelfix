@@ -7,7 +7,11 @@ import { BackButton } from "@/components/mypage/BackButton";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
+
+export default async function DashboardLayout({ children }: DashboardLayoutProps) {
   const [me, banners] = await Promise.all([getMe(), getReferralBanners()]);
 
   const user = me?.user ?? null;
