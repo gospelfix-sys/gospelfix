@@ -5,6 +5,25 @@ import { Tab } from "@/components/ui/Tab";
 import { cn } from "@/lib/utils";
 import { PRICING_TABS, type PricingTabKey } from "@/components/main/pricingData";
 
+interface EmphasizedTextProps {
+  text: string;
+  emphasis?: string;
+}
+
+// text 안에서 emphasis와 처음 일치하는 부분만 굵게 강조한다. 일치하지 않으면 그대로 출력
+function EmphasizedText({ text, emphasis }: EmphasizedTextProps) {
+  const index = emphasis ? text.indexOf(emphasis) : -1;
+  if (!emphasis || index === -1) return <>{text}</>;
+
+  return (
+    <>
+      {text.slice(0, index)}
+      <strong className="font-extrabold">{emphasis}</strong>
+      {text.slice(index + emphasis.length)}
+    </>
+  );
+}
+
 export function PricingSection() {
   const [activeKey, setActiveKey] = useState<PricingTabKey>("build");
   const activeTab = PRICING_TABS.find((tab) => tab.key === activeKey) ?? PRICING_TABS[0];
@@ -91,7 +110,7 @@ export function PricingSection() {
                     {(Array.isArray(feature.value) ? feature.value : [feature.value]).map(
                       (line) => (
                         <dd key={line} className="text-sm text-gf-black">
-                          {line}
+                          <EmphasizedText text={line} emphasis={feature.emphasis} />
                         </dd>
                       ),
                     )}
