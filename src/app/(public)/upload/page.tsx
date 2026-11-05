@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { UploadWorkEditor } from "@/components/layer/UploadWorkEditor";
+import { UploadWorkEditor } from "@/components/upload/UploadWorkEditor";
 import { getProductCategories } from "@/lib/api/categories";
 import { getProductSubCategories } from "@/lib/api/subCategories";
 

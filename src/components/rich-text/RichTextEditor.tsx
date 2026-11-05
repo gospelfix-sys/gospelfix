@@ -8,8 +8,8 @@ import TiptapLink from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TiptapImage from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
-import CustomTextStyle from "@/components/layer/richTextStyle";
-import { RichTextToolbar } from "@/components/layer/richText/RichTextToolbar";
+import CustomTextStyle from "@/components/rich-text/richTextStyle";
+import { RichTextToolbar } from "@/components/rich-text/RichTextToolbar";
 
 interface RichTextEditorProps {
   value: string;

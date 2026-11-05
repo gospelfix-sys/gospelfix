@@ -7,7 +7,7 @@ import {
   normalizeLicense,
   uploadImage,
   uploadZip,
-} from "@/components/layer/upload/uploadEditorUtils";
+} from "@/components/upload/uploadEditorUtils";
 import type { UploadWorkForm } from "@/hooks/useUploadWorkForm";
 import type { SellerProductInput } from "@/types/product.types";
 import { resolveVideoLink } from "@/lib/videoLink";

@@ -10,7 +10,7 @@ import {
   normalizeLicense,
   parseContentBlocks,
   type ContentBlock,
-} from "@/components/layer/upload/uploadEditorUtils";
+} from "@/components/upload/uploadEditorUtils";
 import {
   DEFAULT_LICENSE,
   MAX_SUB_CATEGORIES,

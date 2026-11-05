@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { normalizeLicense } from "@/components/layer/upload/uploadEditorUtils";
+import { normalizeLicense } from "@/components/upload/uploadEditorUtils";
 import { LICENSE_OPTIONS } from "@/types/product.types";
 import { cn } from "@/lib/utils";
 

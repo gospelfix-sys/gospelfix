@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { ChevronRight, Image as ImageIcon, Type, Video as VideoIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { RichTextEditorLazy } from "@/components/layer/RichTextEditorLazy";
-import { AddBlockButton } from "@/components/layer/upload/AddBlockButton";
-import type { ContentBlock } from "@/components/layer/upload/uploadEditorUtils";
+import { RichTextEditorLazy } from "@/components/rich-text/RichTextEditorLazy";
+import { AddBlockButton } from "@/components/upload/AddBlockButton";
+import type { ContentBlock } from "@/components/upload/uploadEditorUtils";
 import { cn } from "@/lib/utils";
 
 interface UploadCanvasProps {

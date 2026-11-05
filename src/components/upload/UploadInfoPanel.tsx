@@ -10,12 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PurchaseOptionEditor } from "@/components/layer/upload/PurchaseOptionEditor";
-import { CodePreviewEditor } from "@/components/layer/upload/CodePreviewEditor";
-import { PriceFields } from "@/components/layer/upload/PriceFields";
-import { CoverUploadField } from "@/components/layer/upload/CoverUploadField";
-import { DownloadFileField } from "@/components/layer/upload/DownloadFileField";
-import { DESIGN_TYPES } from "@/components/layer/upload/uploadEditorUtils";
+import { PurchaseOptionEditor } from "@/components/upload/PurchaseOptionEditor";
+import { CodePreviewEditor } from "@/components/upload/CodePreviewEditor";
+import { PriceFields } from "@/components/upload/PriceFields";
+import { CoverUploadField } from "@/components/upload/CoverUploadField";
+import { DownloadFileField } from "@/components/upload/DownloadFileField";
+import { DESIGN_TYPES } from "@/components/upload/uploadEditorUtils";
 import type { UploadWorkForm } from "@/hooks/useUploadWorkForm";
 import { getLicenseLabel } from "@/types/product.types";
 import { cn, slugify } from "@/lib/utils";

@@ -23,9 +23,9 @@ import {
   AlignCenter,
   AlignRight,
 } from "lucide-react";
-import { ToolbarButton, Divider } from "@/components/layer/richText/ToolbarButton";
-import { FontSizeControl } from "@/components/layer/richText/FontSizeControl";
-import { ColorControl } from "@/components/layer/richText/ColorControl";
+import { ToolbarButton, Divider } from "@/components/rich-text/ToolbarButton";
+import { FontSizeControl } from "@/components/rich-text/FontSizeControl";
+import { ColorControl } from "@/components/rich-text/ColorControl";
 
 interface RichTextToolbarProps {
   editor: Editor;

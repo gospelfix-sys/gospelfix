@@ -14,7 +14,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { HOURS, MINUTES } from "@/components/layer/upload/uploadEditorUtils";
+import { HOURS, MINUTES } from "@/components/upload/uploadEditorUtils";
 
 interface DateTimeFieldProps {
   value: string | null;

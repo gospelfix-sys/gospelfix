@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DateTimeField } from "@/components/layer/upload/DateTimeField";
+import { DateTimeField } from "@/components/upload/DateTimeField";
 import { cn } from "@/lib/utils";
 
 interface PriceFieldsProps {
