@@ -15,15 +15,15 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL).
 export const metadata: Metadata = {
   title: "GOSPELFIX",
   description:
-    "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
+    "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: "/logo.webp",
   },
   openGraph: {
-    title: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
+    title: "GOSPELFIX — 브랜딩부터 챗봇 홈페이지까지 한 번에",
     description:
-      "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
+      "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
     url: SITE_URL,
     siteName: "GOSPELFIX",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         url: "/og-image.v5.jpg",
         width: 984,
         height: 477,
-        alt: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
+        alt: "GOSPELFIX — 브랜딩부터 챗봇 홈페이지까지 한 번에",
       },
     ],
     locale: "ko_KR",
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GOSPELFIX — 챗봇이 응대하는 홈페이지 구축·유지보수",
+    title: "GOSPELFIX — 브랜딩부터 챗봇 홈페이지까지 한 번에",
     description:
-      "문의·예약을 놓치지 않는 챗봇 홈페이지를 만들어 드립니다. 브랜딩부터 구축, 유지보수까지 단계별로 선택하세요.",
+      "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
     images: ["/og-image.v5.jpg"],
   },
 };

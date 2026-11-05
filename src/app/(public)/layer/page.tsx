@@ -12,11 +12,20 @@ import { PortfolioListItem } from "@/types/portfolio.types";
 
 export const metadata: Metadata = {
   title: "GOSPELFIX | 공식홈페이지",
-  description: "GOSPELFIX 공식홈페이지입니다. 블로그와 교육 콘텐츠를 제공합니다.",
+  description:
+    "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
 };
 
 // 히어로 알약 안에서 순서대로 롤링되는 단어. 가장 긴 단어 기준으로 알약 너비가 정해진다
-const HERO_ROLLING_WORDS = ["홈페이지", "쇼핑몰", "랜딩페이지"] as const;
+const HERO_ROLLING_WORDS = [
+  "CI 로고",
+  "MOCKUP",
+  "배너",
+  "광고소재",
+  "챗봇",
+  "홈페이지",
+  "쇼핑몰",
+] as const;
 
 const AUDIENCE = [
   {
@@ -56,27 +65,26 @@ export default async function OfficialHomePage() {
         {/* 배지 */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gf-border text-gf-black text-sm font-bold shadow-sm">
           <span className="w-2 h-2 rounded-full bg-gf-orange shrink-0" />
-          GOSPELFIX — 예약 문의를 놓치지 않는 챗봇 시스템
+          GOSPELFIX 브랜딩부터 챗봇 홈페이지까지
         </div>
 
         {/* 헤드라인 */}
         <h1 className="text-6xl sm:text-8xl font-black tracking-tight text-gf-black leading-none uppercase">
-          24시간
+          브랜딩부터
           <br />
-          예약받는
+          온라인까지
           <br />
           <HeroRollingWord words={HERO_ROLLING_WORDS} />
-          <br />
-          OPEN.
+          <br />한 번에.
         </h1>
 
         {/* 설명 */}
         <div className="flex flex-col items-center">
           <p className="text-gf-black text-base font-bold">
-            잠든 사이에도 고객을 응대하는 챗봇이 달린 홈페이지·쇼핑몰
+            로고·목업·배너·광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지
           </p>
           <p className="text-gf-gray2 leading-relaxed text-center sm:whitespace-nowrap">
-            첫 사업이라면 가스펄픽스가 처음부터 끝까지 만들어 드립니다.
+            사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.
           </p>
         </div>
 
@@ -89,15 +97,6 @@ export default async function OfficialHomePage() {
             솔루션 보기
           </Link>
         </div>
-
-        {/* 모다 크로스링크 */}
-        <p className="text-gf-gray2 text-sm">
-          이미 완성된 템플릿을 바로 구매하고 싶다면{" "}
-          <Link href="/" className="text-gf-orange font-bold underline underline-offset-2">
-            모다(MODA)
-          </Link>
-          에서 둘러보세요.
-        </p>
       </section>
 
       {/* 추천 대상 */}
