@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
 import { ReferralBanner } from "@/types/referralBanner.types";
+import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";
-
-interface CmsListResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
 
 // cms.api 호출 실패(엔드포인트 미배포, 리소스 토글 OFF로 인한 404 포함)해도
 // 마이페이지/몰 페이지 렌더링을 막지 않도록 항상 200 + 빈 배열로 응답한다.

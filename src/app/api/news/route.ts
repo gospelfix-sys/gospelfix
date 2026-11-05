@@ -1,19 +1,9 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
 import { NewsListItem } from "@/types/news.types";
+import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";
-
-/**
- * cms.api 리스트 엔드포인트 공통 응답 형식.
- * GET /api/v1/{resource}?page=&limit= → { data, total, page, limit }
- */
-interface CmsListResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
 
 const PAGE_SIZE = 50;
 // 원본 구현의 .limit(100)을 그대로 상한으로 유지한다.

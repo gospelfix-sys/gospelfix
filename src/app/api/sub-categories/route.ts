@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
 import { FALLBACK_SUB_CATEGORIES, ProductCategory } from "@/types/product.types";
+import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";
-
-interface CmsListResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
 
 // api/categories/route.ts와 동일한 이유로 실패 시 정적 기본값(15종)으로 폴백한다.
 export async function GET() {
