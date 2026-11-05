@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
 import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
