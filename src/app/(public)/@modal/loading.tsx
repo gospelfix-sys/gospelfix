@@ -1,4 +1,4 @@
-import { RouteModalLoading } from "@/components/ui/RouteModalLoading";
+import { RouteModalLoading } from "@/components/layout/RouteModalLoading";
 
 // @modal 슬롯(블로그·상품 상세 인터셉트 모달)에 전용 loading이 없으면 상위 (public)/loading.tsx
 // (마켓플레이스용 사이드바+상품그리드 스켈레톤)를 fallback으로 물려받아, 카드 클릭 직후 사이드바가

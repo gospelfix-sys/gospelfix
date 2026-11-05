@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { BatchPaymentModal } from "@/components/cart/BatchPaymentModal";
-import { WithdrawalNoticeAgreement } from "@/components/widgets/WithdrawalNoticeAgreement";
+import { WithdrawalNoticeAgreement } from "@/components/orders/WithdrawalNoticeAgreement";
 import { useCart } from "@/hooks/useCart";
 import axiosInstance from "@/lib/axios/instance";
 import { getErrorMessage } from "@/lib/axios/getErrorMessage";

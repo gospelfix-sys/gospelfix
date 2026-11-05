@@ -19,7 +19,11 @@ const NAV_ITEMS = [
 // 의미가 없다(project_product_crud_migration_to_mypage 메모리 참고).
 const SELLER_NAV_ITEM = { href: "/mypage/products", label: "내 상품", icon: Package };
 
-export function MypageSidebar({ canSell = false }: { canSell?: boolean }) {
+interface MypageSidebarProps {
+  canSell?: boolean;
+}
+
+export function MypageSidebar({ canSell = false }: MypageSidebarProps) {
   const pathname = usePathname();
   const navItems = canSell ? [...NAV_ITEMS, SELLER_NAV_ITEM] : NAV_ITEMS;
 

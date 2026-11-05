@@ -11,7 +11,7 @@ import { LikeButton } from "@/components/products/LikeButton";
 import { ProductInfoTicket } from "@/components/products/ProductInfoTicket";
 import { ShareButton } from "@/components/products/ShareButton";
 import { usePurchaseOption } from "@/components/products/PurchaseOptionContext";
-import { WithdrawalNoticeAgreement } from "@/components/widgets/WithdrawalNoticeAgreement";
+import { WithdrawalNoticeAgreement } from "@/components/orders/WithdrawalNoticeAgreement";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import type { ProductPriceState } from "@/lib/discount";

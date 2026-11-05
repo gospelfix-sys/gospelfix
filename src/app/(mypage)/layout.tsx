@@ -1,6 +1,6 @@
 import { getMe } from "@/lib/api/me";
 import { getReferralBanners } from "@/lib/api/referralBanners";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import DashboardHeader from "@/components/mypage/DashboardHeader";
 import { MypageSidebar } from "@/components/mypage/MypageSidebar";
 import { ReferralCodeCard } from "@/components/mypage/ReferralCodeCard";
 import { BackButton } from "@/components/mypage/BackButton";

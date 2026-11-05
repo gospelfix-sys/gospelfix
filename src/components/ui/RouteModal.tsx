@@ -45,15 +45,13 @@ export function useRouteModalClose(): (() => void) | null {
  * fadeOut이 재생될 기회 없이 DOM이 통째로 사라지므로, 이 순서를 반드시 지켜야 한다.
  * news/detail 등 도메인을 모르는 범용 wrapper — children만 렌더링한다.
  */
-export default function RouteModal({
-  children,
-  ariaLabel,
-  theme = "light",
-}: {
+interface RouteModalProps {
   children: React.ReactNode;
   ariaLabel: string;
   theme?: RouteModalTheme;
-}) {
+}
+
+export default function RouteModal({ children, ariaLabel, theme = "light" }: RouteModalProps) {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
   const [mounted, setMounted] = React.useState(false);
