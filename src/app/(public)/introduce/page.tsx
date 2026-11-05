@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Hammer, Globe2, HandCoins } from "lucide-react";
 import { LayerShell } from "@/components/layer/LayerShell";
+import { FeatureCard } from "@/components/marketing/FeatureCard";
 
 export const metadata: Metadata = {
   title: "소개 | 가스펄픽스",
@@ -49,23 +50,14 @@ export default function IntroducePage() {
 
       <section className="border-t border-gf-border bg-gf-white px-6 py-20">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3">
-          {VALUES.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.title}
-                className="gf-feature-card flex flex-col gap-4 rounded-2xl border p-6"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gf-orange-bg">
-                  <Icon className="h-5 w-5 text-gf-orange" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <h3 className="text-base font-bold text-gf-black">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-gf-gray2">{item.description}</p>
-                </div>
-              </div>
-            );
-          })}
+          {VALUES.map((item) => (
+            <FeatureCard
+              key={item.title}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
         </div>
       </section>
 

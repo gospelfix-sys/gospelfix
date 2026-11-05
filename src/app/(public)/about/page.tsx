@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BarChart3, Bot, CalendarCheck, Megaphone, Palette, Rocket } from "lucide-react";
+import { FeatureCard } from "@/components/marketing/FeatureCard";
 import { QuoteFloatingButton } from "@/components/marketing/QuoteFloatingButton";
 
 export const metadata: Metadata = {
@@ -142,23 +143,14 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {SERVICES.map((service, i) => {
-              const Icon = service.icon;
-              return (
-                <div
-                  key={i}
-                  className="gf-feature-card rounded-2xl p-6 flex flex-col gap-4 border"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gf-orange-bg flex items-center justify-center shrink-0">
-                    <Icon className="text-gf-orange w-5 h-5" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <h3 className="text-gf-black font-bold text-base">{service.title}</h3>
-                    <p className="text-gf-gray2 text-sm leading-relaxed">{service.description}</p>
-                  </div>
-                </div>
-              );
-            })}
+            {SERVICES.map((service) => (
+              <FeatureCard
+                key={service.title}
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -220,27 +212,18 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-            <div className="gf-feature-card rounded-2xl p-6 flex flex-col gap-2 border">
-              <h3 className="text-gf-black font-bold text-base">전담 에이전트</h3>
-              <p className="text-gf-gray2 text-sm leading-relaxed">
-                코드 리뷰, 컴포넌트 작성, 커밋까지 역할별로 나뉜 AI 에이전트가 각자의 전문
-                영역을 책임집니다.
-              </p>
-            </div>
-            <div className="gf-feature-card rounded-2xl p-6 flex flex-col gap-2 border">
-              <h3 className="text-gf-black font-bold text-base">자동 적용 규칙</h3>
-              <p className="text-gf-gray2 text-sm leading-relaxed">
-                공용 컴포넌트·스타일 규칙을 문서화해, 같은 실수가 반복되지 않도록 매번 자동으로
-                참고합니다.
-              </p>
-            </div>
-            <div className="gf-feature-card rounded-2xl p-6 flex flex-col gap-2 border">
-              <h3 className="text-gf-black font-bold text-base">일관된 품질</h3>
-              <p className="text-gf-gray2 text-sm leading-relaxed">
-                세션이 바뀌어도 프로젝트 맥락과 컨벤션을 그대로 기억해, 사람이 검수하는
-                디테일만 남깁니다.
-              </p>
-            </div>
+            <FeatureCard
+              title="전담 에이전트"
+              description="코드 리뷰, 컴포넌트 작성, 커밋까지 역할별로 나뉜 AI 에이전트가 각자의 전문 영역을 책임집니다."
+            />
+            <FeatureCard
+              title="자동 적용 규칙"
+              description="공용 컴포넌트·스타일 규칙을 문서화해, 같은 실수가 반복되지 않도록 매번 자동으로 참고합니다."
+            />
+            <FeatureCard
+              title="일관된 품질"
+              description="세션이 바뀌어도 프로젝트 맥락과 컨벤션을 그대로 기억해, 사람이 검수하는 디테일만 남깁니다."
+            />
           </div>
         </div>
       </section>

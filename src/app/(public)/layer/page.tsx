@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
+import { FeatureCard } from "@/components/marketing/FeatureCard";
 import { HeroRollingWord } from "@/components/marketing/hero/HeroRollingWord";
 import { QuoteFloatingButton } from "@/components/marketing/QuoteFloatingButton";
 import { ReservationAiShowcase } from "@/components/marketing/reservation-showcase/ReservationAiShowcase";
@@ -111,20 +112,14 @@ export default async function OfficialHomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {AUDIENCE.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <div key={i} className="gf-feature-card rounded-2xl p-6 flex flex-col gap-4 border">
-                  <div className="w-10 h-10 rounded-xl bg-gf-orange-bg flex items-center justify-center shrink-0">
-                    <Icon className="text-gf-orange w-5 h-5" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <h3 className="text-gf-black font-bold text-base">{item.title}</h3>
-                    <p className="text-gf-gray2 text-sm leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
-              );
-            })}
+            {AUDIENCE.map((item) => (
+              <FeatureCard
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
           </div>
         </div>
       </section>
