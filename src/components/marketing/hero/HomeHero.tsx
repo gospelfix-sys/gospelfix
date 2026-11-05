@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { HeroCta, HeroReveal, HeroRevealItem } from "@/components/layer/HeroReveal";
-import { HeroTypingTitle } from "@/components/layer/HeroTypingTitle";
+import { HeroCta, HeroReveal, HeroRevealItem } from "@/components/marketing/hero/HeroReveal";
+import { HeroTypingTitle } from "@/components/marketing/hero/HeroTypingTitle";
 
 // 판매 카테고리 순서와 맞춘다. 가장 긴 문구가 모바일 한 줄 폭의 기준이 된다.
 const HERO_PHRASES = ["LOGOS.", "MOCKUPS.", "WEBSITES.", "AD CREATIVES."] as const;

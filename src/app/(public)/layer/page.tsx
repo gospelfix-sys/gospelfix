@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, Coffee, Stethoscope, GraduationCap } from "lucide-react";
-import { HeroRollingWord } from "@/components/layer/HeroRollingWord";
-import { QuoteFloatingButton } from "@/components/main/QuoteFloatingButton";
-import { ReservationAiShowcase } from "@/components/main/reservation-showcase/ReservationAiShowcase";
-import { PricingSection } from "@/components/main/PricingSection";
-import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
+import { HeroRollingWord } from "@/components/marketing/hero/HeroRollingWord";
+import { QuoteFloatingButton } from "@/components/marketing/QuoteFloatingButton";
+import { ReservationAiShowcase } from "@/components/marketing/reservation-showcase/ReservationAiShowcase";
+import { PricingSection } from "@/components/marketing/PricingSection";
+import PortfolioSwiper from "@/components/marketing/PortfolioSwiper";
 import { serverFetch } from "@/lib/serverFetch";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import { SITE_DESCRIPTION } from "@/lib/siteMetadata";

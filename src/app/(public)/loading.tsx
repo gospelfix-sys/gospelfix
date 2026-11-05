@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { LayerShell } from "@/components/layer/LayerShell";
-import { HomeHero } from "@/components/layer/HomeHero";
+import { HomeHero } from "@/components/marketing/hero/HomeHero";
 import { SortTabs } from "@/components/layer/SortTabs";
 import { CategoryTabs } from "@/components/layer/CategoryTabs";
 import { FilterDropdown } from "@/components/products/FilterDropdown";

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Tab } from "@/components/ui/Tab";
 import { cn } from "@/lib/utils";
-import { PRICING_TABS, type PricingTabKey } from "@/components/main/pricingData";
+import { PRICING_TABS, type PricingTabKey } from "@/components/marketing/pricingData";
 
 interface EmphasizedTextProps {
   text: string;

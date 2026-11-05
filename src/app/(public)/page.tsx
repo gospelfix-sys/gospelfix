@@ -7,7 +7,7 @@ import { getProductCategories } from "@/lib/api/categories";
 import { ProductCard } from "@/components/products/ProductCard";
 import { FilterDropdown } from "@/components/products/FilterDropdown";
 import { LayerShell } from "@/components/layer/LayerShell";
-import { HomeHero } from "@/components/layer/HomeHero";
+import { HomeHero } from "@/components/marketing/hero/HomeHero";
 import { SortTabs } from "@/components/layer/SortTabs";
 import { CategoryTabs } from "@/components/layer/CategoryTabs";
 

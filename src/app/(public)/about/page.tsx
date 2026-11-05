@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BarChart3, Bot, CalendarCheck, Megaphone, Palette, Rocket } from "lucide-react";
-import { QuoteFloatingButton } from "@/components/main/QuoteFloatingButton";
+import { QuoteFloatingButton } from "@/components/marketing/QuoteFloatingButton";
 
 export const metadata: Metadata = {
   title: "소개 | GOSPELFIX",

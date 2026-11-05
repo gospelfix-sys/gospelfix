@@ -9,11 +9,11 @@ import type {
   ReservationChannel,
   ReservationStatus,
 } from "@/types/reservationDemo.types";
-import { ChatPanel } from "@/components/main/reservation-showcase/ChatPanel";
-import { ReservationFormPanel } from "@/components/main/reservation-showcase/ReservationFormPanel";
-import { ReservationFeedPanel } from "@/components/main/reservation-showcase/ReservationFeedPanel";
-import { CustomerSearchPanel } from "@/components/main/reservation-showcase/CustomerSearchPanel";
-import { NotificationPreview } from "@/components/main/reservation-showcase/NotificationPreview";
+import { ChatPanel } from "@/components/marketing/reservation-showcase/ChatPanel";
+import { ReservationFormPanel } from "@/components/marketing/reservation-showcase/ReservationFormPanel";
+import { ReservationFeedPanel } from "@/components/marketing/reservation-showcase/ReservationFeedPanel";
+import { CustomerSearchPanel } from "@/components/marketing/reservation-showcase/CustomerSearchPanel";
+import { NotificationPreview } from "@/components/marketing/reservation-showcase/NotificationPreview";
 
 type LeftTab = "chat" | "form";
 type RightTab = "feed" | "search";
