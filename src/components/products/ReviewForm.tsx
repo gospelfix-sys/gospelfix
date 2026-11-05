@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/ui/star-rating";
 import { useAuth } from "@/hooks/useAuth";
-import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
+import axiosInstance from "@/lib/axios/instance";
+import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 
 const RATING_LABELS = ["", "별로예요", "아쉬워요", "보통이에요", "좋아요", "최고예요"];
 
@@ -66,10 +67,7 @@ export function ReviewForm({
       await axiosInstance.post("/reviews", { productId, rating, content: content.trim() || null });
       window.location.reload();
     } catch (error) {
-      const data = isAxiosError(error)
-        ? (error.response?.data as { error?: string } | undefined)
-        : undefined;
-      setError(data?.error ?? "저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setError(getErrorMessage(error, "저장 중 오류가 발생했습니다. 다시 시도해주세요."));
     } finally {
       setLoading(false);
     }

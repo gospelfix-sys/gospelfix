@@ -11,7 +11,8 @@ import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/u
 import { BatchPaymentModal } from "@/components/cart/BatchPaymentModal";
 import { WithdrawalNoticeAgreement } from "@/components/widgets/WithdrawalNoticeAgreement";
 import { useCart } from "@/hooks/useCart";
-import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
+import axiosInstance from "@/lib/axios/instance";
+import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { formatPrice } from "@/lib/utils";
 
 interface BatchOrderState {
@@ -86,12 +87,13 @@ export default function CartModal() {
         itemCount: selectedItems.length,
       });
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        const data = error.response.data as { error?: string } | undefined;
-        toast.error(data?.error ?? "결제 준비에 실패했습니다.");
-      } else {
-        toast.error("결제 준비에 실패했습니다. 다시 시도해주세요.");
-      }
+      toast.error(
+        getErrorMessage(
+          error,
+          "결제 준비에 실패했습니다.",
+          "결제 준비에 실패했습니다. 다시 시도해주세요.",
+        ),
+      );
     } finally {
       setIsCheckingOut(false);
     }

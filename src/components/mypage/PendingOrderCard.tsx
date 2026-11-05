@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn, formatPrice } from "@/lib/utils";
-import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
+import axiosInstance from "@/lib/axios/instance";
+import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PaymentModal from "@/components/products/PaymentModal";
@@ -30,12 +31,13 @@ export function PendingOrderCard({ order }: { order: PendingOrder }) {
       toast.success("무료 상품을 받았습니다. 마이페이지 구매 / 혜택에서 확인하세요.");
       router.refresh();
     } catch (error) {
-      const message =
-        isAxiosError(error) && error.response
-          ? ((error.response.data as { error?: string } | undefined)?.error ??
-            "처리 중 오류가 발생했습니다.")
-          : "네트워크 오류가 발생했습니다. 다시 시도해주세요.";
-      toast.error(message);
+      toast.error(
+        getErrorMessage(
+          error,
+          "처리 중 오류가 발생했습니다.",
+          "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
+        ),
+      );
     } finally {
       setCompletingFree(false);
     }
