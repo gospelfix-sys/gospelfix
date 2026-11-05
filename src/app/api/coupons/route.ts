@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
 import { getAccessToken } from "@/lib/cmsApi/session";
-import { Coupon, CouponSource } from "@/types/coupon.types";
+import type { Coupon, CouponSource } from "@/types/coupon.types";
 
 export const dynamic = "force-dynamic";
 

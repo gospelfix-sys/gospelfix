@@ -9,7 +9,7 @@ import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
 import { serverFetch } from "@/lib/serverFetch";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import { SITE_DESCRIPTION } from "@/lib/siteMetadata";
-import { PortfolioListItem } from "@/types/portfolio.types";
+import type { PortfolioListItem } from "@/types/portfolio.types";
 
 export const metadata: Metadata = {
   title: "GOSPELFIX | 공식홈페이지",

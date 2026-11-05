@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { CheckCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";

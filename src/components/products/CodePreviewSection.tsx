@@ -15,7 +15,7 @@ import oneDark from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
 import { Button } from "@/components/ui/button";
 import { Tab } from "@/components/ui/Tab";
 import { cn } from "@/lib/utils";
-import { Product } from "@/types/product.types";
+import type { Product } from "@/types/product.types";
 import { isAuthenticatedSelector } from "@/store/selectors/authSelector";
 import { useAuth } from "@/hooks/useAuth";
 

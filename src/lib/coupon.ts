@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios/instance";
-import { Coupon, CouponSource } from "@/types/coupon.types";
+import type { Coupon, CouponSource } from "@/types/coupon.types";
 
 const COUPON_SOURCE_LABEL: Record<CouponSource, string> = {
   signup: "회원가입 혜택",

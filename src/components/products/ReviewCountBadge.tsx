@@ -1,5 +1,5 @@
 import { serverFetch } from "@/lib/serverFetch";
-import { Review } from "@/types/review.types";
+import type { Review } from "@/types/review.types";
 import { ReviewCountButton } from "@/components/products/ReviewCountButton";
 
 interface ReviewCountBadgeProps {

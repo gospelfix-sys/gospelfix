@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
-import { Product, ProductOption } from "@/types/product.types";
+import type { Product, ProductOption } from "@/types/product.types";
 
 const DEFAULT_PURCHASE_OPTIONS: ProductOption[] = [
   {

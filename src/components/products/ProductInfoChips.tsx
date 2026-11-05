@@ -8,9 +8,9 @@ import {
   ClipboardList,
   MessageCircle,
   Sparkles,
-  LucideIcon,
+  type LucideIcon,
 } from "lucide-react";
-import { ProductOption, PRODUCT_FORMAT_LABELS } from "@/types/product.types";
+import { type ProductOption, PRODUCT_FORMAT_LABELS } from "@/types/product.types";
 import { formatWorkPeriodDays } from "@/lib/utils";
 
 type ProductInfoChipsMode = "free" | "paid";

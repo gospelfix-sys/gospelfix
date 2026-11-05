@@ -3,9 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, type Variants } from "motion/react";
-import { ProductPriceState } from "@/lib/discount";
+import type { ProductPriceState } from "@/lib/discount";
 import { cn, formatPrice } from "@/lib/utils";
-import { getCategoryLabel, Product } from "@/types/product.types";
+import { getCategoryLabel, type Product } from "@/types/product.types";
 import { PRESS_TRANSITION } from "@/components/ui/motionPresets";
 
 // 카드가 많아 마운트 시 애니메이션 없이 호버·탭 제스처에만 반응한다(whileHover는 터치 에뮬레이션 호버를 무시).

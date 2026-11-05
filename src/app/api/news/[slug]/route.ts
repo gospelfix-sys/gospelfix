@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch, CmsApiError } from "@/lib/cmsApi/client";
 import { unwrapDetail } from "@/lib/cmsApi/unwrapDetail";
-import { NewsItem } from "@/types/news.types";
+import type { NewsItem } from "@/types/news.types";
 
 export const dynamic = "force-dynamic";
 

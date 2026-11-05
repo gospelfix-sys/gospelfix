@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
-import { ReferralBanner } from "@/types/referralBanner.types";
+import type { ReferralBanner } from "@/types/referralBanner.types";
 import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";

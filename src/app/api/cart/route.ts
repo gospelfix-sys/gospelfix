@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
 import { getAccessToken } from "@/lib/cmsApi/session";
-import { CartItem } from "@/types/cart.types";
+import type { CartItem } from "@/types/cart.types";
 
 export const dynamic = "force-dynamic";
 

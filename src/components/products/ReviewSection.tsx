@@ -3,8 +3,8 @@ import { StarRating } from "@/components/ui/star-rating";
 import { getMe } from "@/lib/api/me";
 import { serverFetch } from "@/lib/serverFetch";
 import { cn } from "@/lib/utils";
-import { Review } from "@/types/review.types";
-import { PurchasedOrder } from "@/types/order.types";
+import type { Review } from "@/types/review.types";
+import type { PurchasedOrder } from "@/types/order.types";
 import { ReviewForm } from "./ReviewForm";
 
 interface ReviewSectionProps {

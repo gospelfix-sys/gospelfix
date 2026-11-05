@@ -7,9 +7,9 @@ import { ProductInfoChips } from "@/components/products/ProductInfoChips";
 import { usePurchaseOption } from "@/components/products/PurchaseOptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
-import { ProductPriceState } from "@/lib/discount";
+import type { ProductPriceState } from "@/lib/discount";
 import { formatPrice } from "@/lib/utils";
-import { Product } from "@/types/product.types";
+import type { Product } from "@/types/product.types";
 
 interface ProductOptionsSectionProps {
   product: Product;

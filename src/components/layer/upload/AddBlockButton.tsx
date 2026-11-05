@@ -1,6 +1,6 @@
 "use client";
 
-import { Image as ImageIcon } from "lucide-react";
+import type { Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

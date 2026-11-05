@@ -1,7 +1,7 @@
 import { getMe } from "@/lib/api/me";
 import { serverFetch } from "@/lib/serverFetch";
-import { PendingOrder, PurchasedOrder } from "@/types/order.types";
-import { Coupon } from "@/types/coupon.types";
+import type { PendingOrder, PurchasedOrder } from "@/types/order.types";
+import type { Coupon } from "@/types/coupon.types";
 import { OrdersTabs } from "@/components/mypage/OrdersTabs";
 
 export const dynamic = "force-dynamic";

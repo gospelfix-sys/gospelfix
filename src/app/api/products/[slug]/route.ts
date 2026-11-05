@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch, CmsApiError } from "@/lib/cmsApi/client";
 import { unwrapDetail } from "@/lib/cmsApi/unwrapDetail";
-import { Product } from "@/types/product.types";
+import type { Product } from "@/types/product.types";
 
 // 쿠키/헤더를 읽지 않는 순수 공개 엔드포인트라 Full Route Cache로 60초간 캐시한다.
 export const revalidate = 60;

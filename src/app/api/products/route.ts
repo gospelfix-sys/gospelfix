@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
-import { Product } from "@/types/product.types";
+import type { Product } from "@/types/product.types";
 import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";

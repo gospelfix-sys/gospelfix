@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { serverFetch } from "@/lib/serverFetch";
 import { getProductPriceState } from "@/lib/discount";
-import { getCategoryLabel, Product } from "@/types/product.types";
+import { getCategoryLabel, type Product } from "@/types/product.types";
 import { getProductCategories } from "@/lib/api/categories";
 import { ProductCard } from "@/components/products/ProductCard";
 import { FilterDropdown } from "@/components/products/FilterDropdown";

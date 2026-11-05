@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Megaphone } from "lucide-react";
 import { LayerShell } from "@/components/layer/LayerShell";
 import { BlogCard } from "@/components/news/BlogCard";

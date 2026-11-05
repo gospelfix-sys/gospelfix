@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Hammer, Globe2, HandCoins } from "lucide-react";
 import { LayerShell } from "@/components/layer/LayerShell";

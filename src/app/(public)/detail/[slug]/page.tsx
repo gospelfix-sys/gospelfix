@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { serverFetch } from "@/lib/serverFetch";
 import { getProductPriceState } from "@/lib/discount";
-import { Coupon } from "@/types/coupon.types";
-import { PurchasedOrder } from "@/types/order.types";
+import type { Coupon } from "@/types/coupon.types";
+import type { PurchasedOrder } from "@/types/order.types";
 import { getBestAvailableCoupon } from "@/lib/coupon";
 import { getProductBySlug } from "@/lib/api/products";
 import { ProductDetailView } from "@/components/products/ProductDetailView";

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { cmsApiFetch, CmsApiError } from "@/lib/cmsApi/client";
 import { getAccessToken } from "@/lib/cmsApi/session";
-import { Review } from "@/types/review.types";
+import type { Review } from "@/types/review.types";
 
 export const dynamic = "force-dynamic";
 

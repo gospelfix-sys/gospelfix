@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMe } from "@/lib/api/me";
 import { serverFetch } from "@/lib/serverFetch";
-import { MyReview } from "@/types/review.types";
+import type { MyReview } from "@/types/review.types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyStateCard } from "@/components/mypage/EmptyStateCard";
 

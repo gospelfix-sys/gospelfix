@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription, AlertAction } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
-import { ReferralBanner } from "@/types/referralBanner.types";
+import type { ReferralBanner } from "@/types/referralBanner.types";
 
 const DISMISS_STORAGE_KEY = "gf_referral_banner_dismissed_until";
 const DISMISS_DURATION_MS = 1 * 24 * 60 * 60 * 1000; // 1일

@@ -4,7 +4,7 @@ import { serverFetch } from "@/lib/serverFetch";
 import { buttonVariants } from "@/components/ui/button";
 import { EmptyStateCard } from "@/components/mypage/EmptyStateCard";
 import { MyProductsList } from "@/components/mypage/MyProductsList";
-import { SellerProduct } from "@/types/product.types";
+import type { SellerProduct } from "@/types/product.types";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";

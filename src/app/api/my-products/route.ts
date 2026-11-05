@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { cmsApiFetch, CmsApiError } from "@/lib/cmsApi/client";
 import { getAccessToken } from "@/lib/cmsApi/session";
 import { toCmsProductInput, toSellerProduct, type CmsMyProduct } from "@/lib/api/myProducts";

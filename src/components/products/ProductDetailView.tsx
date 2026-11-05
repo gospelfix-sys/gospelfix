@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import { Product } from "@/types/product.types";
-import { Coupon } from "@/types/coupon.types";
-import { ProductPriceState } from "@/lib/discount";
+import type { Product } from "@/types/product.types";
+import type { Coupon } from "@/types/coupon.types";
+import type { ProductPriceState } from "@/lib/discount";
 import { isContentHtmlEmpty, sanitizeContentHtml } from "@/lib/sanitizeHtml";
 import { PurchaseOptionsPanel } from "@/components/products/PurchaseOptionsPanel";
 import { PurchaseOptionProvider } from "@/components/products/PurchaseOptionContext";

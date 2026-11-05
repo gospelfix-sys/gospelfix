@@ -1,4 +1,4 @@
-import { Product } from "@/types/product.types";
+import type { Product } from "@/types/product.types";
 
 export interface ProductPriceState {
   // 실제 판매가(=체크아웃 금액). 할인 기간 중엔 price, 기간이 끝나면 supply_price로 전환됨

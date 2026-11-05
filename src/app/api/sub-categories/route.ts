@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cmsApiFetch } from "@/lib/cmsApi/client";
-import { FALLBACK_SUB_CATEGORIES, ProductCategory } from "@/types/product.types";
+import { FALLBACK_SUB_CATEGORIES, type ProductCategory } from "@/types/product.types";
 import type { CmsListResponse } from "@/lib/cmsApi/types";
 
 export const dynamic = "force-dynamic";
