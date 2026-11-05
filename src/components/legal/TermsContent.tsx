@@ -1,3 +1,4 @@
+import LegalSection from "@/components/legal/LegalSection";
 import ContactCard from "@/components/legal/ContactCard";
 
 const SECTIONS = [
@@ -44,18 +45,16 @@ export default function TermsContent() {
 
       <div className="flex flex-col gap-12">
         {/* 제1조 목적 */}
-        <section id="article-1" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제1조 (목적)</h2>
+        <LegalSection id="article-1" title="제1조 (목적)">
           <p className="text-sm text-gf-gray1 leading-relaxed">
             이 약관은 GOSPELFIX(이하 &ldquo;회사&rdquo;)가 운영하는 모다(MODA)(이하
             &ldquo;몰&rdquo;)에서 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에
             있어 회사와 이용자의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.
           </p>
-        </section>
+        </LegalSection>
 
         {/* 제2조 용어의 정의 */}
-        <section id="article-2" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제2조 (용어의 정의)</h2>
+        <LegalSection id="article-2" title="제2조 (용어의 정의)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -88,11 +87,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제3조 약관의 게시와 개정 */}
-        <section id="article-3" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제3조 (약관의 게시와 개정)</h2>
+        <LegalSection id="article-3" title="제3조 (약관의 게시와 개정)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -116,11 +114,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제4조 서비스의 제공 및 변경 */}
-        <section id="article-4" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제4조 (서비스의 제공 및 변경)</h2>
+        <LegalSection id="article-4" title="제4조 (서비스의 제공 및 변경)">
           <p className="text-sm text-gf-gray1 mb-4 leading-relaxed">
             회사는 다음과 같은 업무를 수행합니다.
           </p>
@@ -142,11 +139,10 @@ export default function TermsContent() {
               <span>기타 회사가 정하는 업무</span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제5조 회원가입 */}
-        <section id="article-5" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제5조 (회원가입)</h2>
+        <LegalSection id="article-5" title="제5조 (회원가입)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -170,11 +166,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제6조 회원 탈퇴 및 자격 상실 */}
-        <section id="article-6" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제6조 (회원 탈퇴 및 자격 상실)</h2>
+        <LegalSection id="article-6" title="제6조 (회원 탈퇴 및 자격 상실)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -204,11 +199,10 @@ export default function TermsContent() {
               <span>관련 법령 또는 이 약관이 금지하거나 공서양속에 반하는 행위를 하는 경우</span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제7조 구매 계약 체결 */}
-        <section id="article-7" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제7조 (구매 계약 체결)</h2>
+        <LegalSection id="article-7" title="제7조 (구매 계약 체결)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -241,13 +235,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제8조 디지털 콘텐츠 환불 및 청약철회 */}
-        <section id="article-8" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">
-            제8조 (디지털 콘텐츠 환불 및 청약철회)
-          </h2>
+        <LegalSection id="article-8" title="제8조 (디지털 콘텐츠 환불 및 청약철회)">
           <div className="rounded-xl border border-gf-line bg-gf-orange-bg px-6 py-5 text-sm text-gf-gray1 leading-relaxed mb-4">
             <p className="font-semibold text-gf-black mb-2">중요 안내</p>
             <p>
@@ -313,11 +304,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제9조 저작권 */}
-        <section id="article-9" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제9조 (저작권 및 이용 제한)</h2>
+        <LegalSection id="article-9" title="제9조 (저작권 및 이용 제한)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -358,11 +348,10 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제10조 책임 제한 */}
-        <section id="article-10" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제10조 (책임 제한)</h2>
+        <LegalSection id="article-10" title="제10조 (책임 제한)">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -385,30 +374,27 @@ export default function TermsContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 제11조 분쟁 해결 */}
-        <section id="article-11" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제11조 (분쟁 해결)</h2>
+        <LegalSection id="article-11" title="제11조 (분쟁 해결)">
           <p className="text-sm text-gf-gray1 leading-relaxed">
             회사와 이용자 사이에 발생한 전자상거래 분쟁과 관련하여 이용자의 피해 구제 신청이 있는
             경우에는 공정거래위원회 또는 시·도지사가 의뢰하는 분쟁조정기관의 조정에 따를 수
             있습니다.
           </p>
-        </section>
+        </LegalSection>
 
         {/* 제12조 준거법 및 관할 법원 */}
-        <section id="article-12" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">제12조 (준거법 및 관할 법원)</h2>
+        <LegalSection id="article-12" title="제12조 (준거법 및 관할 법원)">
           <p className="text-sm text-gf-gray1 leading-relaxed">
             회사와 이용자 간에 발생한 분쟁에 관한 소송은 대한민국 법을 준거법으로 하며, 회사의 본사
             소재지를 관할하는 법원을 합의 관할 법원으로 합니다.
           </p>
-        </section>
+        </LegalSection>
 
         {/* 문의처 */}
-        <section id="contact" className="scroll-mt-8">
-          <h2 className="text-lg font-bold text-gf-black mb-4">문의처</h2>
+        <LegalSection id="contact" title="문의처">
           <ContactCard>
             <p>상호: GOSPELFIX</p>
             <p>
@@ -423,7 +409,7 @@ export default function TermsContent() {
               </a>
             </p>
           </ContactCard>
-        </section>
+        </LegalSection>
 
         {/* 시행일 */}
         <section>

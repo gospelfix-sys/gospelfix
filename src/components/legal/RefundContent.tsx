@@ -1,3 +1,4 @@
+import LegalSection from "@/components/legal/LegalSection";
 import ContactCard from "@/components/legal/ContactCard";
 
 export default function RefundContent() {
@@ -11,8 +12,7 @@ export default function RefundContent() {
 
       <div className="flex flex-col gap-12">
         {/* 1. 환불정책 개요 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">1. 환불정책 개요</h2>
+        <LegalSection title="1. 환불정책 개요">
           <div className="rounded-xl border border-gf-line bg-gf-orange-bg px-6 py-5 text-sm text-gf-gray1 leading-relaxed">
             <p className="font-semibold text-gf-black mb-2">중요 안내</p>
             <p>
@@ -20,11 +20,10 @@ export default function RefundContent() {
               제작(용역) 제공이 개시된 경우 청약철회가 제한될 수 있습니다.
             </p>
           </div>
-        </section>
+        </LegalSection>
 
         {/* 2. 청약철회 기간 및 예외 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">2. 청약철회 기간 및 예외</h2>
+        <LegalSection title="2. 청약철회 기간 및 예외">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -40,13 +39,10 @@ export default function RefundContent() {
               </span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 3. 구매 옵션별 제작(용역) 제공 개시 시점 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">
-            3. 구매 옵션별 제작(용역) 제공 개시 시점
-          </h2>
+        <LegalSection title="3. 구매 옵션별 제작(용역) 제공 개시 시점">
           <p className="text-sm text-gf-gray1 mb-4 leading-relaxed">
             몰에서 판매하는 구매 옵션은 &ldquo;단순복사&rdquo;와 &ldquo;커스터마이징&rdquo;으로
             구분되며, 두 옵션 모두 청약철회 제한 대상인 용역에 해당합니다. 다만 제작(용역) 제공이
@@ -76,11 +72,10 @@ export default function RefundContent() {
             구매 후 회원님이 직접 채워 넣으셔야 합니다. 이는 결함이 아니므로 환불 사유에
             해당하지 않습니다.
           </div>
-        </section>
+        </LegalSection>
 
         {/* 4. 환불이 제한되는 경우 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">4. 환불이 제한되는 경우</h2>
+        <LegalSection title="4. 환불이 제한되는 경우">
           <ul className="flex flex-col gap-2 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">•</span>
@@ -95,20 +90,18 @@ export default function RefundContent() {
               <span>이용자의 요청으로 커스터마이징이 완료되어 원상회복이 곤란한 경우</span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 5. 회사 귀책 사유로 인한 환불 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">5. 회사 귀책 사유로 인한 환불</h2>
+        <LegalSection title="5. 회사 귀책 사유로 인한 환불">
           <p className="text-sm text-gf-gray1 leading-relaxed">
             콘텐츠 또는 결과물 자체의 결함(회사 귀책 사유)으로 인한 경우에는 제작 진행 여부와
             관계없이 환불이 가능합니다.
           </p>
-        </section>
+        </LegalSection>
 
         {/* 6. 환불 신청 방법 및 처리 절차 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">6. 환불 신청 방법 및 처리 절차</h2>
+        <LegalSection title="6. 환불 신청 방법 및 처리 절차">
           <ul className="flex flex-col gap-3 text-sm text-gf-gray1">
             <li className="flex gap-2">
               <span className="shrink-0">①</span>
@@ -134,20 +127,18 @@ export default function RefundContent() {
               <span>환불이 확정되면 영업일 기준 3일 이내에 처리됩니다.</span>
             </li>
           </ul>
-        </section>
+        </LegalSection>
 
         {/* 7. 환불 방법 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">7. 환불 방법</h2>
+        <LegalSection title="7. 환불 방법">
           <p className="text-sm text-gf-gray1 leading-relaxed">
             결제는 카카오페이로 이루어지며, 환불 역시 결제 시 이용한 카카오페이 계정으로
             환불금을 재입금하는 방식으로 처리됩니다.
           </p>
-        </section>
+        </LegalSection>
 
         {/* 8. 문의처 */}
-        <section>
-          <h2 className="text-lg font-bold text-gf-black mb-4">8. 문의처</h2>
+        <LegalSection title="8. 문의처">
           <ContactCard>
             <p>상호: GOSPELFIX</p>
             <p>
@@ -162,7 +153,7 @@ export default function RefundContent() {
               </a>
             </p>
           </ContactCard>
-        </section>
+        </LegalSection>
 
         {/* 시행일 */}
         <section>
