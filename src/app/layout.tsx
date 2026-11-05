@@ -6,6 +6,7 @@ import AuthProvider from "@/components/auth/AuthProvider";
 import CartProvider from "@/components/cart/CartProvider";
 import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
 import { Toaster } from "@/components/ui/sonner";
+import { SITE_DESCRIPTION } from "@/lib/siteMetadata";
 
 const DEFAULT_SITE_URL = "https://gospelfix-ashy.vercel.app";
 
@@ -14,16 +15,14 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL).
 
 export const metadata: Metadata = {
   title: "GOSPELFIX",
-  description:
-    "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
+  description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: "/logo.webp",
   },
   openGraph: {
     title: "GOSPELFIX — 브랜딩부터 챗봇 홈페이지까지 한 번에",
-    description:
-      "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "GOSPELFIX",
     images: [
@@ -40,8 +39,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "GOSPELFIX — 브랜딩부터 챗봇 홈페이지까지 한 번에",
-    description:
-      "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
+    description: SITE_DESCRIPTION,
     images: ["/og-image.v5.jpg"],
   },
 };

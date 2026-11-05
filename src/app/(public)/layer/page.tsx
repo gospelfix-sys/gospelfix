@@ -8,12 +8,12 @@ import { PricingSection } from "@/components/main/PricingSection";
 import PortfolioSwiper from "@/components/portfolio/PortfolioSwiper";
 import { serverFetch } from "@/lib/serverFetch";
 import { sanitizeContentHtml } from "@/lib/sanitizeHtml";
+import { SITE_DESCRIPTION } from "@/lib/siteMetadata";
 import { PortfolioListItem } from "@/types/portfolio.types";
 
 export const metadata: Metadata = {
   title: "GOSPELFIX | 공식홈페이지",
-  description:
-    "CI 로고, 목업, 배너, 광고소재부터 예약 챗봇이 달린 홈페이지·쇼핑몰까지. 사업에서 필요한 요소들 GOSPELFIX 함께 만들어 드립니다.",
+  description: SITE_DESCRIPTION,
 };
 
 // 히어로 알약 안에서 순서대로 롤링되는 단어. 가장 긴 단어 기준으로 알약 너비가 정해진다
