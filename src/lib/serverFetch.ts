@@ -79,3 +79,17 @@ async function serverFetchImpl<T = unknown>(
 }
 
 export const serverFetch = cache(serverFetchImpl) as typeof serverFetchImpl;
+
+/**
+ * serverFetch가 실패해도 throw하지 않고 로그만 남긴 뒤 fallback을 돌려준다.
+ * 보조 데이터(배너·카테고리 등)가 실패해도 페이지 렌더를 막지 않아야 하는 getter용.
+ * tag는 로그 접두사(예: getMe)다.
+ */
+export async function serverFetchOr<T>(path: string, fallback: T, tag: string): Promise<T> {
+  try {
+    return await serverFetch<T>(path);
+  } catch (error) {
+    console.error(`[${tag}] ${path} 호출 실패`, error);
+    return fallback;
+  }
+}

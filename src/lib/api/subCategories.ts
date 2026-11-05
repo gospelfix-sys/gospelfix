@@ -1,4 +1,4 @@
-import { serverFetch } from "@/lib/serverFetch";
+import { serverFetchOr } from "@/lib/serverFetch";
 import { FALLBACK_SUB_CATEGORIES, type ProductCategory } from "@/types/product.types";
 
 /**
@@ -6,10 +6,9 @@ import { FALLBACK_SUB_CATEGORIES, type ProductCategory } from "@/types/product.t
  * 조회에 실패하면 정적 기본값으로 폴백한다.
  */
 export async function getProductSubCategories(): Promise<ProductCategory[]> {
-  try {
-    return await serverFetch<ProductCategory[]>("/api/sub-categories");
-  } catch (error) {
-    console.error("[getProductSubCategories] /api/sub-categories 호출 실패", error);
-    return FALLBACK_SUB_CATEGORIES;
-  }
+  return serverFetchOr<ProductCategory[]>(
+    "/api/sub-categories",
+    FALLBACK_SUB_CATEGORIES,
+    "getProductSubCategories",
+  );
 }
