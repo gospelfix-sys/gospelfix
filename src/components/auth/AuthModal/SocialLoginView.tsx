@@ -15,7 +15,11 @@ export default function SocialLoginView() {
     <div className="flex flex-col items-center">
       <Image src="/logo.webp" alt="GOSPELFIX" width={48} height={48} className="mb-3 rounded-xl" />
       <h2 className="text-xl font-bold text-gf-black">가스펄픽스에 오신 것을 환영합니다</h2>
-      <p className="mt-1 mb-6 text-sm text-gf-gray2">간편하게 로그인하고 시작해보세요</p>
+      <p className="mt-1 mb-6 text-center text-sm text-gf-gray2">
+        꿀팁과 이벤트 소식, 잘 정리된 글까지
+        <br />
+        간편하게 가입하고 가장 먼저 만나보세요
+      </p>
 
       <div className="flex w-full flex-col gap-3">
         <GoogleLoginButton />
