@@ -58,7 +58,8 @@ export function HeaderProfileMenu() {
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
         aria-label="프로필 메뉴 열기"
-        className="h-10 w-10 rounded-full p-0"
+        // 흰 헤더 위라 다크 스코프의 muted 토큰(어두운 원) 대신 비반전 색을 쓴다
+        className="h-10 w-10 rounded-full p-0 hover:bg-black/5 aria-expanded:bg-black/5"
       >
         <Avatar size="default">
           {profile?.avatar_url && <AvatarImage src={profile.avatar_url} alt={displayName} />}
