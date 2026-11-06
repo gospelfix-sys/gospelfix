@@ -458,6 +458,34 @@
   margin: 32px 0;
 }
 
+/* Tailwind preflight가 table의 border-collapse·th 정렬을 초기화하므로 에디터(TipTap) 표와 맞춰 복원한다.
+   첫 열은 글자 너비에 맞추고 나머지는 설명 열이 차지한다. */
+.prose-gf table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+}
+.prose-gf th,
+.prose-gf td {
+  border: 1px solid var(--gf-border);
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+}
+.prose-gf th {
+  background: var(--gf-surface);
+  font-weight: 700;
+}
+.prose-gf td p,
+.prose-gf th p {
+  margin: 0;
+}
+.prose-gf tr > :first-child {
+  white-space: nowrap;
+  font-weight: 700;
+}
+
 .prose-gf a {
   color: var(--gf-orange2);
   text-decoration: underline;
