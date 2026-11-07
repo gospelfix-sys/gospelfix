@@ -64,8 +64,10 @@ export default function NewsImageGallery({ images, title, galleryId }: NewsImage
               disabled={disabled}
               aria-label={label}
               className={cn(
-                "rounded-full bg-white text-gf-black shadow-md hover:bg-white hover:text-gf-gray2",
-                "disabled:bg-white disabled:text-gf-gray3 disabled:shadow-sm disabled:hover:text-gf-gray3",
+                "rounded-full border border-gf-border bg-gf-white text-gf-black shadow-md",
+                "hover:border-gf-orange hover:bg-gf-white hover:text-gf-orange",
+                "disabled:border-gf-border disabled:bg-gf-white disabled:text-gf-gray3 disabled:opacity-60 disabled:shadow-none",
+                "disabled:hover:border-gf-border disabled:hover:text-gf-gray3",
               )}
             >
               <Icon className="h-4 w-4" />
