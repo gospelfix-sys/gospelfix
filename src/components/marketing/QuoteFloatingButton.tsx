@@ -105,7 +105,7 @@ export function QuoteFloatingButton() {
         {/* CTA 알약 - 카드 하단과 겹치며 입체감 형성 */}
         <div className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-1.5 rounded-full bg-gf-black py-3 shadow-[0_10px_20px_-6px_rgba(17,17,17,0.55)]">
           <span className="text-sm font-extrabold text-white whitespace-nowrap sm:text-base">
-            챗봇으로 의뢰하기
+            챗봇으로 상담신청
           </span>
           <span className="text-sm font-extrabold text-white sm:text-base" aria-hidden="true">
             →
