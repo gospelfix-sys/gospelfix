@@ -5,4 +5,5 @@
 - [Section toggle motion](project_section_toggle_motion.md) — 토글은 경로로 활성 안 바뀜(pending 반영), fixed 헤더 layoutId 함정, 세그먼트 스프링 프리셋
 - [Inline text rolling pitfalls](project_inline_text_rolling_pitfalls.md) — overflow-clip로 baseline 유지, reduced motion variants 키 불일치 hydration 경고, grid sizer
 - [Quote floating CTA motion](project_quote_floating_cta_motion.md) — 범위 밖 reduced motion은 훅 분기, group-hover→variants 전파, hover 검증은 mouse.move
+- [Reelsfactory motion](project_reelsfactory_motion.md) — whileInView 프리셋 위치, style= 없이 useAnimate 포인터 추적, 글자 reveal a11y, 스크롤 복원 착시
 - [Loading skeleton structure](project_loading_skeleton_structure.md) — 정적 Skeleton+SkeletonPulse 구조, Preload 트릭 실패, LayerShellLoading fallback
