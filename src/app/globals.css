@@ -72,6 +72,15 @@
   font-display: swap;
 }
 
+/* ── Italiana (/reelsfactory 대형 타이틀용 디스플레이, 라틴 전용) ── */
+@font-face {
+  font-family: "Italiana";
+  src: url("/fonts/Italiana-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── DM Sans (영문) ── */
 @font-face {
   font-family: "DM Sans";
@@ -182,6 +191,7 @@
     --font-kr: "Pretendard", sans-serif;
     --font-en: "DM Sans", sans-serif;
     --font-playfair: "Playfair Display", serif;
+    --font-rf-display: "Italiana", serif;
   }
 
   /* LayerShell(홈/소개/크리에이터/무료 리소스) 전용 다크 스코프.

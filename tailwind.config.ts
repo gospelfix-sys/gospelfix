@@ -73,6 +73,11 @@ const config: Config = {
           line: 'var(--gf-line)',
           surface: 'var(--gf-surface)',
         },
+        // /reelsfactory 포트폴리오 전용 팔레트. .gf-dark 테마와 무관하게 항상 같은 색이라 정적 값으로 둔다.
+        rf: {
+          ink: '#1a1a18',
+          cream: '#ebe7c7',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -85,6 +90,7 @@ const config: Config = {
         en: ['var(--font-en)', 'DM Sans', 'sans-serif'],
         kr: ['var(--font-kr)', 'Pretendard', 'sans-serif'],
         playfair: ['var(--font-playfair)', 'Playfair Display', 'serif'],
+        'rf-display': ['var(--font-rf-display)', 'Italiana', 'serif'],
       },
     },
   },
