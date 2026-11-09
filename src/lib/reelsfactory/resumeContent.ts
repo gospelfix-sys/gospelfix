@@ -52,12 +52,15 @@ export const WORK_PROJECTS: WorkProject[] = [
     slug: "yezakeumak",
     nameEn: "YEZAKEUMAK",
     nameKo: "예작음악 신문사",
-    category: "음악 미디어 웹사이트",
+    category: "클래식 음악 미디어 웹사이트",
     duration: "12주",
-    summary: "콘텐츠가 쌓일수록 탐색이 어려워지는 미디어 사이트의 정보구조와 UI를 풀었습니다.",
-    situation: "콘텐츠가 쌓일수록 탐색이 어려워지는 정보구조·UI 문제가 있었습니다.",
+    summary:
+      "클래식 음악 미디어 분야에 없던 반응형 홈페이지를 기획부터 개발까지 직접 만들었습니다.",
+    situation:
+      "클래식 음악 미디어 분야에는 반응형 기반의 홈페이지가 없었고, 콘텐츠가 쌓일수록 탐색이 어려워지는 정보구조·UI 문제가 있었습니다.",
     actions: [
       "Planning · Design · Full-Stack Development 수행",
+      "클래식 음악 미디어 분야에서 찾아보기 어려웠던 반응형 기반 홈페이지를 처음으로 제작해 PC와 모바일 어디서든 기사를 읽을 수 있게 구현",
       "콘텐츠가 쌓여도 탐색하기 쉽도록 정보구조와 UX/UI를 직접 설계·디자인해 제작",
     ],
     tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
