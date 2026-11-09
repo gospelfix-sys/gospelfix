@@ -45,16 +45,18 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
 
             <div className="flex flex-col gap-2">
               {gallery.map((src, index) => (
+                // 상세페이지 캡처는 세로로 길어 고정 비율 칸에 넣으면 잘리므로, 원본 비율대로 폭에 맞춘다
                 <div
                   key={`${src}-${index}`}
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-rf-cream/10"
+                  className="w-full overflow-hidden rounded-lg bg-rf-cream/10"
                 >
                   <Image
                     src={src}
                     alt={`${work.nameKo} 화면 ${index + 1}`}
-                    fill
+                    width={0}
+                    height={0}
                     sizes="(min-width: 640px) 42rem, 100vw"
-                    className="object-cover"
+                    className="block h-auto w-full"
                   />
                 </div>
               ))}
