@@ -11,6 +11,7 @@ import { UploadInfoPanel } from "@/components/upload/UploadInfoPanel";
 import { LicenseDialog } from "@/components/upload/LicenseDialog";
 import { CategoryDialog } from "@/components/upload/CategoryDialog";
 import { FormatGuideDialog } from "@/components/upload/FormatGuideDialog";
+import { UploadEditorSkeleton } from "@/components/upload/UploadEditorSkeleton";
 import { useAuth } from "@/hooks/useAuth";
 import { useUploadWorkForm } from "@/hooks/useUploadWorkForm";
 import { useUploadWorkSubmit } from "@/hooks/useUploadWorkSubmit";
@@ -48,7 +49,7 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
   const { submitting, handleSubmit } = useUploadWorkSubmit(form);
 
   if (authLoading || form.loadingProduct) {
-    return <div className="min-h-dvh bg-gf-bg" />;
+    return <UploadEditorSkeleton />;
   }
 
   if (!authUser) {
