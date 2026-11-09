@@ -18,6 +18,8 @@ export const WORK_INTRO = [
   "디자인이 화면에서 끝나지 않고 사용자가 만나는 실제 결과물이 되도록 만듭니다.",
 ];
 
+export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년입니다.";
+
 export const ABOUT_HEADLINE = "웹디자이너 소윤호입니다.";
 
 export const ABOUT_PARAGRAPHS = [
@@ -97,17 +99,30 @@ export const WORK_PROJECTS: WorkProject[] = [
 export const EXPERIENCES: ExperienceItem[] = [
   {
     company: "GospelFix",
-    role: "대표 · 웹디자인·브랜딩·퍼블리싱",
-    period: "현재",
+    role: "대표 · 웹디자인·브랜딩·프론트개발",
+    period: "2026. 03 ~ 현재",
     headline: "중소사업장 웹사이트와 브랜드 제작",
     situation: "중소사업장의 웹사이트와 브랜드 제작을 기획부터 배포까지 1인으로 수행합니다.",
     actions: [
-      "기획, UI 디자인, 퍼블리싱, 배포를 직접 수행",
+      "기획, UI 디자인, 프론트개발, 배포를 직접 수행",
       "CI 로고, 배너, 상세페이지, 광고소재 등 브랜드 디자인 에셋 제작",
       "고품격대패, 예작음악 신문사, 디어틴트산타 제작",
     ],
     result: "프로젝트별 상세는 Work 섹션에 정리했습니다.",
-    tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
+    tools: [
+      "Figma",
+      "Photoshop",
+      "HTML5",
+      "CSS3",
+      "React",
+      "Next.js",
+      "styled-components",
+      "Claude",
+      "Cafe24",
+      "고도몰",
+      "샵바이",
+      "Illustrator",
+    ],
   },
   {
     company: "비스톤스",
@@ -122,7 +137,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   },
   {
     company: "펠리즈(Feliz)",
-    role: "디자인팀 프리랜서",
+    role: "개발팀 프리랜서",
     period: "2024. 09 ~ 2024. 11",
     headline: "SKT UX 가이드라인 기반 티월드 채널 UI",
     situation: "티멤버십·티다이렉트샵·티월드 3개 채널을 통합하는 서비스 UI 작업이었습니다.",

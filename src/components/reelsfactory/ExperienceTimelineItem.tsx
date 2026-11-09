@@ -2,6 +2,7 @@ import type { ExperienceItem } from "@/types/reelsfactory.types";
 import { TONE_CLASSES } from "@/components/reelsfactory/SectionShell";
 import { cn } from "@/lib/utils";
 import { RevealGroup, RevealItem } from "@/components/reelsfactory/Reveal";
+import ToolGroups from "@/components/reelsfactory/ToolGroups";
 
 interface ExperienceTimelineItemProps {
   item: ExperienceItem;
@@ -36,13 +37,7 @@ export default function ExperienceTimelineItem({ item }: ExperienceTimelineItemP
           <span className="font-medium">결과 </span>
           <span className={tone.muted}>{item.result}</span>
         </p>
-        <ul className="flex flex-wrap gap-1.5" aria-label="사용 툴">
-          {item.tools.map((tool) => (
-            <li key={tool} className={cn("rounded-sm px-2 py-0.5 text-xs", tone.chip)}>
-              {tool}
-            </li>
-          ))}
-        </ul>
+        <ToolGroups tools={item.tools} chipClassName={tone.chip} labelClassName={tone.muted} />
       </RevealItem>
     </RevealGroup>
   );

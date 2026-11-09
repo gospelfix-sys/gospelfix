@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { WorkProject } from "@/types/reelsfactory.types";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import ToolGroups from "@/components/reelsfactory/ToolGroups";
 import {
   Dialog,
   DialogContent,
@@ -69,16 +70,11 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
               <dd>{work.duration}</dd>
               <dt className="text-rf-cream/70">툴</dt>
               <dd>
-                <ul className="flex flex-wrap gap-1.5">
-                  {work.tools.map((tool) => (
-                    <li
-                      key={tool}
-                      className="rounded-sm border border-rf-cream/30 px-2 py-0.5 text-xs"
-                    >
-                      {tool}
-                    </li>
-                  ))}
-                </ul>
+                <ToolGroups
+                  tools={work.tools}
+                  chipClassName="border border-rf-cream/30"
+                  labelClassName="text-rf-cream/70"
+                />
               </dd>
             </dl>
 
