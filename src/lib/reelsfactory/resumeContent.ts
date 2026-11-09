@@ -80,6 +80,7 @@ export const WORK_PROJECTS: WorkProject[] = [
       "브랜드 에셋부터 쇼핑몰 UX/UI, 로딩·인터랙션까지 디자인 의도가 그대로 전달되게 만들었습니다.",
     situation: "브랜드 아이덴티티와 쇼핑몰 UX/UI를 전면 개선해야 했습니다.",
     actions: [
+      "Planning · Design · Full-Stack Development 수행",
       "CI 로고, 목업, 배너, 광고소재를 직접 디자인",
       "폰트를 Pretendard로 통일하고 모노톤 중심으로 정리해 일관된 브랜드 톤 구축",
       "카페24 기반 쇼핑몰 스킨을 직접 커스텀하고 로딩 화면과 인터랙션까지 구현",
