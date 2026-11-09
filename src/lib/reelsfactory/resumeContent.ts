@@ -18,7 +18,7 @@ export const WORK_INTRO = [
   "디자인이 화면에서 끝나지 않고 사용자가 만나는 실제 결과물이 되도록 만듭니다.",
 ];
 
-export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년입니다.";
+export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년 입니다.";
 
 export const ABOUT_HEADLINE = "웹디자이너 소윤호입니다.";
 
