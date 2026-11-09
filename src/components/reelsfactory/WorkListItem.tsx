@@ -115,13 +115,13 @@ export default function WorkListItem({
         </span>
       </motion.button>
 
-      {/* 호버 썸네일 프리뷰(lg 이상). 바깥 div는 포인터 y 추적, 안쪽은 나타남·사라짐을 맡아
+      {/* 호버 썸네일 프리뷰(lg 이상). 썸네일이 세로로 긴 캡처라 3:4로 높여 윗부분만 잘리지 않게 한다. 바깥 div는 포인터 y 추적, 안쪽은 나타남·사라짐을 맡아
           두 transform이 서로의 애니메이션을 덮어쓰지 않게 나눴다 */}
       <div
         ref={previewScope}
         data-slot="work-preview"
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-0 hidden aspect-[4/3] w-56 lg:block"
+        className="pointer-events-none absolute right-0 top-0 hidden aspect-[3/4] w-56 lg:block"
       >
         <motion.div
           initial={false}
