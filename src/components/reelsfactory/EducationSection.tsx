@@ -21,7 +21,7 @@ export default function EducationSection() {
           >
             <p className={cn("text-sm tabular-nums", tone.muted)}>{item.period}</p>
             <div className="flex flex-col gap-1">
-              <h3 className="text-xl font-medium">{item.title}</h3>
+              <h3 className="text-xl font-medium text-inherit">{item.title}</h3>
               <p className={cn("text-sm", tone.muted)}>{item.organization}</p>
               <p className={tone.muted}>{item.description}</p>
             </div>

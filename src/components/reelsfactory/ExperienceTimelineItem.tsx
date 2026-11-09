@@ -22,7 +22,7 @@ export default function ExperienceTimelineItem({ item }: ExperienceTimelineItemP
 
       <RevealItem className="flex flex-col gap-3">
         <div>
-          <h3 className="text-2xl font-medium">{item.company}</h3>
+          <h3 className="text-2xl font-medium text-inherit">{item.company}</h3>
           <p className={cn("text-sm", tone.muted)}>{item.role}</p>
         </div>
         <p className="font-medium">{item.headline}</p>

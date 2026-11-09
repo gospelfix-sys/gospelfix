@@ -22,7 +22,8 @@ export default function SectionTitle({
       id={`${sectionId}-title`}
       lang="en"
       className={cn(
-        "font-rf-display font-normal uppercase leading-none",
+        // 전역 h1~h6 규칙이 color를 gf-black으로 고정해 어두운 섹션에서 제목이 묻히므로 섹션 글자색을 상속한다
+        "font-rf-display font-normal uppercase leading-none text-inherit",
         size === "lg" ? "text-[clamp(3.5rem,13vw,9rem)]" : "text-[clamp(2.25rem,8vw,6rem)]",
         className,
       )}
