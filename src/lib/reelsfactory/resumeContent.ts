@@ -18,7 +18,7 @@ export const WORK_INTRO = [
   "디자인이 화면에서 끝나지 않고 사용자가 만나는 실제 결과물이 되도록 만듭니다.",
 ];
 
-export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년 입니다.";
+export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년입니다.";
 
 export const ABOUT_HEADLINE = "웹디자이너 소윤호입니다.";
 
@@ -105,7 +105,7 @@ export const EXPERIENCES: ExperienceItem[] = [
     situation: "중소사업장의 웹사이트와 브랜드 제작을 기획부터 배포까지 1인으로 수행합니다.",
     actions: [
       "기획, UI 디자인, 프론트개발, 배포를 직접 수행",
-      "CI 로고, 배너, 상세페이지, 광고소재 등 브랜드 디자인 에셋 제작",
+      "CI 로고, 배너, 상세페이지, MOCKUP, 광고소재 등 브랜드 디자인 에셋 제작",
       "고품격대패, 예작음악 신문사, 디어틴트산타 제작",
     ],
     result: "프로젝트별 상세는 Work 섹션에 정리했습니다.",
