@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import type { WorkProject } from "@/types/reelsfactory.types";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,24 +24,30 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      {/* 포털로 body에 렌더돼 섹션 색을 상속받지 못하므로 rf 팔레트를 직접 입힌다. 닫기(X) 버튼은 공용 Button(ghost)이라 슬롯 선택자로 색만 맞춘다 */}
+      <DialogContent
+        className={cn(
+          "bg-rf-ink text-rf-cream ring-rf-cream/20 sm:max-w-2xl",
+          "[&>[data-slot=dialog-close]]:text-rf-cream [&>[data-slot=dialog-close]:hover]:bg-rf-cream/15",
+        )}
+      >
         {work && (
           <>
             <DialogHeader className="pr-8">
-              <DialogTitle className="text-xl leading-tight">
+              <DialogTitle className="text-xl leading-tight text-inherit">
                 {work.nameKo}
-                <span lang="en" className="ml-2 text-xs font-normal text-muted-foreground">
+                <span lang="en" className="ml-2 text-xs font-normal text-rf-cream/70">
                   {work.nameEn}
                 </span>
               </DialogTitle>
-              <DialogDescription>{work.summary}</DialogDescription>
+              <DialogDescription className="text-rf-cream/70">{work.summary}</DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col gap-2">
               {gallery.map((src, index) => (
                 <div
                   key={`${src}-${index}`}
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-muted"
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-rf-cream/10"
                 >
                   <Image
                     src={src}
@@ -54,15 +61,18 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
             </div>
 
             <dl className="grid grid-cols-[4rem_1fr] gap-x-3 gap-y-2">
-              <dt className="text-muted-foreground">분야</dt>
+              <dt className="text-rf-cream/70">분야</dt>
               <dd>{work.category}</dd>
-              <dt className="text-muted-foreground">기간</dt>
+              <dt className="text-rf-cream/70">기간</dt>
               <dd>{work.duration}</dd>
-              <dt className="text-muted-foreground">툴</dt>
+              <dt className="text-rf-cream/70">툴</dt>
               <dd>
                 <ul className="flex flex-wrap gap-1.5">
                   {work.tools.map((tool) => (
-                    <li key={tool} className="rounded-sm border px-2 py-0.5 text-xs">
+                    <li
+                      key={tool}
+                      className="rounded-sm border border-rf-cream/30 px-2 py-0.5 text-xs"
+                    >
                       {tool}
                     </li>
                   ))}
@@ -71,17 +81,17 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
             </dl>
 
             <section aria-labelledby="work-situation" className="flex flex-col gap-1.5">
-              <h3 id="work-situation" className="font-medium">
+              <h3 id="work-situation" className="font-medium text-inherit">
                 상황
               </h3>
-              <p className="text-muted-foreground">{work.situation}</p>
+              <p className="text-rf-cream/70">{work.situation}</p>
             </section>
 
             <section aria-labelledby="work-actions" className="flex flex-col gap-1.5">
-              <h3 id="work-actions" className="font-medium">
+              <h3 id="work-actions" className="font-medium text-inherit">
                 행동
               </h3>
-              <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
+              <ul className="list-disc space-y-1 pl-5 text-rf-cream/70">
                 {work.actions.map((action) => (
                   <li key={action}>{action}</li>
                 ))}
@@ -89,14 +99,17 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
             </section>
 
             {work.archivedNote ? (
-              <p className="text-muted-foreground">{work.archivedNote}</p>
+              <p className="text-rf-cream/70">{work.archivedNote}</p>
             ) : (
               work.siteUrl && (
                 <a
                   href={work.siteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={buttonVariants({ variant: "default", size: "lg" })}
+                  className={cn(
+                    buttonVariants({ variant: "default", size: "lg" }),
+                    "bg-rf-cream text-rf-ink hover:bg-rf-cream/85",
+                  )}
                 >
                   사이트 방문
                   <span className="sr-only"> (새 탭에서 열림)</span>
