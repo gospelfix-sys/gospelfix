@@ -38,7 +38,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     summary: "가맹 문의를 받을 온라인 창구를 기획부터 배포까지 5~7일 만에 만들었습니다.",
     situation: "가맹 문의를 받을 온라인 창구가 없다는 문제가 있었습니다.",
     actions: [
-      "기획, UI 디자인, 퍼블리싱, 배포까지 직접 수행",
+      "Planning · Design · Full-Stack Development 수행",
       "모바일 퍼스트 반응형으로 설계",
       "운영자가 직접 관리할 수 있는 관리자 페이지를 분리해 구축",
     ],
