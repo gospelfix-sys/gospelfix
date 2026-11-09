@@ -56,7 +56,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     duration: "12주",
     summary: "콘텐츠가 쌓일수록 탐색이 어려워지는 미디어 사이트의 정보구조와 UI를 풀었습니다.",
     situation: "콘텐츠가 쌓일수록 탐색이 어려워지는 정보구조·UI 문제가 있었습니다.",
-    actions: ["기획부터 디자인, 개발까지 12주간 전담"],
+    actions: ["Planning · Design · Full-Stack Development 수행"],
     tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
     thumbnail: "/reelsfactory/yezakeumak.avif",
     images: [],
