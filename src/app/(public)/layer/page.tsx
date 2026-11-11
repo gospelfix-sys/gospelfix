@@ -24,6 +24,8 @@ const HERO_ROLLING_WORDS = [
   "배너",
   "광고소재",
   "챗봇",
+  "알림",
+  "예약관리",
   "홈페이지",
   "쇼핑몰",
 ] as const;
