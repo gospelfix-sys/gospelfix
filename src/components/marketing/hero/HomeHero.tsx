@@ -16,14 +16,6 @@ export function HomeHero() {
         <HeroTypingTitle label="GOSPELFIX" script="Buy your brand" phrases={HERO_PHRASES} />
       </HeroRevealItem>
 
-      <HeroRevealItem
-        as="p"
-        className="max-w-[560px] text-base leading-relaxed text-gf-gray1 sm:text-lg"
-      >
-        로고부터 목업, 웹사이트, 광고 소재까지. 처음부터 만들 시간에 바로 쓰고 바로 런칭하세요.
-        파일을 여는 순간, 브랜드가 완성됩니다.
-      </HeroRevealItem>
-
       <HeroCta
         href="#gallery"
         icon={<ArrowRight className="h-4 w-4" />}
