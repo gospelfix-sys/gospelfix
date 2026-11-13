@@ -64,7 +64,7 @@ export function FilterDropdown({ paramKey, options, placeholder }: FilterDropdow
       {open && (
         <div
           role="listbox"
-          className="absolute right-0 top-[calc(100%+8px)] z-20 min-w-[168px] rounded-2xl border border-gf-border bg-gf-white p-2 shadow-lg"
+          className="absolute left-0 top-[calc(100%+8px)] z-20 min-w-[168px] lg:left-auto lg:right-0 rounded-2xl border border-gf-border bg-gf-white p-2 shadow-lg"
         >
           {options.map((option) => {
             const isSelected = option.value === currentValue;
