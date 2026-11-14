@@ -13,10 +13,16 @@ const DEFAULT_SITE_URL = "https://gospelfix-ashy.vercel.app";
 // 빈 문자열·끝 슬래시까지 걸러서 metadataBase가 깨지지 않게 한다
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL).replace(/\/+$/, "");
 
+// 네이버 서치어드바이저 소유확인 값. 미설정이면 meta 태그를 아예 출력하지 않는다
+const NAVER_SITE_VERIFICATION = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION?.trim();
+
 export const metadata: Metadata = {
   title: "GOSPELFIX",
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
+  ...(NAVER_SITE_VERIFICATION && {
+    other: { "naver-site-verification": NAVER_SITE_VERIFICATION },
+  }),
   icons: {
     icon: "/logo.webp",
   },
