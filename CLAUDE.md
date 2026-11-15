@@ -67,7 +67,7 @@ Client Component ─ axiosInstance ─┘
 
 - 루트 레이아웃 Provider 중첩: `PostHogProvider > RecoilProvider > AuthProvider > CartProvider`, `CookieConsentBanner`는 RecoilProvider 안 형제. **새 추적 SDK는 `CookieConsentBanner`/`useCookieConsent` 게이팅부터 연동.**
 - `(public)/@modal` 병렬 라우트: `(.)detail/[slug]`, `(.)blog/[slug]`는 `RouteModal` 인터셉트, 전체 페이지 버전도 별도 존재. 목록에서는 모달, 직접 진입하면 풀 페이지.
-- `LayerShell`(`components/layer/`)을 쓰는 페이지(`/`, `introduce`, `resources`, `blog`, `blog/[slug]`; `upload` 에디터는 LayerShell이 아니라 `LayerSidebar`를 직접 쓴다): **새 페이지를 추가하면 `layerNav.ts`의 `LAYER_NAV_ITEMS`에 반드시 등록**해야 한다(안 하면 고아 라우트).
+- `LayerShell`(`components/layer/`)을 쓰는 페이지(`/`, `introduce`, `resources`, `blog`, `blog/[slug]`; `upload` 에디터는 LayerShell 없이 자체 상단바만 쓴다): **새 페이지를 추가하면 `layerNav.ts`의 `LAYER_NAV_ITEMS`에 반드시 등록**해야 한다(안 하면 고아 라우트).
 - 라우트 이력: `/growth` → `/layer`로 리네임(next.config.mjs 영구 리다이렉트), `/mall` → `/`, `/creator`·`/free-resources` → `/resources`(통합, 영구 리다이렉트). 현재 `/`는 브랜딩 디자인 소재(CI 로고·목업·홈페이지·대시보드·이커머스 템플릿·광고 소재 PSD/AI) 마켓.
 - `(mypage)/layout.tsx`는 `force-dynamic` 서버 레이아웃.
 - 루트 레이아웃에 상주하는 모달(`BatchPaymentModal` 등)은 페이지 이동만 하지 말고 **모든 종료 액션에서 `onClose` 호출**.
@@ -100,5 +100,5 @@ Client Component ─ axiosInstance ─┘
 - 커밋 요청 시 `code-reviewer` 에이전트가 먼저 APPROVED를 내야 한다. `git-commit-pusher` 에이전트는 Bash가 없어 실제 커밋을 못 한다 → 리뷰(APPROVED) 후 메인 세션이 직접 커밋/푸시하고 `git log`로 검증.
 - `pkill -f "next dev"`는 형제 저장소(cms.api) 서버까지 죽인다 → `lsof -i :포트`로 PID 지정.
 - 여러 저장소를 오갈 때 `pwd`로 cwd를 확인한 뒤 tsc/lint 실행.
-- `.claude/agents/`에는 핵심 4개(`code-reviewer`, `component-writer`, `motion-designer`, `git-commit-pusher`)와 기획용 3개(`development-planner`, `prd-generator`, `prd-validator`, 공통 가이드는 `agents/docs/`)가 있다(과거 모노레포 시절 에이전트는 삭제). 어긋나는 내용이 보이면 이 문서와 `.claude/rules/`를 우선한다.
+- `.claude/agents/`에는 핵심 4개(`code-reviewer`, `component-writer`, `motion-designer`, `git-commit-pusher`)와 기획용 3개(`development-planner`, `prd-generator`, `prd-validator`; 뒤 둘은 `agents/docs/` 아래, 에이전트 메모리 공통 가이드는 `rules/agent-memory-guide.md`)가 있다(과거 모노레포 시절 에이전트는 삭제). 어긋나는 내용이 보이면 이 문서와 `.claude/rules/`를 우선한다.
 - `.claude/memory/MEMORY.md`에 프로젝트 히스토리/결정 사항 인덱스가 있다. 날짜가 박힌 `project_*.md`는 당시 기준이며 최신 리네임/스왑 항목을 먼저 확인할 것.

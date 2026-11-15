@@ -11,12 +11,14 @@
 
 ```markdown
 ---
-name: {메모리 이름}
+name: {짧은-kebab-case-slug}
 description: {한 줄 설명 — 미래 대화에서 관련성 판단에 사용}
-type: {user | feedback | project | reference}
+metadata:
+  type: {user | feedback | project | reference}
 ---
 
-{내용 — feedback/project 타입은: 규칙/사실 → **Why:** → **How to apply:** 순으로}
+{내용 — feedback/project 타입은: 규칙/사실 → **Why:** → **How to apply:** 순으로.
+관련 메모리는 [[다른-메모리-name]] 형식으로 링크}
 ```
 
 **Step 2** — `MEMORY.md` 인덱스에 포인터 추가 (내용 직접 작성 금지, 링크만).
