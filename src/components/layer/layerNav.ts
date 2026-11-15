@@ -14,7 +14,7 @@ export interface LayerNavItem {
   isActive: (ctx: LayerNavContext) => boolean;
 }
 
-// LayerShell 상단 네비와 업로드 에디터용 LayerSidebar가 함께 읽는 단일 정의.
+// LayerShell 상단 네비가 읽는 단일 정의.
 // 새 LayerShell 페이지를 추가하면 여기에 등록한다(안 하면 고아 라우트).
 export const LAYER_NAV_ITEMS: LayerNavItem[] = [
   {

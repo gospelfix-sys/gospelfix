@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // 이전 화면(어느 경로에서 진입했는지)에 관계없이 브라우저 히스토리로 되돌아간다 —
-// /mypage는 LayerSidebar 프로필 메뉴 등 여러 경로에서 진입할 수 있어 고정된
+// /mypage는 헤더 프로필 메뉴 등 여러 경로에서 진입할 수 있어 고정된
 // href 대신 router.back()을 사용한다.
 export function BackButton() {
   const router = useRouter();

@@ -32,7 +32,7 @@ const COMPACT_WIDTH = 460;
 export default function TopBar() {
   const pathname = usePathname();
 
-  // 모다(마켓플레이스) 홈/업로드는 자체 네비(LayerShell의 LayerNavBar, 업로드는 LayerSidebar)를 쓰므로 전역 TopBar를
+  // 모다(마켓플레이스) 홈/업로드는 자체 네비(LayerShell의 LayerNavBar, 업로드는 전용 상단바)를 쓰므로 전역 TopBar를
   // 렌더링하지 않는다. /detail(상품 상세)은 LayerShell을 쓰진 않지만 자체 네비게이션이
   // 없는 페이지라, 압축 알약 헤더가 콘텐츠 위에 떠 있는 게 불필요해 마찬가지로 숨긴다.
   if (

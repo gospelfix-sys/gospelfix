@@ -29,11 +29,6 @@ export default function Footer() {
   const pathname = usePathname();
   const [infoOpen, setInfoOpen] = useState(false);
 
-  // 업로드("/upload")만 lg 이상에서 fixed 왼쪽 사이드바(LayerSidebar, w-[220px])를 쓴다.
-  // 사이드바는 fixed라 항상 화면에 떠 있으므로, 이 Footer가 일반 문서 흐름에 있어도
-  // 그 경로에서는 사이드바 폭만큼 왼쪽 패딩을 줘 겹치지 않게 한다.
-  const isUploadShell = pathname.startsWith("/upload");
-
   // LayerShell(다크 상단 네비) 경로는 푸터도 다크 스코프로 맞춘다.
   const isDarkShell =
     pathname === "/" ||
@@ -47,7 +42,6 @@ export default function Footer() {
     <footer
       className={cn(
         "hidden border-t border-gf-border bg-gf-white md:block",
-        isUploadShell && "lg:pl-[220px]",
         isDarkShell && "gf-dark",
       )}
     >

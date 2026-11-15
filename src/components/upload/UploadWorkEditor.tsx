@@ -1,10 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { LayerSidebar } from "@/components/layer/LayerSidebar";
 import { UploadEditorHeader } from "@/components/upload/UploadEditorHeader";
 import { UploadCanvas } from "@/components/upload/UploadCanvas";
 import { UploadInfoPanel } from "@/components/upload/UploadInfoPanel";
@@ -43,8 +42,6 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
   const { openAuthModal } = useAuth();
   const canSell = profile?.role === "seller" || profile?.role === "admin";
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const form = useUploadWorkForm({ categories, subCategories });
   const { submitting, handleSubmit } = useUploadWorkSubmit(form);
 
@@ -80,16 +77,8 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
 
   return (
     <div className="min-h-dvh bg-gf-bg">
-      <Suspense fallback={null}>
-        <LayerSidebar open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-      </Suspense>
-
-      <div className="flex min-h-dvh flex-col lg:pl-[220px]">
-        <UploadEditorHeader
-          submitting={submitting}
-          onOpenMenu={() => setMobileMenuOpen(true)}
-          onSubmit={handleSubmit}
-        />
+      <div className="flex min-h-dvh flex-col">
+        <UploadEditorHeader submitting={submitting} onSubmit={handleSubmit} />
 
         <div className="flex flex-1 flex-col gap-6 p-4 lg:flex-row lg:p-10">
           <UploadCanvas

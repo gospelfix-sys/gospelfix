@@ -8,7 +8,7 @@ export interface ProfileMenuItem {
   sellerOnly?: boolean;
 }
 
-// SidebarProfileMenu(위로 열림)와 HeaderProfileMenu(아래로 열림)가 공유하는 메뉴 항목.
+// HeaderProfileMenu가 쓰는 메뉴 항목.
 // 로그아웃은 동작이 달라 각 컴포넌트에서 별도로 렌더링한다.
 export const PROFILE_MENU_ITEMS: ProfileMenuItem[] = [
   { href: "/mypage/settings", label: "설정", icon: Settings },

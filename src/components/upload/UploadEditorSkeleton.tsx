@@ -7,7 +7,7 @@ import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
 export function UploadEditorSkeleton() {
   return (
     <SkeletonRegion className="min-h-dvh bg-gf-bg">
-      <div className="flex min-h-dvh flex-col lg:pl-[220px]">
+      <div className="flex min-h-dvh flex-col">
         <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b border-gf-border bg-gf-white px-4 lg:px-6">
           <Skeleton className="h-9 w-16 rounded-full" />
           <div className="flex items-center gap-2">
