@@ -110,7 +110,7 @@ function LayerNavLinks({ variant, onNavigate }: LayerNavLinksProps) {
 // 로그인 후 마이페이지/로그아웃 진입점은 HeaderProfileMenu가 담당한다.
 // "작품 업로드"는 seller/admin만 실제로 작품을 등록할 수 있어(마이페이지 상품 CRUD 셀프서비스),
 // 로그인한 일반 회원에게는 버튼을 숨기지 않고 비활성화 상태로 보여준다 —
-// 존재를 알려주되 /mypage/settings의 "판매자 신청"으로 유도하기 위함.
+// 존재를 알려주되 /mypage의 "판매자 신청"으로 유도하기 위함.
 export function LayerNavBar() {
   const user = useRecoilValue(authUserAtom);
   const loading = useRecoilValue(authLoadingAtom);
@@ -204,7 +204,7 @@ export function LayerNavBar() {
                         작품 업로드
                       </Link>
                     ) : (
-                      <Button disabled title="판매자 전환 후 이용할 수 있어요 (마이페이지 > 설정)">
+                      <Button disabled title="판매자 전환 후 이용할 수 있어요 (마이페이지 > 프로필)">
                         작품 업로드
                       </Button>
                     )}

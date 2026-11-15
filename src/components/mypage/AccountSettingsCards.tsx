@@ -22,18 +22,12 @@ import {
 
 interface AccountSettingsCardsProps {
   email: string;
-  role: "user" | "admin" | "seller";
-  sellerRequestedAt: string | null;
 }
 
 // "설정" 개요 페이지 전용 — 프로필(이름/아바타)은 /mypage(프로필 페이지)의
 // ProfileSettingsForm으로 분리됐고, 여기는 계정 자체에 대한 설정(로그인 계정 확인,
 // 비밀번호 변경, 회원탈퇴)만 다룬다.
-export function AccountSettingsCards({
-  email,
-  role,
-  sellerRequestedAt,
-}: AccountSettingsCardsProps) {
+export function AccountSettingsCards({ email }: AccountSettingsCardsProps) {
   const { signOut } = useAuth();
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -45,22 +39,6 @@ export function AccountSettingsCards({
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-
-  const [requested, setRequested] = useState(sellerRequestedAt !== null);
-  const [requestingSeller, setRequestingSeller] = useState(false);
-
-  async function handleSellerRequest() {
-    setRequestingSeller(true);
-    try {
-      await axiosInstance.post("/auth/seller-request");
-      setRequested(true);
-      toast.success("판매자 신청이 접수되었습니다. 검토 후 전환해드릴게요.");
-    } catch (error) {
-      toast.error(getErrorMessage(error, "판매자 신청에 실패했습니다."));
-    } finally {
-      setRequestingSeller(false);
-    }
-  }
 
   async function handleChangePassword() {
     if (newPassword !== newPasswordConfirm) {
@@ -109,30 +87,6 @@ export function AccountSettingsCards({
           </div>
         </CardContent>
       </Card>
-
-      {role === "user" && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">판매자 전환</CardTitle>
-            <CardDescription>
-              직접 만든 작품을 등록하고 판매하고 싶다면 신청해주세요. 검토 후 관리자가 직접
-              승인해드립니다.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {requested ? (
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                신청 완료 — 검토 중입니다.
-              </div>
-            ) : (
-              <Button onClick={handleSellerRequest} disabled={requestingSeller}>
-                {requestingSeller ? "신청 중..." : "판매자 신청"}
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      )}
 
       <Card>
         <CardHeader>
