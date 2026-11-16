@@ -18,7 +18,7 @@ export function CouponTicketCard({ coupon, className }: CouponTicketCardProps) {
         </span>
       </div>
 
-      <div className="pointer-events-none absolute inset-y-3 left-24 border-l border-dashed border-white/15" />
+      <div className="pointer-events-none absolute inset-y-5 left-24 border-l border-dashed border-white/15" />
       <div className="pointer-events-none absolute -top-3 left-24 size-6 -translate-x-1/2 rounded-full bg-gf-bg" />
       <div className="pointer-events-none absolute -bottom-3 left-24 size-6 -translate-x-1/2 rounded-full bg-gf-bg" />
 
