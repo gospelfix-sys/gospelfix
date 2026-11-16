@@ -22,7 +22,7 @@ export function CouponTicketCard({ coupon, className }: CouponTicketCardProps) {
       <div className="pointer-events-none absolute -top-3 left-24 size-6 -translate-x-1/2 rounded-full bg-gf-bg" />
       <div className="pointer-events-none absolute -bottom-3 left-24 size-6 -translate-x-1/2 rounded-full bg-gf-bg" />
 
-      <div className="flex flex-1 flex-col justify-center gap-1 px-4 py-3">
+      <div className="flex flex-1 flex-col justify-center gap-1.5 px-4 py-5">
         <div className="flex items-center justify-between gap-2">
           <span className="truncate font-mono text-sm font-bold text-white">{coupon.code}</span>
           <span
