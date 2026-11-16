@@ -34,7 +34,7 @@ export function SellerRequestButton({ sellerRequestedAt }: SellerRequestButtonPr
     return (
       <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
         <CheckCircle2 className="h-4 w-4 text-green-600" />
-        신청 완료 — 검토 중입니다.
+        신청 완료 — 검토 중입니다. (약 7일 이내 승인돼요)
       </div>
     );
   }
