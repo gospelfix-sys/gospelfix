@@ -1,6 +1,6 @@
 export function CodePreviewSectionSkeleton() {
   return (
-    <div className="max-w-[1365px] animate-pulse">
+    <div className="w-full min-w-0 max-w-[1365px] animate-pulse">
       <h2 className="mb-6 text-xl font-black tracking-[-0.03em] text-gf-black">코드 미리보기</h2>
 
       <div className="overflow-hidden rounded-2xl bg-[#282c34]">

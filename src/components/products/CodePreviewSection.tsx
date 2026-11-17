@@ -106,7 +106,7 @@ export function CodePreviewSection({ product }: CodePreviewSectionProps) {
   }
 
   return (
-    <div className="max-w-[1365px]">
+    <div className="w-full min-w-0 max-w-[1365px]">
       <h2 className="mb-6 text-xl font-black tracking-[-0.03em] text-gf-black">코드 미리보기</h2>
 
       <div className="overflow-hidden rounded-2xl">

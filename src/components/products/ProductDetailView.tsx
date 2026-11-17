@@ -50,7 +50,7 @@ export function ProductDetailView({
         )}
 
         {/* 구매 옵션(왼쪽) + 상품 정보(오른쪽) */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_380px]">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_380px]">
           {/* 상품 정보: 모바일 맨 위, 데스크톱 오른쪽 사이드바(스크롤 고정) */}
           <div id="product-info" className="lg:order-2 lg:sticky lg:top-10 lg:self-start">
             <PurchaseOptionsPanel
@@ -67,7 +67,7 @@ export function ProductDetailView({
           </div>
 
           {/* 구매 옵션: 모바일 상품 정보 아래, 데스크톱 왼쪽 */}
-          <div className="flex flex-col gap-10 lg:order-1">
+          <div className="flex min-w-0 flex-col gap-10 lg:order-1">
             <ProductOptionsSection product={product} priceState={priceState} />
 
             {/* 코드 미리보기 — 다운로드 전 코드 품질을 보여주는 신뢰 장치 */}
