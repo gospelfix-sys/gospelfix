@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CollapsibleSection } from "@/components/ui/collapsible-section";
 import { DateTimeField } from "@/components/upload/DateTimeField";
 import { cn } from "@/lib/utils";
 
@@ -75,41 +76,52 @@ export function PriceFields({
         )}
       </div>
 
-      <div className="space-y-2">
-        <h2 className="text-sm font-bold text-gf-black">
-          공급원가{" "}
-          <span className="font-normal text-gf-gray2">(취소선 참고가, 미입력 시 숨김)</span>
-        </h2>
-        <Input
-          type="text"
-          inputMode="numeric"
-          value={supplyPrice ? supplyPrice.toLocaleString("ko-KR") : ""}
-          onChange={(e) => {
-            const raw = e.target.value.replace(/[^0-9]/g, "");
-            onSupplyPriceChange(raw === "" ? null : parseInt(raw, 10));
-          }}
-          placeholder="예: 58,000"
-          className="h-10 rounded-xl bg-gf-white"
-        />
-      </div>
+      {/* 무료 상품에는 공급원가·할인이 의미가 없어 유료일 때만 보인다. 대부분 쓰지 않는
+          선택 항목이라 접어 둔다 (값이 있으면 펼친 상태로 시작) */}
+      {priceType === "paid" && (
+        <CollapsibleSection
+          title={
+            <>
+              공급원가 · 할인 기간 <span className="font-normal text-gf-gray2">(선택)</span>
+            </>
+          }
+          hasValue={!!supplyPrice || !!discountStartsAt || !!discountEndsAt}
+        >
+          <div className="space-y-2">
+            <h3 className="text-sm font-bold text-gf-black">
+              공급원가{" "}
+              <span className="font-normal text-gf-gray2">(취소선 참고가, 미입력 시 숨김)</span>
+            </h3>
+            <Input
+              type="text"
+              inputMode="numeric"
+              value={supplyPrice ? supplyPrice.toLocaleString("ko-KR") : ""}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^0-9]/g, "");
+                onSupplyPriceChange(raw === "" ? null : parseInt(raw, 10));
+              }}
+              placeholder="예: 58,000"
+              className="h-10 rounded-xl bg-gf-white"
+            />
+          </div>
 
-      <div className="space-y-2">
-        <h2 className="text-sm font-bold text-gf-black">
-          할인 기간 <span className="font-normal text-gf-gray2">(선택)</span>
-        </h2>
-        <div className="grid grid-cols-2 gap-2">
-          <DateTimeField
-            value={discountStartsAt}
-            onChange={onDiscountStartsAtChange}
-            placeholder="시작일"
-          />
-          <DateTimeField
-            value={discountEndsAt}
-            onChange={onDiscountEndsAtChange}
-            placeholder="종료일"
-          />
-        </div>
-      </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-bold text-gf-black">할인 기간</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <DateTimeField
+                value={discountStartsAt}
+                onChange={onDiscountStartsAtChange}
+                placeholder="시작일"
+              />
+              <DateTimeField
+                value={discountEndsAt}
+                onChange={onDiscountEndsAtChange}
+                placeholder="종료일"
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+      )}
     </>
   );
 }

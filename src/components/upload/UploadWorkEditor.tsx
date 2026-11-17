@@ -101,9 +101,10 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
         open={form.licenseDialogOpen}
         onOpenChange={form.setLicenseDialogOpen}
         priceType={form.priceType}
+        isCodeWork={form.isCodeWork}
         draftLicense={form.draftLicense}
         onDraftLicenseChange={form.setDraftLicense}
-        onConfirm={form.setLicense}
+        onConfirm={form.confirmLicense}
       />
 
       <CategoryDialog

@@ -1,5 +1,6 @@
 import {
-  LICENSE_OPTIONS,
+  COMMERCIAL_LICENSE,
+  isLicenseAllowed,
   type ProductCodePreviewItem,
   type ProductOption,
 } from "@/types/product.types";
@@ -18,6 +19,9 @@ export interface ContentBlock {
 }
 
 export const DESIGN_TYPES = ["반응형", "고정형"];
+
+// 미술·전시 탭의 "에디션 구분". cms.api는 문자열로만 저장하므로 값 자체가 표시 문구다.
+export const EDITION_TYPES = ["원본 (1점)", "에디션 프린트", "오픈 에디션"];
 
 export const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
 export const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
@@ -42,11 +46,13 @@ export function createEmptyCodePreviewItem(): ProductCodePreviewItem {
   return { id: createId(), label: "", code: "" };
 }
 
-// 무료 상품은 "구매 후 부여된 이용 범위"를 전제로 한 판권소유(all-rights-reserved) 라이선스와
-// 정책상 양립할 수 없다 — 가격 토글뿐 아니라 기존 상품 로드/라이선스 확정/최종 제출 시점에도
-// 동일하게 강제해야 편집 흐름을 통해 위반 상태가 재생산되지 않는다.
+// 유료 상품은 상용 라이선스만, 무료 상품은 CC 라이선스만 허용한다(CC는 철회가 불가능해 유료
+// 상품에 부여하면 구매자의 재배포가 합법이 된다). 가격 토글뿐 아니라 기존 상품 로드/라이선스
+// 확정/최종 제출 시점에도 동일하게 강제해야 편집 흐름을 통해 위반 상태가 재생산되지 않는다.
+// 무료로 바뀔 때는 기본값 없이 비워 판매자가 직접 고르게 한다.
 export function normalizeLicense(license: string, isFree: boolean): string {
-  return isFree && license === "all-rights-reserved" ? LICENSE_OPTIONS[0].value : license;
+  if (isLicenseAllowed(license, isFree)) return license;
+  return isFree ? "" : COMMERCIAL_LICENSE;
 }
 
 export async function uploadImage(file: File): Promise<string> {

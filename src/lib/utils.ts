@@ -68,3 +68,17 @@ export function slugify(text: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+// 신규 작품의 슬러그 기본값 — 한글 제목은 slugify하면 비어버리므로 숫자만으로 랜덤 생성한다.
+// 중복(409)은 서버가 필드 에러로 알려주므로 판매자가 직접 고치거나 재생성할 수 있다.
+export function generateRandomSlug(length = 10): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  // 첫 자리가 0이면 숫자로 읽혔을 때 길이가 줄어 보이므로 1~9로 시작시킨다.
+  return Array.from(bytes, (b, i) => (i === 0 ? (b % 9) + 1 : b % 10)).join("");
+}
+
+// 상품 상세에 표시되는 제품코드 — 문의 때 쓰는 품번이라 판매자가 짓지 않고 자동 부여한다.
+// DB에 유일 제약은 없지만 8자리 숫자 랜덤이라 겹칠 확률은 사실상 무시할 수 있다.
+export function generateProductCode(): string {
+  return `GF${generateRandomSlug(8)}`;
+}

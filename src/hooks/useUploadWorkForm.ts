@@ -12,14 +12,16 @@ import {
   type ContentBlock,
 } from "@/components/upload/uploadEditorUtils";
 import {
-  DEFAULT_LICENSE,
+  EMPTY_ART_DETAILS,
   MAX_SUB_CATEGORIES,
+  type ArtDetails,
+  type LicenseAcknowledgement,
   type ProductCategory,
   type ProductCodePreviewItem,
   type ProductOption,
   type SellerProduct,
 } from "@/types/product.types";
-import { slugify } from "@/lib/utils";
+import { generateProductCode, generateRandomSlug } from "@/lib/utils";
 import { resolveVideoLink } from "@/lib/videoLink";
 
 interface UseUploadWorkFormOptions {
@@ -63,6 +65,11 @@ export function useUploadWorkForm({
   const [productCode, setProductCode] = useState("");
   const [designType, setDesignType] = useState("");
   const [hasAiStarterKit, setHasAiStarterKit] = useState(false);
+  // "미술·전시" 탭 입력값 10개를 한 객체로 들고 있다 — 필드마다 useState를 늘리지 않으려는 의도
+  const [artDetails, setArtDetails] = useState<ArtDetails>(EMPTY_ART_DETAILS);
+  function setArtDetail<K extends keyof ArtDetails>(key: K, value: ArtDetails[K]) {
+    setArtDetails((prev) => ({ ...prev, [key]: value }));
+  }
   const [priceType, setPriceType] = useState<"free" | "paid">("free");
   const [price, setPrice] = useState(0);
   const [supplyPrice, setSupplyPrice] = useState<number | null>(null);
@@ -76,7 +83,13 @@ export function useUploadWorkForm({
   ]);
   const [filePath, setFilePath] = useState<string | null>(null);
   const [newZipFile, setNewZipFile] = useState<File | null>(null);
-  const [license, setLicense] = useState(DEFAULT_LICENSE);
+  const [license, setLicense] = useState("");
+  // 이번 편집에서 라이선스 모달로 받은 동의 기록. 서버의 기존 기록은 불러오지 않는다.
+  const [licenseAcknowledgement, setLicenseAcknowledgement] =
+    useState<LicenseAcknowledgement | null>(null);
+  // 수정 모드에서 서버에 저장돼 있던 라이선스 원본값(정규화 전). 이 값을 그대로 다시 저장하면
+  // 라이선스를 새로 확정한 게 아니므로 재동의를 요구하지 않는다(useUploadWorkSubmit 참고).
+  const [loadedLicense, setLoadedLicense] = useState<string | null>(null);
   const [licenseDialogOpen, setLicenseDialogOpen] = useState(false);
   const [formatGuideOpen, setFormatGuideOpen] = useState(false);
   const [draftLicense, setDraftLicense] = useState(license);
@@ -85,6 +98,14 @@ export function useUploadWorkForm({
   // 서버(cms.api)가 "어떤 필드 때문에 실패했는지" 알려줄 때(예: slug 중복 409) 그 필드
   // 옆에 바로 표시하기 위한 상태 — 필드명(예: "slug")을 key로 메시지를 담는다.
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  // 신규 등록일 때만 슬러그를 랜덤 숫자로 채운다. 마운트 후에 채우는 이유는 SSR 결과와
+  // 클라이언트 초기값이 달라 hydration 경고가 나지 않게 하기 위해서다.
+  useEffect(() => {
+    if (editId) return;
+    setSlug((prev) => prev || generateRandomSlug());
+    setProductCode((prev) => prev || generateProductCode());
+  }, [editId]);
 
   useEffect(() => {
     if (!editId) return;
@@ -101,9 +122,22 @@ export function useUploadWorkForm({
         setProductCategory(product.category);
         setSubCategories(product.sub_categories ?? []);
         setProductionSolution(product.production_solution ?? "");
-        setProductCode(product.product_code ?? "");
+        // 기존 상품은 저장된 코드를 유지하고, 코드가 없던 상품만 새로 부여한다.
+        setProductCode(product.product_code || generateProductCode());
         setDesignType(product.design_type ?? "");
         setHasAiStarterKit(product.has_ai_starter_kit ?? false);
+        setArtDetails({
+          artwork_size: product.artwork_size ?? "",
+          artwork_medium: product.artwork_medium ?? "",
+          artwork_year: product.artwork_year ?? "",
+          exhibition_title: product.exhibition_title ?? "",
+          exhibition_period: product.exhibition_period ?? "",
+          exhibition_venue: product.exhibition_venue ?? "",
+          exhibition_artists: product.exhibition_artists ?? "",
+          edition_type: product.edition_type ?? "",
+          edition_size: product.edition_size ?? "",
+          frame_included: product.frame_included ?? false,
+        });
         setPriceType(product.price > 0 ? "paid" : "free");
         setPrice(product.price);
         setSupplyPrice(product.supply_price ?? null);
@@ -120,7 +154,8 @@ export function useUploadWorkForm({
         setSiteUrl(product.demo_url ?? "");
         setCoverPreview(product.images?.[0] ?? product.thumbnail_url ?? null);
         setFilePath(product.file_path);
-        setLicense(normalizeLicense(product.license ?? DEFAULT_LICENSE, product.price <= 0));
+        setLoadedLicense(product.license ?? "");
+        setLicense(normalizeLicense(product.license ?? "", product.price <= 0));
         // content_html은 리치 텍스트 부분까지 완전히 역변환할 수는 없어, 우리가 직접
         // 직렬화한 이미지/동영상 패턴만 블록으로 복원하고 나머지는 text 블록에 담는다.
         setBlocks(product.content_html ? parseContentBlocks(product.content_html) : []);
@@ -132,18 +167,13 @@ export function useUploadWorkForm({
     })();
   }, [editId]);
 
-  function handleSlugChange(value: string, isComposing: boolean) {
-    setSlug(isComposing ? value : slugify(value));
-    if (fieldErrors.slug) clearFieldError("slug");
-  }
+  // 코드 미리보기나 AI 스타터 킷이 있으면 수정해서 쓰는 템플릿·코드 작품으로 본다 —
+  // 이런 작품에는 변경금지(ND) 라이선스가 맞지 않아 선택을 막는다.
+  const isCodeWork = hasAiStarterKit || codePreview.some((item) => item.code.trim() !== "");
 
-  function clearFieldError(field: string) {
-    setFieldErrors((prev) => {
-      if (!(field in prev)) return prev;
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
+  function confirmLicense(value: string, acknowledgement: LicenseAcknowledgement) {
+    setLicense(value);
+    setLicenseAcknowledgement(acknowledgement);
   }
 
   function handlePriceTypeChange(type: "free" | "paid") {
@@ -153,6 +183,7 @@ export function useUploadWorkForm({
       setLicense((prev) => normalizeLicense(prev, true));
     }
     if (type === "paid") {
+      setLicense((prev) => normalizeLicense(prev, false));
       setNewZipFile(null);
       setFilePath(null);
     }
@@ -297,6 +328,8 @@ export function useUploadWorkForm({
     setDesignType,
     hasAiStarterKit,
     setHasAiStarterKit,
+    artDetails,
+    setArtDetail,
     priceType,
     price,
     setPrice,
@@ -314,6 +347,10 @@ export function useUploadWorkForm({
     setNewZipFile,
     license,
     setLicense,
+    licenseAcknowledgement,
+    loadedLicense,
+    confirmLicense,
+    isCodeWork,
     licenseDialogOpen,
     setLicenseDialogOpen,
     formatGuideOpen,
@@ -322,7 +359,6 @@ export function useUploadWorkForm({
     setDraftLicense,
     fieldErrors,
     setFieldErrors,
-    handleSlugChange,
     handlePriceTypeChange,
     toggleDraftSubCategory,
     addPurchaseOption,

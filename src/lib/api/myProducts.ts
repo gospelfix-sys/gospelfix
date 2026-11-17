@@ -1,8 +1,8 @@
 import type { SellerProduct, SellerProductInput, SellerProductStatus } from "@/types/product.types";
 
-// cms.api `/api/v1/my-products/*` 응답 형태 (camelCase) — 아직 cms.api에 구현되지 않은
-// 신규 엔드포인트. 필드셋은 project_product_crud_migration_to_mypage 메모리에 정리된
-// 계약을 그대로 따른다. 순수 타입/매핑만 담당하며 cmsApiFetch 호출은 하지 않으므로
+// cms.api `/api/v1/my-products/*` 응답 형태 (camelCase). 필드셋은
+// project_product_crud_migration_to_mypage 메모리에 정리된 계약을 그대로 따른다.
+// 순수 타입/매핑만 담당하며 cmsApiFetch 호출은 하지 않으므로
 // route.ts 바깥에 둬도 "cms.api 호출은 route.ts 안에서만" 규칙에 저촉되지 않는다.
 export interface CmsMyProduct {
   id: string;
@@ -37,6 +37,17 @@ export interface CmsMyProduct {
   filePath: string | null;
   codePreview: { id: string; label: string; code: string }[] | null;
   license: string | null;
+  // 미술·전시 탭 필드. 마이그레이션 이전 등록분은 값이 없을 수 있다.
+  artworkSize?: string | null;
+  artworkMedium?: string | null;
+  artworkYear?: string | null;
+  exhibitionTitle?: string | null;
+  exhibitionPeriod?: string | null;
+  exhibitionVenue?: string | null;
+  exhibitionArtists?: string | null;
+  editionType?: string | null;
+  editionSize?: string | null;
+  frameIncluded?: boolean;
   status: SellerProductStatus;
   sellerId: string | null;
   isActive: boolean;
@@ -81,6 +92,16 @@ export function toSellerProduct(item: CmsMyProduct): SellerProduct {
     has_ai_starter_kit: item.hasAiStarterKit,
     code_preview: item.codePreview,
     license: item.license,
+    artwork_size: item.artworkSize,
+    artwork_medium: item.artworkMedium,
+    artwork_year: item.artworkYear,
+    exhibition_title: item.exhibitionTitle,
+    exhibition_period: item.exhibitionPeriod,
+    exhibition_venue: item.exhibitionVenue,
+    exhibition_artists: item.exhibitionArtists,
+    edition_type: item.editionType,
+    edition_size: item.editionSize,
+    frame_included: item.frameIncluded,
     status: item.status,
     seller_id: item.sellerId,
     file_path: item.filePath,
@@ -120,5 +141,23 @@ export function toCmsProductInput(input: SellerProductInput) {
     filePath: input.file_path,
     codePreview: input.code_preview,
     license: input.license,
+    artworkSize: input.artwork_size,
+    artworkMedium: input.artwork_medium,
+    artworkYear: input.artwork_year,
+    exhibitionTitle: input.exhibition_title,
+    exhibitionPeriod: input.exhibition_period,
+    exhibitionVenue: input.exhibition_venue,
+    exhibitionArtists: input.exhibition_artists,
+    editionType: input.edition_type,
+    editionSize: input.edition_size,
+    frameIncluded: input.frame_included,
+    // 동의가 없는 저장(수정 시 라이선스 유지)은 키를 빼서 cms.api가 기존 기록을 유지하게 한다.
+    licenseAcknowledgement: input.license_acknowledgement
+      ? {
+          license: input.license_acknowledgement.license,
+          version: input.license_acknowledgement.version,
+          agreedAt: input.license_acknowledgement.agreed_at,
+        }
+      : undefined,
   };
 }

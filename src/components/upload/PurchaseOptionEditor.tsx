@@ -22,9 +22,8 @@ export function PurchaseOptionEditor({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold text-gf-black">
-          구매항목 <span className="font-normal text-gf-gray2">(비워두면 단일 가격으로 표시)</span>
-        </h2>
+        {/* 제목은 감싸는 접이식 헤더가 표시하므로 안내 문구만 둔다 */}
+        <p className="text-xs text-gf-gray2">비워두면 단일 가격으로 표시</p>
         <Button type="button" variant="outline" size="sm" onClick={onAdd} className="gap-1">
           <Plus className="h-3.5 w-3.5" />
           항목 추가
@@ -51,7 +50,7 @@ export function PurchaseOptionEditor({
             <Input
               value={opt.label}
               onChange={(e) => onUpdate(index, { label: e.target.value })}
-              placeholder="구매항목명 (예: 단순복사)"
+              placeholder="구매항목명 (예: 개인 이용, 상업 이용)"
               className="h-10 rounded-xl bg-gf-white"
             />
             <label className="flex items-center gap-2 text-xs text-gf-gray2">

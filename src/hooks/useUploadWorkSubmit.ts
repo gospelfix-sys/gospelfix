@@ -10,6 +10,7 @@ import {
 } from "@/components/upload/uploadEditorUtils";
 import type { UploadWorkForm } from "@/hooks/useUploadWorkForm";
 import type { SellerProductInput } from "@/types/product.types";
+import { generateRandomSlug } from "@/lib/utils";
 import { resolveVideoLink } from "@/lib/videoLink";
 
 // 작품 업로드 화면의 제출(초안저장/게시) 로직. 폼 상태는 useUploadWorkForm의 반환값을 받아 읽는다.
@@ -20,6 +21,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     blocks,
     title,
     slug,
+    setSlug,
     coverPreview,
     coverFile,
     coverMode,
@@ -32,6 +34,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     productCode,
     designType,
     hasAiStarterKit,
+    artDetails,
     priceType,
     price,
     supplyPrice,
@@ -42,6 +45,9 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     filePath,
     newZipFile,
     license,
+    licenseAcknowledgement,
+    loadedLicense,
+    isCodeWork,
     setFieldErrors,
   } = form;
 
@@ -52,6 +58,23 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     if (!title.trim()) return toast.error("작품명을 입력해주세요.");
     if (!slug.trim()) return toast.error("슬러그를 입력해주세요.");
     if (!productCategory) return toast.error("카테고리를 선택해주세요.");
+    if (!license) return toast.error("저작권 및 라이선스를 선택해주세요.");
+    if (license === "cc-by-nc-nd" && isCodeWork) {
+      return toast.error("템플릿·코드 작품에는 변경금지(CC BY-NC-ND)를 선택할 수 없습니다.");
+    }
+    const isFree = priceType === "free";
+    const finalLicense = normalizeLicense(license, isFree);
+    // 동의 기록은 저장할 라이선스와 같을 때만 유효하다 — 유료 전환 시 상용 라이선스가 자동
+    // 지정되는 등 모달을 거치지 않고 바뀐 라이선스는 동의를 받지 않은 상태다.
+    const acknowledgement =
+      licenseAcknowledgement?.license === finalLicense ? licenseAcknowledgement : null;
+    // 수정 모드에서 저장돼 있던 라이선스를 그대로 두면 재동의를 강제하지 않는다. 기존 상품에는
+    // 동의 기록이 없을 수 있지만 이번에 라이선스를 새로 확정한 것이 아니기 때문이다.
+    // (예전에 CC로 저장된 유료 상품처럼 불러올 때 값이 바뀐 경우는 새로 확정하는 것이라 동의 필요)
+    const keepsLoadedLicense = !!editId && loadedLicense === finalLicense;
+    if (!acknowledgement && !keepsLoadedLicense) {
+      return toast.error("저작권 및 라이선스를 열어 확인 항목에 동의해주세요.");
+    }
     if (priceType === "paid" && price <= 0) return toast.error("유료 상품은 가격을 입력해주세요.");
     if (
       discountStartsAt &&
@@ -126,22 +149,27 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         name: title,
         description,
         content_html: contentHtml,
-        discount_starts_at: discountStartsAt,
-        discount_ends_at: discountEndsAt,
+        // 무료 상품은 해당 입력란을 숨기므로, 유료일 때 입력했다가 무료로 바꾼 값이 남아
+        // 저장되지 않게 비워서 보낸다(상태는 지우지 않아 다시 유료로 바꾸면 복원된다).
+        discount_starts_at: isFree ? null : discountStartsAt,
+        discount_ends_at: isFree ? null : discountEndsAt,
         category: productCategory,
         sub_categories: subCategories,
         images: finalCoverUrl ? [finalCoverUrl] : [],
         demo_url: siteUrl,
         price,
-        supply_price: supplyPrice,
-        purchase_options: purchaseOptions,
+        supply_price: isFree ? null : supplyPrice,
+        purchase_options: isFree ? [] : purchaseOptions,
         production_solution: productionSolution,
         product_code: productCode,
         design_type: designType,
         has_ai_starter_kit: hasAiStarterKit,
+        ...artDetails,
         file_path: finalFilePath,
         code_preview: codePreview,
-        license: normalizeLicense(license, priceType === "free"),
+        license: finalLicense,
+        // 없으면 키를 빼서(JSON 직렬화 시 제외) cms.api가 기존 동의 기록을 덮어쓰지 않게 한다.
+        license_acknowledgement: acknowledgement ?? undefined,
       };
 
       const res = await fetch(editId ? `/api/my-products/${editId}` : "/api/my-products", {
@@ -152,6 +180,9 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         if (data?.field) setFieldErrors((prev) => ({ ...prev, [data.field]: data.error }));
+        // 슬러그는 수정할 수 없어 중복(409)이 나면 사용자가 고칠 방법이 없다 — 새 값으로
+        // 바꿔 두어 다시 저장하면 통과하게 한다(신규 등록만; 기존 상품 슬러그는 유지).
+        if (!editId && data?.field === "slug") setSlug(generateRandomSlug());
         throw new Error(data?.error ?? "저장에 실패했습니다.");
       }
 
