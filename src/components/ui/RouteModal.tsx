@@ -78,6 +78,8 @@ export default function RouteModal({ children, ariaLabel, theme = "light" }: Rou
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        // 그 위에 열린 Dialog가 Esc를 처리하므로 라우트 모달까지 같이 닫지 않는다
+        if (document.querySelector('[data-slot="dialog-content"]')) return;
         setOpen(false);
         return;
       }
