@@ -46,6 +46,7 @@ export default function PaymentModal({ orderId, productName, amount, onClose }: 
 
   return (
     <PaymentInstructionModal
+      payoutOrderId={orderId}
       done={done}
       loading={loading}
       onConfirm={handleConfirm}

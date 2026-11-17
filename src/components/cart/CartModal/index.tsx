@@ -17,6 +17,8 @@ import { formatPrice } from "@/lib/utils";
 
 interface BatchOrderState {
   orderIds: string[];
+  // 판매자 입금 계좌를 조회할 유료 주문(전부 무료면 null)
+  payoutOrderId: string | null;
   amount: number;
   itemCount: number;
 }
@@ -81,8 +83,11 @@ export default function CartModal() {
         items: orderItems,
         agreedToWithdrawalNotice,
       });
+      // orderIds는 요청한 items와 같은 순서이므로, 무료 상품 주문은 건너뛰고 유료 첫 주문을 고른다
+      const paidIndex = selectedItems.findIndex((item) => item.price > 0);
       setBatchOrder({
         orderIds: data.orderIds,
+        payoutOrderId: paidIndex >= 0 ? (data.orderIds[paidIndex] ?? null) : null,
         amount: selectedTotal,
         itemCount: selectedItems.length,
       });
@@ -226,6 +231,7 @@ export default function CartModal() {
       {batchOrder && (
         <BatchPaymentModal
           orderIds={batchOrder.orderIds}
+          payoutOrderId={batchOrder.payoutOrderId}
           itemCount={batchOrder.itemCount}
           amount={batchOrder.amount}
           onConfirmed={handleConfirmed}

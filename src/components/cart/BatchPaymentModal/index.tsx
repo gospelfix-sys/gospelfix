@@ -10,6 +10,7 @@ import PaymentAmountBox from "@/components/orders/PaymentAmountBox";
 
 interface BatchPaymentModalProps {
   orderIds: string[];
+  payoutOrderId: string | null;
   itemCount: number;
   amount: number;
   onConfirmed: () => void;
@@ -18,6 +19,7 @@ interface BatchPaymentModalProps {
 
 export function BatchPaymentModal({
   orderIds,
+  payoutOrderId,
   itemCount,
   amount,
   onConfirmed,
@@ -53,6 +55,7 @@ export function BatchPaymentModal({
 
   return (
     <PaymentInstructionModal
+      payoutOrderId={payoutOrderId}
       done={done}
       loading={loading}
       onConfirm={handleConfirm}

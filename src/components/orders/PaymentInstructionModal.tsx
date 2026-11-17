@@ -5,8 +5,11 @@ import { createPortal } from "react-dom";
 import { CheckCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AccountTransferCard from "@/components/orders/AccountTransferCard";
+import { useOrderPayoutAccount } from "@/hooks/useOrderPayoutAccount";
 
 interface PaymentInstructionModalProps {
+  // 판매자 입금 계좌를 조회할 주문 ID(묶음 결제는 판매자가 같으므로 유료 첫 주문). 입금이 필요 없으면 null
+  payoutOrderId: string | null;
   done: boolean;
   loading: boolean;
   onConfirm: () => void;
@@ -16,6 +19,7 @@ interface PaymentInstructionModalProps {
 }
 
 export default function PaymentInstructionModal({
+  payoutOrderId,
   done,
   loading,
   onConfirm,
@@ -23,6 +27,12 @@ export default function PaymentInstructionModal({
   onGoToMypage,
   children,
 }: PaymentInstructionModalProps) {
+  const {
+    account,
+    loading: accountLoading,
+    error: accountError,
+  } = useOrderPayoutAccount(payoutOrderId);
+
   return createPortal(
     <div
       className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-4"
@@ -47,17 +57,26 @@ export default function PaymentInstructionModal({
 
             <h2 className="mb-1 text-center text-lg font-bold text-gray-900">입금 안내</h2>
             <p className="mb-4 text-center text-[13px] text-gray-500">
-              QR 스캔 또는 계좌이체 후 입금 완료 버튼을 눌러주세요
+              판매자 계좌로 직접 입금한 뒤 &lsquo;입금했어요&rsquo;를 눌러주세요
             </p>
 
-            <AccountTransferCard />
+            {payoutOrderId === null ? null : account ? (
+              <AccountTransferCard account={account} />
+            ) : (
+              <div
+                role={accountError ? "alert" : "status"}
+                className="mb-4 rounded-xl border border-gray-100 bg-gray-50 px-4 py-6 text-center text-[13px] text-gray-500"
+              >
+                {accountLoading ? "입금 계좌를 불러오는 중이에요..." : accountError}
+              </div>
+            )}
 
             {children}
 
             <div className="flex flex-col gap-2">
               <Button
                 onClick={onConfirm}
-                disabled={loading}
+                disabled={loading || (payoutOrderId !== null && !account)}
                 className="w-full bg-gf-black text-gf-orange hover:bg-gf-black/90"
                 size="lg"
               >
@@ -80,7 +99,7 @@ export default function PaymentInstructionModal({
             <div>
               <h2 className="text-xl font-bold text-gray-900">입금 알림이 접수되었습니다!</h2>
               <p className="mt-1 text-sm text-gray-500">
-                관리자 확인 후 담당자가 연락드려 제작을 진행합니다.
+                입금이 확인되면 마이페이지에서 진행 상황을 확인할 수 있어요.
               </p>
             </div>
             <Button onClick={onGoToMypage} className="w-full" size="lg">

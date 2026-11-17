@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Camera, Check, Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ACCOUNT_INFO } from "@/lib/paymentAccount";
+import type { SellerTransferAccount } from "@/types/payout.types";
 
-export default function AccountTransferCard() {
+interface AccountTransferCardProps {
+  account: SellerTransferAccount;
+}
+
+// 구매자에게 보여주는 판매자 입금 정보. 회사 계좌가 아니라 상품 판매자의 계좌다.
+export default function AccountTransferCard({ account }: AccountTransferCardProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -17,7 +21,7 @@ export default function AccountTransferCard() {
   }, [copied]);
 
   async function handleCopyAccount() {
-    const digitsOnly = ACCOUNT_INFO.number.replace(/[^0-9]/g, "");
+    const digitsOnly = account.accountNumber.replace(/[^0-9]/g, "");
     try {
       await navigator.clipboard.writeText(digitsOnly);
       setCopied(true);
@@ -28,34 +32,19 @@ export default function AccountTransferCard() {
 
   return (
     <>
-      {/* QR 코드 */}
-      <div className="mb-3 rounded-2xl border border-gray-100 bg-gray-50 p-5">
-        <div className="relative mx-auto h-40 w-40">
-          <Image src="/qr-transfer.png" alt="계좌이체 QR 코드" fill className="object-contain" />
-        </div>
-      </div>
-
-      <div className="mb-4 flex justify-center">
-        <span className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600">
-          <Camera className="h-3.5 w-3.5" />
-          카메라로 스캔하세요
-        </span>
-      </div>
-
-      {/* 송금 정보 */}
       <div className="mb-3 overflow-hidden rounded-xl border border-gray-100">
         <div className="bg-gf-orange py-2.5 text-center text-sm font-bold text-white">
-          송금 정보
+          판매자 입금 정보
         </div>
         <div className="divide-y divide-gray-100 bg-white">
           <div className="flex items-center justify-between px-4 py-3 text-[13px]">
             <span className="text-gray-500">받는 은행</span>
-            <span className="font-bold text-gf-orange">{ACCOUNT_INFO.bank}</span>
+            <span className="font-bold text-gf-orange">{account.bankName}</span>
           </div>
           <div className="flex items-center justify-between gap-2 px-4 py-3 text-[13px]">
             <span className="text-gray-500">계좌번호</span>
             <span className="flex items-center gap-2">
-              <span className="font-mono font-bold text-gray-900">{ACCOUNT_INFO.number}</span>
+              <span className="font-mono font-bold text-gray-900">{account.accountNumber}</span>
               <Button
                 type="button"
                 variant="ghost"
@@ -70,10 +59,17 @@ export default function AccountTransferCard() {
           </div>
           <div className="flex items-center justify-between px-4 py-3 text-[13px]">
             <span className="text-gray-500">예금주</span>
-            <span className="font-bold text-gray-900">{ACCOUNT_INFO.holder}</span>
+            <span className="font-bold text-gray-900">{account.accountHolder}</span>
           </div>
         </div>
       </div>
+
+      <ul className="mb-4 list-disc space-y-1 pl-4 text-[11px] leading-relaxed text-gray-500">
+        <li>이 계좌는 판매자가 등록한 계좌이며, 가스펄픽스 회사 계좌가 아닙니다.</li>
+        <li>입금자명에 주문번호를 함께 적어주세요.</li>
+        <li>이 계좌 정보는 이 주문의 입금에만 쓰고, 다른 사람에게 알리지 마세요.</li>
+        <li>가스펄픽스를 거치지 않은 거래는 주문 내역에 남지 않아 확인과 환불 안내가 어려워요.</li>
+      </ul>
     </>
   );
 }

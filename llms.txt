@@ -78,7 +78,9 @@ status로, 그 외는 `console.error("[api/xxx]")` + 500(한국어 메시지). h
 ## 결제 (계좌이체 + 관리자 수동 확인)
 
 구매 → `POST /api/orders/create`(또는 장바구니 일괄 `create-batch`) → 계좌이체 안내 모달(은행·계좌·예금주는
-`NEXT_PUBLIC_PAYMENT_*`) → "입금했어요" → `POST /api/orders/notify-payment`는 입금 **신고**만 합니다.
+주문 생성 후 `GET /api/orders/[orderId]/payout-account`로 해당 상품 **판매자가 등록한 계좌**를 그 구매자에게만
+조회) → "입금했어요" → `POST /api/orders/notify-payment`는 입금 **신고**만 합니다. 이 방식은 cms.api의
+`SELLER_DIRECT_TRANSFER_ENABLED=true`일 때만 동작하며, 꺼져 있으면 유료 주문 생성이 막힙니다.
 승인(status → paid)은 cms.api의 관리자 앱에서 수동으로 처리하고, 승인 후 `downloads/[productId]`로 내려받습니다.
 
 ## 상태·타입·훅
@@ -97,9 +99,6 @@ KAKAO_REDIRECT_URI=            # 카카오 콜백 URL (/api/auth/kakao/callback)
 GOOGLE_CLIENT_ID=              # 구글 OAuth 웹 클라이언트 ID (Secret은 cms.api에만 둔다)
 GOOGLE_REDIRECT_URI=           # 구글 콜백 URL (/api/auth/google/callback)
 NEXT_PUBLIC_SITE_URL=          # 사이트 절대 URL (OG 메타데이터 등)
-NEXT_PUBLIC_PAYMENT_BANK=      # 계좌이체 안내: 은행명
-NEXT_PUBLIC_PAYMENT_ACCOUNT=   # 계좌이체 안내: 계좌번호
-NEXT_PUBLIC_PAYMENT_HOLDER=    # 계좌이체 안내: 예금주
 NEXT_PUBLIC_POSTHOG_KEY=       # 선택, 쿠키 동의 후에만 초기화
 NEXT_PUBLIC_POSTHOG_HOST=
 ```
