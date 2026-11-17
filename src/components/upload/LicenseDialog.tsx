@@ -51,7 +51,7 @@ const segmentText = (segment: GuideSegment) =>
 // 특정하므로, 아래 ACKNOWLEDGEMENTS·SERVICE_DELIVERY_ACKNOWLEDGEMENT(펼침 안내 포함)나
 // LICENSE_OPTIONS 설명을 바꾸면 반드시 변경일로 올린다. 같은 날 다시 바꾸면 "-2", "-3"을 붙인다
 // (cms.api는 40자 이하 문자열만 받는다). 과거 문구는 git 이력으로 버전과 대조한다.
-export const LICENSE_ACKNOWLEDGEMENT_VERSION = "2026-11-17-3";
+export const LICENSE_ACKNOWLEDGEMENT_VERSION = "2026-11-17-4";
 
 const ACKNOWLEDGEMENTS: Acknowledgement[] = [
   {
@@ -118,7 +118,10 @@ const SERVICE_DELIVERY_ACKNOWLEDGEMENT: Acknowledgement = {
     ],
     [
       "결과물 저작권은 판매자에게 남고, 구매자는 ",
-      { strong: "자기 용도로 기간 제한 없이 사용·수정할 수 있는 비독점 이용권" },
+      {
+        strong:
+          "개인 용도는 물론 자기 사업 용도(영리 목적 포함)로도 기간 제한 없이 사용·수정할 수 있는 비독점 이용권",
+      },
       "을 받습니다(재판매·재배포·재양도 불가). 상품 설명의 '이용 범위'는 이 기준과 어긋나지 않게 적어 주세요.",
     ],
     [
