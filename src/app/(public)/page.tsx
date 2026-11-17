@@ -52,7 +52,7 @@ export default async function LayerPage({ searchParams }: LayerPageProps) {
       <HomeHero />
 
       {/* ── 모든 템플릿 갤러리 ── */}
-      <section id="gallery" className="scroll-mt-20 px-6 pb-16 lg:px-10">
+      <section id="gallery" className="scroll-mt-20 px-6 pb-24 lg:px-10">
         <h2 className="sr-only">
           {currentCategory === "all"
             ? "모든 디자인 소재"

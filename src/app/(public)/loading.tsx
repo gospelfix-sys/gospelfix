@@ -16,7 +16,7 @@ export default function LayerLoading() {
     <LayerShell>
       <HomeHero />
 
-      <section id="gallery" className="scroll-mt-20 px-6 pb-16 lg:px-10">
+      <section id="gallery" className="scroll-mt-20 px-6 pb-24 lg:px-10">
         <div className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
           <Suspense fallback={null}>
             <SortTabs />
