@@ -84,6 +84,7 @@ Client Component ─ axiosInstance ─┘
 - 인라인 `style=` 금지 → `className`만. 조건부/병합은 `cn()`(`lib/utils.ts`, clsx+tailwind-merge). 임의값은 Tailwind arbitrary value 또는 `tailwind.config.ts` 토큰(`text-gf-orange` 등).
 - **인터랙션·모션·움직이는 모든 UI는 `motion` 라이브러리(`motion/react`)로 구현**한다. CSS `@keyframes`/`tailwindcss-animate`로 새 애니메이션을 만들지 않는다 (Tailwind 3.4라 `data-open:animate-in` 같은 v4 문법은 CSS가 생성되지 않음). 기존 CSS 애니메이션은 해당 코드를 수정할 때 함께 옮기고, 일괄 리팩터링은 요청 시에만. motion은 `transform`을 인라인으로 쓰므로 Tailwind `-translate-*`와 충돌하니 위치 잡기는 flex 래퍼에 맡긴다. 기준 구현은 `components/ui/dialog.tsx`.
 - **UI 작업 중 motion 인터랙션·움직임에 해당하는 요청(등장/퇴장, 전환, 호버·탭 피드백, 로딩 표시, 스크롤 연동, 기존 CSS 애니메이션의 motion 이전 등)이 있으면 반드시 `motion-designer` 에이전트(`.claude/agents/motion-designer.md`)를 사용한다.** 메인 세션이 직접 구현하지 않는다. 컴포넌트 작업에 모션이 섞여 있으면 구조/스타일은 `component-writer`, 모션 부분은 `motion-designer`가 맡는다.
+- **저작권·라이선스(상품 등록 폼의 "저작권 및 라이선스", `LICENSE_OPTIONS`, CC/상용 라이선스 정책, 이용약관 제9조, 환불·청약철회 문구, 제3자 소재·코드 미리보기 노출 범위)에 관한 작업이나 지시는 반드시 `license-counsel` 에이전트(`.claude/agents/license-counsel.md`)를 호출해서 처리한다.** 메인 세션이 직접 구현하지 않는다. 민감하거나 법적으로 문제가 될 것 같은 기능·정책이 있으면 구현 전에 사용자에게 먼저 알린다(에이전트 보고의 `⚠️ 법적 리스크 사전 고지`를 그대로 전달).
 - **`asChild` 사용 금지** (shadcn base-nova는 `@base-ui/react` 기반). 링크 버튼은 `<Link className={buttonVariants({variant})}>`. 토스트는 `sonner`. `components/ui/form.tsx`는 수작업 구현.
 - `any` 금지, props interface 필수, `types/` 재사용. 주석은 한국어, 식별자는 영어.
 - 서버 컴포넌트 기본, 훅/핸들러/Recoil/브라우저 API가 필요할 때만 `"use client"`. 위젯급 UI를 `page.tsx`에 인라인하지 말고 `components/`로 분리. 같은 JSX가 2곳 이상 반복되면 추출.
@@ -100,5 +101,5 @@ Client Component ─ axiosInstance ─┘
 - 커밋 요청 시 `code-reviewer` 에이전트가 먼저 APPROVED를 내야 한다. `git-commit-pusher` 에이전트는 Bash가 없어 실제 커밋을 못 한다 → 리뷰(APPROVED) 후 메인 세션이 직접 커밋/푸시하고 `git log`로 검증.
 - `pkill -f "next dev"`는 형제 저장소(cms.api) 서버까지 죽인다 → `lsof -i :포트`로 PID 지정.
 - 여러 저장소를 오갈 때 `pwd`로 cwd를 확인한 뒤 tsc/lint 실행.
-- `.claude/agents/`에는 핵심 4개(`code-reviewer`, `component-writer`, `motion-designer`, `git-commit-pusher`)와 기획용 3개(`development-planner`, `prd-generator`, `prd-validator`; 뒤 둘은 `agents/docs/` 아래, 에이전트 메모리 공통 가이드는 `rules/agent-memory-guide.md`)가 있다(과거 모노레포 시절 에이전트는 삭제). 어긋나는 내용이 보이면 이 문서와 `.claude/rules/`를 우선한다.
+- `.claude/agents/`에는 핵심 5개(`code-reviewer`, `component-writer`, `motion-designer`, `license-counsel`, `git-commit-pusher`)와 기획용 3개(`development-planner`, `prd-generator`, `prd-validator`; 뒤 둘은 `agents/docs/` 아래, 에이전트 메모리 공통 가이드는 `rules/agent-memory-guide.md`)가 있다(과거 모노레포 시절 에이전트는 삭제). 어긋나는 내용이 보이면 이 문서와 `.claude/rules/`를 우선한다.
 - `.claude/memory/MEMORY.md`에 프로젝트 히스토리/결정 사항 인덱스가 있다. 날짜가 박힌 `project_*.md`는 당시 기준이며 최신 리네임/스왑 항목을 먼저 확인할 것.
