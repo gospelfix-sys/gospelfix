@@ -6,4 +6,5 @@
 - [Inline text rolling pitfalls](project_inline_text_rolling_pitfalls.md) — overflow-clip로 baseline 유지, reduced motion variants 키 불일치 hydration 경고, grid sizer
 - [Quote floating CTA motion](project_quote_floating_cta_motion.md) — 범위 밖 reduced motion은 훅 분기, group-hover→variants 전파, hover 검증은 mouse.move
 - [Reelsfactory motion](project_reelsfactory_motion.md) — whileInView 프리셋 위치, style= 없이 useAnimate 포인터 추적, 글자 reveal a11y, 스크롤 복원 착시
+- [layoutId vs scroll lock](project_layoutid_scroll_lock_pitfalls.md) — 모달 닫힘 시 body fixed 해제로 scrollY만큼 세로 보간, 모달 중 searchParams 소실
 - [Loading skeleton structure](project_loading_skeleton_structure.md) — 정적 Skeleton+SkeletonPulse 구조, Preload 트릭 실패, LayerShellLoading fallback
