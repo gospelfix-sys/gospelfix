@@ -8,7 +8,7 @@ import { usePurchaseOption } from "@/components/products/PurchaseOptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import type { ProductPriceState } from "@/lib/discount";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product.types";
 
 interface ProductOptionsSectionProps {
@@ -106,7 +106,11 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
       <div
         role="radiogroup"
         aria-label="구매항목"
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+        className={cn(
+          "grid grid-cols-1 gap-4",
+          // 옵션이 하나뿐이면 반쪽 카드가 어색하므로 전체 폭으로 펼친다
+          purchaseOptions.length > 1 && "sm:grid-cols-2",
+        )}
       >
         {purchaseOptions.map((option) => (
           <OptionToggle
