@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Info } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouteModalClose } from "@/components/ui/RouteModal";
 import { cn } from "@/lib/utils";
@@ -14,12 +15,26 @@ interface ProductVisitNavProps {
 // 디자인 토큰(rounded-[28px] bg-black + shadow, 오렌지 CTA, 흰 텍스트 로고)을 재사용해
 // TopBar가 숨겨지는 /detail 경로에서도 같은 브랜드 아이덴티티를 유지한다.
 export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
-  // RouteModal(인터셉트 모달) 안에서는 뒤로가기 버튼이 popup 최상위에 absolute로 있다.
+  // RouteModal(인터셉트 모달) 안에서는 닫기(X) 버튼이 popup 최상위에 absolute로 있다.
   // 이 nav가 그 아래 overflow-y-auto 스크롤 컨테이너 안에서 sticky로 있으면 기준
   // containing block이 서로 달라 bottom 값을 아무리 맞춰도 정확히 정렬되지 않는다.
-  // 모달 안에서는 fixed로 바꿔 뒤로가기 버튼과 같은 containing block(popup의
+  // 모달 안에서는 fixed로 바꿔 닫기 버튼과 같은 containing block(popup의
   // motion.div — transform이 걸려 fixed 자손의 기준점이 됨)을 공유하게 한다.
-  const isInModal = useRouteModalClose() !== null;
+  const closeModal = useRouteModalClose();
+  const isInModal = closeModal !== null;
+  const router = useRouter();
+
+  // 모달은 exit 애니메이션을 거치는 닫기 함수를 써야 한다. 풀 페이지로 직접 진입해 이력이 없으면
+  // router.back()이 아무 일도 안 하므로 홈으로 보낸다.
+  function handleBack() {
+    if (closeModal) {
+      closeModal();
+    } else if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  }
 
   function scrollToProductInfo() {
     document.getElementById("product-info")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -66,6 +81,17 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
             Visit Site
           </a>
         )}
+
+        <div className="h-6 w-px shrink-0 bg-white/20" />
+
+        <Button
+          type="button"
+          onClick={handleBack}
+          aria-label="뒤로가기"
+          className="size-11 shrink-0 rounded-md border border-white/20 bg-transparent p-0 text-white/60 shadow-none hover:bg-transparent hover:text-white"
+        >
+          <ArrowLeft className="size-4" />
+        </Button>
       </div>
     </nav>
   );
