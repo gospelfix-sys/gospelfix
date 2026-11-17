@@ -12,12 +12,14 @@ const NAV_ITEMS = [
   { href: "/mypage", label: "프로필", icon: User },
   { href: "/mypage/orders", label: "구매 / 혜택", icon: Receipt },
   { href: "/mypage/reviews", label: "작성한 댓글", icon: MessageSquare },
-  { href: "/mypage/settings", label: "설정", icon: Settings },
 ];
 
 // seller/admin에게만 노출 — 상품 CRUD는 판매자 셀프서비스 기능이라 일반 회원에게는
 // 의미가 없다(project_product_crud_migration_to_mypage 메모리 참고).
 const SELLER_NAV_ITEM = { href: "/mypage/products", label: "내 상품", icon: Package };
+
+// "설정"은 항상 맨 아래에 둔다 — 판매자 전용 항목이 그 위에 끼어들도록 분리.
+const SETTINGS_NAV_ITEM = { href: "/mypage/settings", label: "설정", icon: Settings };
 
 interface MypageSidebarProps {
   canSell?: boolean;
@@ -25,7 +27,9 @@ interface MypageSidebarProps {
 
 export function MypageSidebar({ canSell = false }: MypageSidebarProps) {
   const pathname = usePathname();
-  const navItems = canSell ? [...NAV_ITEMS, SELLER_NAV_ITEM] : NAV_ITEMS;
+  const navItems = canSell
+    ? [...NAV_ITEMS, SELLER_NAV_ITEM, SETTINGS_NAV_ITEM]
+    : [...NAV_ITEMS, SETTINGS_NAV_ITEM];
 
   return (
     <nav
@@ -45,7 +49,7 @@ export function MypageSidebar({ canSell = false }: MypageSidebarProps) {
             className={cn(
               "flex shrink-0 items-center gap-2.5 rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-colors",
               active
-                ? "bg-primary/10 text-primary"
+                ? "bg-white text-primary"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
