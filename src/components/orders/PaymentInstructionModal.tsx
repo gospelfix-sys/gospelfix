@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { createPortal } from "react-dom";
 import { CheckCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import AccountTransferCard from "@/components/orders/AccountTransferCard";
 import { useOrderPayoutAccount } from "@/hooks/useOrderPayoutAccount";
 
@@ -33,15 +33,10 @@ export default function PaymentInstructionModal({
     error: accountError,
   } = useOrderPayoutAccount(payoutOrderId);
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-4"
-      onClick={done ? undefined : onClose}
-    >
-      <div
-        className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+  return (
+    // 완료 화면·요청 처리 중에는 바깥 클릭·Esc로 닫히지 않게 해 마이페이지 안내 버튼만 남긴다
+    <Dialog open onOpenChange={(next) => !next && !done && !loading && onClose()}>
+      <DialogContent showCloseButton={false} className="gap-0 p-6 sm:max-w-sm">
         {!done ? (
           <>
             <Button
@@ -55,10 +50,12 @@ export default function PaymentInstructionModal({
               <X className="h-5 w-5" />
             </Button>
 
-            <h2 className="mb-1 text-center text-lg font-bold text-gray-900">입금 안내</h2>
-            <p className="mb-4 text-center text-[13px] text-gray-500">
+            <DialogTitle className="mb-1 text-center text-lg font-bold text-gray-900">
+              입금 안내
+            </DialogTitle>
+            <DialogDescription className="mb-4 text-center text-[13px] text-gray-500">
               판매자 계좌로 직접 입금한 뒤 &lsquo;입금했어요&rsquo;를 눌러주세요
-            </p>
+            </DialogDescription>
 
             {payoutOrderId === null ? null : account ? (
               <AccountTransferCard account={account} />
@@ -97,18 +94,19 @@ export default function PaymentInstructionModal({
           <div className="flex flex-col items-center gap-4 py-4 text-center">
             <CheckCircle className="h-16 w-16 text-green-500" />
             <div>
-              <h2 className="text-xl font-bold text-gray-900">입금 알림이 접수되었습니다!</h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <DialogTitle className="text-xl font-bold text-gray-900">
+                입금 알림이 접수되었습니다!
+              </DialogTitle>
+              <DialogDescription className="mt-1 text-sm text-gray-500">
                 입금이 확인되면 마이페이지에서 진행 상황을 확인할 수 있어요.
-              </p>
+              </DialogDescription>
             </div>
             <Button onClick={onGoToMypage} className="w-full" size="lg">
               마이페이지 바로가기
             </Button>
           </div>
         )}
-      </div>
-    </div>,
-    document.body,
+      </DialogContent>
+    </Dialog>
   );
 }

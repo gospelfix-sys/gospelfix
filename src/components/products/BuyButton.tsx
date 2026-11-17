@@ -12,6 +12,7 @@ import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
 import { useAuth } from "@/hooks/useAuth";
 import { DownloadButton } from "@/components/products/DownloadButton";
 import PaymentPreparingDialog from "@/components/orders/PaymentPreparingDialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { isPaymentPreparingError } from "@/lib/paymentPreparing";
 import PaymentModal from "./PaymentModal";
 
@@ -39,12 +40,13 @@ export function BuyButton({
   const [orderId, setOrderId] = useState<string | null>(null);
   const [alreadyPurchased, setAlreadyPurchased] = useState(false);
   const [freeOrderCompleted, setFreeOrderCompleted] = useState(false);
+  // 닫힘 애니메이션 동안 팝업 내용이 바뀌지 않도록 종류 플래그는 유지하고 열림 상태만 끈다
+  const [completionOpen, setCompletionOpen] = useState(false);
   const [preparingNotice, setPreparingNotice] = useState(false);
   const isRequestingRef = useRef(false);
 
   function closeCompletionModal() {
-    setAlreadyPurchased(false);
-    setFreeOrderCompleted(false);
+    setCompletionOpen(false);
   }
 
   async function handleClick() {
@@ -70,6 +72,8 @@ export function BuyButton({
         try {
           await axiosInstance.post("/orders/notify-payment", { orderId: newOrderId });
           setFreeOrderCompleted(true);
+          setAlreadyPurchased(false);
+          setCompletionOpen(true);
         } catch {
           alert("주문은 생성되었지만 완료 처리에 실패했습니다. 마이페이지에서 다시 시도해주세요.");
           router.push("/mypage");
@@ -89,6 +93,8 @@ export function BuyButton({
         // 상태 코드만으로 판단하지 않고 서버가 내려준 메시지로 구분한다.
         if (error.response.status === 409 && data?.error === "이미 구매한 상품입니다.") {
           setAlreadyPurchased(true);
+          setFreeOrderCompleted(false);
+          setCompletionOpen(true);
           return;
         }
         alert(data?.error ?? "주문 생성에 실패했습니다.");
@@ -123,41 +129,33 @@ export function BuyButton({
         />
       )}
 
-      {(alreadyPurchased || freeOrderCompleted) && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
-          onClick={closeCompletionModal}
-        >
-          <div
-            className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <CheckCircle className="mx-auto mb-3 h-12 w-12 text-green-500" />
-            <h2 className="mb-1 text-lg font-bold text-gray-900">
-              {alreadyPurchased ? "이미 구매한 상품입니다" : "무료 상품을 받았습니다"}
-            </h2>
-            <p className="mb-5 text-sm text-gray-500">
-              {freeOrderCompleted
-                ? "바로 다운로드하거나 마이페이지 구매 / 혜택에서 다시 받을 수 있습니다."
-                : "마이페이지에서 진행 상황을 확인하실 수 있습니다."}
-            </p>
-            <div className="flex flex-col gap-2">
-              {freeOrderCompleted && <DownloadButton productId={productId} hasFile />}
-              <Link href="/mypage/orders" className={cn(buttonVariants({ size: "lg" }), "w-full")}>
-                마이페이지에서 확인하기
-              </Link>
-              <Button
-                variant="ghost"
-                size="lg"
-                className="w-full text-gray-500"
-                onClick={closeCompletionModal}
-              >
-                닫기
-              </Button>
-            </div>
+      <Dialog open={completionOpen} onOpenChange={(next) => !next && closeCompletionModal()}>
+        <DialogContent showCloseButton={false} className="gap-0 p-6 text-center sm:max-w-sm">
+          <CheckCircle className="mx-auto mb-3 h-12 w-12 text-green-500" />
+          <DialogTitle className="mb-1 text-lg font-bold text-gray-900">
+            {alreadyPurchased ? "이미 구매한 상품입니다" : "무료 상품을 받았습니다"}
+          </DialogTitle>
+          <DialogDescription className="mb-5 text-sm text-gray-500">
+            {freeOrderCompleted
+              ? "바로 다운로드하거나 마이페이지 구매 / 혜택에서 다시 받을 수 있습니다."
+              : "마이페이지에서 진행 상황을 확인하실 수 있습니다."}
+          </DialogDescription>
+          <div className="flex flex-col gap-2">
+            {freeOrderCompleted && <DownloadButton productId={productId} hasFile />}
+            <Link href="/mypage/orders" className={cn(buttonVariants({ size: "lg" }), "w-full")}>
+              마이페이지에서 확인하기
+            </Link>
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full text-gray-500"
+              onClick={closeCompletionModal}
+            >
+              닫기
+            </Button>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
