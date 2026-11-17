@@ -94,22 +94,41 @@ export interface Product extends ArtDetailsStored {
 interface LicenseOption {
   value: string;
   label: string;
+  // 판매자(등록 모달)와 구매자(상세페이지 안내)가 함께 보는 설명. 다른 옵션을 보는 화면에도
+  // 나란히 나오므로 "이 상품은"처럼 특정 상품을 가리키는 표현을 쓰지 않는다.
   description: string;
+  // 등록 모달에서만 보이는 판매자용 선택 안내. 구매자에게는 의미가 없어 description과 분리한다.
+  sellerNote?: string;
 }
 
 // 상품 등록/수정 폼("저작권 및 라이선스" 다이얼로그)과 상세페이지 정보 카드가 공용으로
 // 참조하는 라이선스 구분 목록. 한쪽에서만 정의하면 다른 쪽이 값→라벨 매핑을 못 찾는다.
-// 순서는 다이얼로그 노출 순서이기도 하다(유료: 상용 라이선스 / 무료: CC BY-NC → CC BY → CC BY-NC-ND).
+// 순서는 다이얼로그 노출 순서이기도 하다
+// (유료: 상용 라이선스 → 제작·납품 서비스 / 무료: CC BY-NC → CC BY → CC BY-NC-ND).
 // 판매자는 이 설명을 읽고 "선택한 라이선스를 이해했습니다"에 동의하므로, 설명을 바꾸면
 // LicenseDialog의 LICENSE_ACKNOWLEDGEMENT_VERSION도 올린다.
+// 값을 추가하면 cms.api의 moda_products_license_check 제약과 타입·OpenAPI enum도 함께 바꿔야
+// 저장이 된다(004_add_service_delivery_license).
 export const COMMERCIAL_LICENSE = "all-rights-reserved";
+
+// 파일·코드를 파는 것이 아니라 구매자 자료로 결과물을 만들어 납품하는 "용역" 상품 구분.
+// 공개 소스(MIT 등)로 만든 결과물에 상용 라이선스(이용 제한)를 걸면 원 라이선스와 충돌하므로,
+// 이런 상품은 코드 판매가 아니라 제작 서비스의 대가로 판다(사용자 결정, 2026-11-17).
+// 납품 결과물의 권리는 양도가 아니라 이용허락이 기본이다(사용자 결정, 2026-11-17).
+export const SERVICE_DELIVERY_LICENSE = "service-delivery";
+
+// 유료 상품에서 고를 수 있는 구분. 정규화 시 기본으로 되돌아가는 값은 COMMERCIAL_LICENSE뿐이며
+// 제작·납품 서비스는 판매자가 직접 고를 때만 지정된다(기존 상품을 임의로 바꾸지 않기 위해).
+const PAID_LICENSES: readonly string[] = [COMMERCIAL_LICENSE, SERVICE_DELIVERY_LICENSE];
 
 export const LICENSE_OPTIONS: LicenseOption[] = [
   {
     // value는 기존 DB 값("all-rights-reserved")을 유지한다 — 표시명만 "상용 라이선스"로 바꿨다.
     // 템플릿·이미지·음악·영상 등 모든 장르에 공통으로 쓰이므로 "단순 복사/수정 포함" 같은
     // 특정 장르의 구매항목명을 넣지 않고, 구체적 이용 범위는 구매 옵션 설명에 맡긴다.
-    // 완성 작품을 파는 마켓이라 "의뢰받아 납품" 조항은 넣지 않는다(사용자 판단, 2026-11-17).
+    // 이 설명에 "구매자가 의뢰받아 자기 고객에게 납품" 조항은 넣지 않는다(완성 작품 마켓,
+    // 사용자 판단 2026-11-17). 이는 구매자의 2차 이용 얘기이고, 판매자가 직접 만들어 납품하는
+    // 용역 상품은 별도 구분인 SERVICE_DELIVERY_LICENSE로 다룬다 — 둘을 혼동하지 않는다.
     // 구매자가 자기 고객의 결과물에 쓸 수 있는지도 사용처와 함께 구매 옵션 설명이 정한다.
     // 입점형이라 범위 확장(재판매·재배포 포함)을 허락할 권한은 판매자에게 있다. 그래서 "어느
     // 경우에도 금지"라는 플랫폼 단정 대신 "이 라이선스로는 불가 + 넘는 이용은 판매자의 별도
@@ -118,6 +137,21 @@ export const LICENSE_OPTIONS: LicenseOption[] = [
     label: "GospelFix 상용 라이선스",
     description:
       "저작권자가 모든 권리를 보유하고, 구매자에게는 구매한 항목(구매 옵션)에 적힌 이용 범위 안에서만 이용을 허락합니다. 사용 횟수, 사용처(프로젝트·매체·용도), 수정·편집 등 2차 가공 가능 여부는 상품 페이지의 구매 옵션 설명을 따릅니다. 이 라이선스로는 재판매, 재배포, 파일 단독 공유를 할 수 없으며, 구매한 범위를 넘어 복제하거나 다른 용도로 쓰려면 판매자에게 별도로 허락을 받아야 합니다. 허락 없이 범위를 넘어 이용하면 저작권 침해가 될 수 있습니다.",
+  },
+  {
+    // 결과물 권리의 기본 원칙은 "판매자 저작권 유지 + 구매자 비독점·영구 이용권"이다(사용자
+    // 확정, 2026-11-17). 별도 약정이 없으면 저작권은 만든 사람에게 남으므로 "구매자 소유"로 읽히는
+    // 표현은 쓰지 않고, 양도는 판매자와의 별도 서면 합의로만 안내한다.
+    // "기간 제한 없음"은 결과물을 쓸 권리의 기간이다. 웹 주소 유지(호스팅) 같은 운영 서비스 기간은
+    // 이와 별개라 상품 설명에 맡긴다 — 둘을 섞으면 "영구라더니 주소가 닫혔다"는 분쟁이 생긴다.
+    // MIT 등 공개 소스 부분은 판매자가 이용을 제한할 수 없으므로 원 라이선스를 따른다고 따로 적는다.
+    // 청약철회(전자상거래법 제17조) 문구도 여기 넣지 않는다 — 상품마다 달라 상품 설명이 정한다.
+    value: SERVICE_DELIVERY_LICENSE,
+    label: "제작·납품 서비스",
+    description:
+      "파일·코드를 파는 상품이 아니라, 판매자가 구매자가 보낸 자료로 결과물을 만들어 납품하는 서비스입니다. 결과물의 저작권은 판매자에게 있고, 구매자는 납품받은 결과물을 자기 용도로 기간 제한 없이 사용하고 수정할 수 있습니다(비독점 이용권). 결과물을 재판매·재배포하거나 이 권리를 다른 사람에게 넘길 수는 없으며, 저작권 양도는 판매자와 별도로 서면 합의한 경우에만 이루어집니다. 구매자가 보낸 자료(사진·글·로고 등)의 권리는 구매자에게 있고, 판매자는 이 자료를 주문 제작·납품에만 쓰며 포트폴리오 공개는 구매자가 동의한 경우에만 합니다. 결과물에 쓰인 공개 소스(MIT 등) 부분은 각 라이선스 조건을 따릅니다. 납품 범위와 방법, 작업 기간, 수정 횟수, 웹 주소 유지 등 운영 기간, 원본 파일 제공 여부는 상품 설명과 구매 옵션을 따릅니다.",
+    sellerNote:
+      "파일·코드를 내려받게 하는 상품에는 고르지 마세요. 그런 상품은 상용 라이선스를 선택해야 합니다. 결과물 저작권은 판매자에게 남고 구매자에게는 이용권을 줍니다. 저작권을 넘겨야 하는 주문은 구매자와 별도로 서면 합의하세요.",
   },
   {
     value: "cc-by-nc",
@@ -139,9 +173,12 @@ export const LICENSE_OPTIONS: LicenseOption[] = [
   },
 ];
 
-// 라이선스 선택 규칙: 유료는 상용 라이선스만, 무료는 CC 3종 중에서 직접 선택(기본값 없음 = "").
+// 라이선스 선택 규칙: 유료는 상용 라이선스 또는 제작·납품 서비스, 무료는 CC 3종 중에서 직접
+// 선택(기본값 없음 = ""). 제작·납품은 대가를 받는 용역이라 무료 상품에는 쓰지 않는다.
+// 목록에 없는 값(빈 값 포함)은 어느 쪽에서도 허용하지 않는다.
 export function isLicenseAllowed(license: string, isFree: boolean): boolean {
-  return isFree ? license !== COMMERCIAL_LICENSE : license === COMMERCIAL_LICENSE;
+  if (!LICENSE_OPTIONS.some((option) => option.value === license)) return false;
+  return isFree ? !PAID_LICENSES.includes(license) : PAID_LICENSES.includes(license);
 }
 
 export function getLicenseLabel(value?: string | null): string | null {

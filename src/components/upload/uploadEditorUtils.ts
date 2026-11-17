@@ -46,10 +46,12 @@ export function createEmptyCodePreviewItem(): ProductCodePreviewItem {
   return { id: createId(), label: "", code: "" };
 }
 
-// 유료 상품은 상용 라이선스만, 무료 상품은 CC 라이선스만 허용한다(CC는 철회가 불가능해 유료
-// 상품에 부여하면 구매자의 재배포가 합법이 된다). 가격 토글뿐 아니라 기존 상품 로드/라이선스
-// 확정/최종 제출 시점에도 동일하게 강제해야 편집 흐름을 통해 위반 상태가 재생산되지 않는다.
-// 무료로 바뀔 때는 기본값 없이 비워 판매자가 직접 고르게 한다.
+// 유료 상품은 상용 라이선스·제작·납품 서비스만, 무료 상품은 CC 라이선스만 허용한다(CC는 철회가
+// 불가능해 유료 상품에 부여하면 구매자의 재배포가 합법이 된다). 가격 토글뿐 아니라 기존 상품
+// 로드/라이선스 확정/최종 제출 시점에도 동일하게 강제해야 편집 흐름을 통해 위반 상태가 재생산되지
+// 않는다. 무료로 바뀔 때는 기본값 없이 비워 판매자가 직접 고르게 한다.
+// 유료 쪽 대체값은 항상 상용 라이선스다 — 이미 허용된 값(기존 상용 라이선스 상품 포함)은 그대로
+// 두므로, 제작·납품 서비스로 자동 전환되는 경우는 없다(판매자가 모달에서 직접 골라야 한다).
 export function normalizeLicense(license: string, isFree: boolean): string {
   if (isLicenseAllowed(license, isFree)) return license;
   return isFree ? "" : COMMERCIAL_LICENSE;

@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { normalizeLicense } from "@/components/upload/uploadEditorUtils";
 import {
-  COMMERCIAL_LICENSE,
   isLicenseAllowed,
   LICENSE_OPTIONS,
+  SERVICE_DELIVERY_LICENSE,
   type LicenseAcknowledgement,
 } from "@/types/product.types";
 import { cn } from "@/lib/utils";
@@ -48,9 +48,10 @@ const segmentText = (segment: GuideSegment) =>
 // 회사의 책임 범위나 처리 절차는 약관·운영 정책에서 정하므로 이 안내 문구에는 적지 않는다.
 //
 // 동의 기록에 함께 저장되는 안내 문구 버전. 판매자가 "어떤 문구에 동의했는지"를 버전으로
-// 특정하므로, 아래 ACKNOWLEDGEMENTS(펼침 안내 포함)나 LICENSE_OPTIONS 설명을 바꾸면 반드시
-// 변경일로 올린다. 과거 문구는 git 이력으로 버전과 대조한다.
-export const LICENSE_ACKNOWLEDGEMENT_VERSION = "2026-11-17";
+// 특정하므로, 아래 ACKNOWLEDGEMENTS·SERVICE_DELIVERY_ACKNOWLEDGEMENT(펼침 안내 포함)나
+// LICENSE_OPTIONS 설명을 바꾸면 반드시 변경일로 올린다. 같은 날 다시 바꾸면 "-2", "-3"을 붙인다
+// (cms.api는 40자 이하 문자열만 받는다). 과거 문구는 git 이력으로 버전과 대조한다.
+export const LICENSE_ACKNOWLEDGEMENT_VERSION = "2026-11-17-3";
 
 const ACKNOWLEDGEMENTS: Acknowledgement[] = [
   {
@@ -95,6 +96,54 @@ const ACKNOWLEDGEMENTS: Acknowledgement[] = [
   { text: "선택한 라이선스를 이해했습니다." },
 ];
 
+// 제작·납품 서비스를 고를 때만 추가로 받는 확인. 이 구분은 이용 조건을 상품 설명·구매 옵션에
+// 위임하므로, 설명이 비어 있으면 조건이 모호해져 구매자에게 유리하게 해석되거나(약관규제법
+// 제5조②, 일반 지식 기반) 청약철회 제한을 주장할 수 없게 된다. 용역은 제공이 시작되면 철회가
+// 제한될 수 있지만(전자상거래법 제17조②5호), 그 사실을 미리 명확히 표시해야 효력이 있다.
+// 판매자가 등록 시점에 조건을 적었는지 스스로 확인하게 한다 — 환불 문구 자체를 대신 써 주지 않는다.
+// 결과물 권리는 "판매자 저작권 유지 + 구매자 비독점·영구 이용권"이 기본이라(2026-11-17 확정)
+// 판매자가 본문 '이용 범위'를 이 기준과 어긋나게 적지 않도록 함께 확인받는다.
+const SERVICE_DELIVERY_ACKNOWLEDGEMENT: Acknowledgement = {
+  text: "제작·납품 조건과 결과물 이용 범위를 상품 설명이나 구매 옵션에 적었습니다.",
+  guide: [
+    [
+      "파일·코드를 내려받게 하는 상품이라면 이 구분이 아니라 ",
+      { strong: "상용 라이선스" },
+      "를 선택해 주세요.",
+    ],
+    [
+      "구매자가 보내야 할 자료, ",
+      { strong: "납품 범위와 방법" },
+      ", 작업 기간(언제부터 세는지), 수정 횟수를 적어 주세요.",
+    ],
+    [
+      "결과물 저작권은 판매자에게 남고, 구매자는 ",
+      { strong: "자기 용도로 기간 제한 없이 사용·수정할 수 있는 비독점 이용권" },
+      "을 받습니다(재판매·재배포·재양도 불가). 상품 설명의 '이용 범위'는 이 기준과 어긋나지 않게 적어 주세요.",
+    ],
+    [
+      "결과물을 쓸 권리와 별개로, ",
+      { strong: "웹 주소 유지 기간 같은 운영 서비스 기간" },
+      "과 원본 파일 제공 여부를 따로 적어 주세요.",
+    ],
+    [
+      "저작권 양도는 기본이 아닙니다. 구매자가 저작권을 넘겨받길 원하면 ",
+      { strong: "구매자와 별도로 서면 합의" },
+      "해 주세요.",
+    ],
+    [
+      "취소·환불 기준을 작업 시작 전과 후로 나눠 적어 주세요. 작업이 시작된 뒤 철회가 제한된다면 ",
+      { strong: "그 사실을 미리 분명하게 알려야" },
+      " 합니다. '환불 불가'처럼 단정하는 문구는 법에 어긋날 수 있습니다.",
+    ],
+    [
+      "구매자가 보낸 사진·연락처 같은 자료는 ",
+      { strong: "이 주문의 제작·납품에만" },
+      " 써 주세요. 포트폴리오에 공개하려면 구매자의 동의를 먼저 받아야 합니다.",
+    ],
+  ],
+};
+
 export function LicenseDialog({
   open,
   onOpenChange,
@@ -105,14 +154,19 @@ export function LicenseDialog({
   onConfirm,
 }: LicenseDialogProps) {
   const isFree = priceType === "free";
-  const [checked, setChecked] = useState<boolean[]>(() => ACKNOWLEDGEMENTS.map(() => false));
+  // 선택한 구분에 따라 확인 항목 수가 달라지므로 인덱스가 아니라 문구(text)로 체크 상태를 찾는다.
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const acknowledgements =
+    draftLicense === SERVICE_DELIVERY_LICENSE
+      ? [...ACKNOWLEDGEMENTS, SERVICE_DELIVERY_ACKNOWLEDGEMENT]
+      : ACKNOWLEDGEMENTS;
 
   // 열 때마다 동의를 초기화한다 — 라이선스는 철회가 불가능해 매번 다시 확인받는다.
   useEffect(() => {
-    if (open) setChecked(ACKNOWLEDGEMENTS.map(() => false));
+    if (open) setChecked({});
   }, [open]);
 
-  const canConfirm = !!draftLicense && checked.every(Boolean);
+  const canConfirm = !!draftLicense && acknowledgements.every(({ text }) => checked[text]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -124,13 +178,14 @@ export function LicenseDialog({
         <div className="space-y-3">
           {LICENSE_OPTIONS.map((option) => {
             const selected = option.value === draftLicense;
-            // 유료는 상용 라이선스만, 무료는 CC만 선택 가능하다. 무료여도 템플릿·코드에는 ND 불가.
+            // 유료는 상용 라이선스·제작·납품 서비스만, 무료는 CC만 선택 가능하다.
+            // 무료여도 템플릿·코드에는 ND 불가.
             const wrongPriceType = !isLicenseAllowed(option.value, isFree);
             const blockedByCode = option.value === "cc-by-nc-nd" && isCodeWork;
             const disabled = wrongPriceType || blockedByCode;
             // 해당 가격 유형에서 쓸 수 없는 옵션은 숨기지 않고 사유를 보여 준다.
             const disabledReason = wrongPriceType
-              ? option.value === COMMERCIAL_LICENSE
+              ? isFree
                 ? "(무료 상품에는 적용 불가)"
                 : "(유료 상품에는 적용 불가)"
               : blockedByCode
@@ -170,6 +225,9 @@ export function LicenseDialog({
                     )}
                   </p>
                   <p className="text-sm text-gf-gray1">{option.description}</p>
+                  {option.sellerNote && (
+                    <p className="text-xs font-bold text-gf-orange">{option.sellerNote}</p>
+                  )}
                 </div>
                 {selected && (
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-gf-orange text-white">
@@ -182,14 +240,12 @@ export function LicenseDialog({
         </div>
 
         <div className="space-y-2">
-          {ACKNOWLEDGEMENTS.map(({ text, guide }, index) => (
+          {acknowledgements.map(({ text, guide }) => (
             <div key={text} className="space-y-1.5">
               <label className="flex cursor-pointer items-start gap-2 text-sm text-gf-black">
                 <Checkbox
-                  checked={checked[index]}
-                  onCheckedChange={(value) =>
-                    setChecked((prev) => prev.map((c, i) => (i === index ? value : c)))
-                  }
+                  checked={!!checked[text]}
+                  onCheckedChange={(value) => setChecked((prev) => ({ ...prev, [text]: value }))}
                   className="mt-0.5"
                 />
                 <span>{text}</span>
