@@ -34,6 +34,8 @@ export interface CmsMyProduct {
   productCode: string | null;
   designType: string | null;
   hasAiStarterKit: boolean;
+  // cms.api 배포 전에는 내려오지 않을 수 있어 optional
+  allowCoupon?: boolean;
   filePath: string | null;
   codePreview: { id: string; label: string; code: string }[] | null;
   license: string | null;
@@ -90,6 +92,7 @@ export function toSellerProduct(item: CmsMyProduct): SellerProduct {
     design_type: item.designType,
     like_count: item.likeCount,
     has_ai_starter_kit: item.hasAiStarterKit,
+    allow_coupon: item.allowCoupon ?? false,
     code_preview: item.codePreview,
     license: item.license,
     artwork_size: item.artworkSize,
@@ -138,6 +141,7 @@ export function toCmsProductInput(input: SellerProductInput) {
     productCode: input.product_code,
     designType: input.design_type,
     hasAiStarterKit: input.has_ai_starter_kit,
+    allowCoupon: input.allow_coupon,
     filePath: input.file_path,
     codePreview: input.code_preview,
     license: input.license,

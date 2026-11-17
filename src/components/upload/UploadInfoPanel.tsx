@@ -39,6 +39,8 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
     discountEndsAt,
     setDiscountEndsAt,
     handlePriceTypeChange,
+    allowCoupon,
+    setAllowCoupon,
     purchaseOptions,
     addPurchaseOption,
     updatePurchaseOption,
@@ -131,6 +133,8 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
         onSupplyPriceChange={setSupplyPrice}
         onDiscountStartsAtChange={setDiscountStartsAt}
         onDiscountEndsAtChange={setDiscountEndsAt}
+        allowCoupon={allowCoupon}
+        onAllowCouponChange={setAllowCoupon}
       />
 
       {/* 무료 상품은 구매항목이 필요 없어 유료일 때만 보인다 */}

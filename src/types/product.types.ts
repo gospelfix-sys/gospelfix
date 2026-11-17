@@ -82,6 +82,8 @@ export interface Product extends ArtDetailsStored {
   like_count?: number;
   // true면 상세페이지에 "AI 확장" 칩과 .claude 스타터 킷 다운로드 링크가 노출된다.
   has_ai_starter_kit?: boolean;
+  // 판매자가 쿠폰 적용을 허용한 상품만 true. 없거나 false면 구매 화면에 쿠폰 체크박스를 숨긴다.
+  allow_coupon?: boolean;
   // "코드 미리보기" 섹션 탭 배열. 비어있으면 섹션 자체를 숨긴다.
   code_preview?: ProductCodePreviewItem[] | null;
   // 저작권 및 라이선스 구분값(LICENSE_OPTIONS의 value). cms.api가 아직 값을 내려주지
@@ -290,6 +292,7 @@ export interface SellerProductInput extends ArtDetails {
   product_code: string;
   design_type: string;
   has_ai_starter_kit: boolean;
+  allow_coupon: boolean;
   file_path: string | null;
   code_preview: ProductCodePreviewItem[];
   license: string;

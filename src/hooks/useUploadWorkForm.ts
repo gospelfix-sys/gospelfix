@@ -65,6 +65,8 @@ export function useUploadWorkForm({
   const [productCode, setProductCode] = useState("");
   const [designType, setDesignType] = useState("");
   const [hasAiStarterKit, setHasAiStarterKit] = useState(false);
+  // 판매자가 켠 상품만 구매자가 쿠폰을 쓸 수 있다(기본 꺼짐)
+  const [allowCoupon, setAllowCoupon] = useState(false);
   // "미술·전시" 탭 입력값 10개를 한 객체로 들고 있다 — 필드마다 useState를 늘리지 않으려는 의도
   const [artDetails, setArtDetails] = useState<ArtDetails>(EMPTY_ART_DETAILS);
   function setArtDetail<K extends keyof ArtDetails>(key: K, value: ArtDetails[K]) {
@@ -126,6 +128,7 @@ export function useUploadWorkForm({
         setProductCode(product.product_code || generateProductCode());
         setDesignType(product.design_type ?? "");
         setHasAiStarterKit(product.has_ai_starter_kit ?? false);
+        setAllowCoupon(product.allow_coupon ?? false);
         setArtDetails({
           artwork_size: product.artwork_size ?? "",
           artwork_medium: product.artwork_medium ?? "",
@@ -328,6 +331,8 @@ export function useUploadWorkForm({
     setDesignType,
     hasAiStarterKit,
     setHasAiStarterKit,
+    allowCoupon,
+    setAllowCoupon,
     artDetails,
     setArtDetail,
     priceType,

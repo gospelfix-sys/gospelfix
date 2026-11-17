@@ -34,6 +34,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     productCode,
     designType,
     hasAiStarterKit,
+    allowCoupon,
     artDetails,
     priceType,
     price,
@@ -164,6 +165,8 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         product_code: productCode,
         design_type: designType,
         has_ai_starter_kit: hasAiStarterKit,
+        // 무료 상품에는 쿠폰이 의미가 없어, 유료일 때 켰다가 무료로 바꾼 값이 남지 않게 끈다
+        allow_coupon: isFree ? false : allowCoupon,
         ...artDetails,
         file_path: finalFilePath,
         code_preview: codePreview,

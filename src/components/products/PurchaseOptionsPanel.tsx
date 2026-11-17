@@ -75,12 +75,14 @@ export function PurchaseOptionsPanel({
   const [isCouponApplied, setIsCouponApplied] = useState(false);
 
   const isFree = product.price === 0;
+  // 판매자가 쿠폰 적용을 허용한 상품에서만 쿠폰을 보여주고 적용한다(서버도 같은 기준으로 검증)
+  const usableCoupon = product.allow_coupon ? availableCoupon : null;
   const isInquiryOnly = !isFree && selectedOption.is_inquiry_only;
 
   const basePrice = selectedOption.price ?? priceState.effectivePrice;
   const couponDiscountAmount =
-    isCouponApplied && availableCoupon
-      ? Math.floor((basePrice * availableCoupon.discount_rate) / 100)
+    isCouponApplied && usableCoupon
+      ? Math.floor((basePrice * usableCoupon.discount_rate) / 100)
       : 0;
   const finalPrice = basePrice - couponDiscountAmount;
   const productionSolution = product.production_solution || DEFAULT_PRODUCTION_SOLUTION;
@@ -188,12 +190,10 @@ export function PurchaseOptionsPanel({
               onCheckedChange={setIsWithdrawalNoticeAgreed}
             />
 
-            {!isInquiryOnly && availableCoupon && !alreadyPurchased && (
+            {!isInquiryOnly && usableCoupon && !alreadyPurchased && (
               <label className="flex items-center gap-2 rounded-xl border border-gf-orange bg-gf-orange-bg p-3 text-sm text-gf-black">
                 <Checkbox checked={isCouponApplied} onCheckedChange={setIsCouponApplied} />
-                <span className="font-semibold">
-                  {availableCoupon.discount_rate}% 할인 쿠폰 적용
-                </span>
+                <span className="font-semibold">{usableCoupon.discount_rate}% 할인 쿠폰 적용</span>
                 {isCouponApplied && (
                   <span className="ml-auto font-bold text-gf-orange">
                     -{formatPrice(couponDiscountAmount)}
@@ -221,7 +221,7 @@ export function PurchaseOptionsPanel({
                   productSlug={product.slug}
                   productName={product.name}
                   price={finalPrice}
-                  couponCode={isCouponApplied ? availableCoupon?.code : undefined}
+                  couponCode={isCouponApplied ? usableCoupon?.code : undefined}
                   agreedToWithdrawalNotice={isWithdrawalNoticeAgreed}
                 />
               </PrimaryActionRow>

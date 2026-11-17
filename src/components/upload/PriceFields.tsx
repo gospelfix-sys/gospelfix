@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { CollapsibleSection } from "@/components/ui/collapsible-section";
 import { DateTimeField } from "@/components/upload/DateTimeField";
@@ -12,11 +13,13 @@ interface PriceFieldsProps {
   supplyPrice: number | null;
   discountStartsAt: string | null;
   discountEndsAt: string | null;
+  allowCoupon: boolean;
   onPriceTypeChange: (type: "free" | "paid") => void;
   onPriceChange: (price: number) => void;
   onSupplyPriceChange: (supplyPrice: number | null) => void;
   onDiscountStartsAtChange: (value: string | null) => void;
   onDiscountEndsAtChange: (value: string | null) => void;
+  onAllowCouponChange: (allow: boolean) => void;
 }
 
 // 판매 가격 / 공급원가 / 할인 기간
@@ -26,11 +29,13 @@ export function PriceFields({
   supplyPrice,
   discountStartsAt,
   discountEndsAt,
+  allowCoupon,
   onPriceTypeChange,
   onPriceChange,
   onSupplyPriceChange,
   onDiscountStartsAtChange,
   onDiscountEndsAtChange,
+  onAllowCouponChange,
 }: PriceFieldsProps) {
   return (
     <>
@@ -73,6 +78,22 @@ export function PriceFields({
             placeholder="판매 가격 (원)"
             className="h-10 rounded-xl bg-gf-white"
           />
+        )}
+        {priceType === "paid" && (
+          <label className="flex items-start gap-2.5 rounded-xl border border-gf-border bg-gf-white px-4 py-3">
+            <Checkbox
+              checked={allowCoupon}
+              onCheckedChange={(checked) => onAllowCouponChange(checked === true)}
+              className="mt-0.5"
+            />
+            <span className="text-sm text-gf-black">
+              쿠폰 적용 허용{" "}
+              <span className="text-gf-gray2">
+                (구매자가 가입 쿠폰 등 할인 쿠폰을 이 상품에 쓸 수 있습니다. 쿠폰 할인액만큼 판매
+                금액이 줄어듭니다.)
+              </span>
+            </span>
+          </label>
         )}
       </div>
 
