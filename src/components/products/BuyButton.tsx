@@ -11,6 +11,8 @@ import { cn, formatPrice } from "@/lib/utils";
 import axiosInstance, { isAxiosError } from "@/lib/axios/instance";
 import { useAuth } from "@/hooks/useAuth";
 import { DownloadButton } from "@/components/products/DownloadButton";
+import PaymentPreparingDialog from "@/components/orders/PaymentPreparingDialog";
+import { isPaymentPreparingError } from "@/lib/paymentPreparing";
 import PaymentModal from "./PaymentModal";
 
 interface BuyButtonProps {
@@ -37,6 +39,7 @@ export function BuyButton({
   const [orderId, setOrderId] = useState<string | null>(null);
   const [alreadyPurchased, setAlreadyPurchased] = useState(false);
   const [freeOrderCompleted, setFreeOrderCompleted] = useState(false);
+  const [preparingNotice, setPreparingNotice] = useState(false);
   const isRequestingRef = useRef(false);
 
   function closeCompletionModal() {
@@ -76,6 +79,10 @@ export function BuyButton({
 
       setOrderId(newOrderId);
     } catch (error) {
+      if (isPaymentPreparingError(error)) {
+        setPreparingNotice(true);
+        return;
+      }
       if (isAxiosError(error) && error.response) {
         const data = error.response.data as { error?: string } | undefined;
         // 409는 "이미 구매한 상품" 외에 "쿠폰 중복 사용" 등 다른 사유로도 발생하므로
@@ -104,6 +111,8 @@ export function BuyButton({
       >
         {loading ? "처리 중..." : price === 0 ? "무료로 받기" : `${formatPrice(price)} 구매하기`}
       </Button>
+
+      <PaymentPreparingDialog open={preparingNotice} onClose={() => setPreparingNotice(false)} />
 
       {orderId && (
         <PaymentModal

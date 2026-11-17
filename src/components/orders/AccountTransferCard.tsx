@@ -32,11 +32,11 @@ export default function AccountTransferCard({ account }: AccountTransferCardProp
 
   return (
     <>
-      <div className="mb-3 overflow-hidden rounded-xl border border-gray-100">
+      <div className="mb-3 overflow-hidden rounded-xl border border-gray-200">
         <div className="bg-gf-orange py-2.5 text-center text-sm font-bold text-white">
           판매자 입금 정보
         </div>
-        <div className="divide-y divide-gray-100 bg-white">
+        <div className="divide-y divide-gray-200 bg-gray-50">
           <div className="flex items-center justify-between px-4 py-3 text-[13px]">
             <span className="text-gray-500">받는 은행</span>
             <span className="font-bold text-gf-orange">{account.bankName}</span>

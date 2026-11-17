@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { BatchPaymentModal } from "@/components/cart/BatchPaymentModal";
+import PaymentPreparingDialog from "@/components/orders/PaymentPreparingDialog";
+import { isPaymentPreparingError } from "@/lib/paymentPreparing";
 import { WithdrawalNoticeAgreement } from "@/components/orders/WithdrawalNoticeAgreement";
 import { useCart } from "@/hooks/useCart";
 import axiosInstance from "@/lib/axios/instance";
@@ -29,6 +31,7 @@ export default function CartModal() {
   const [agreedToWithdrawalNotice, setAgreedToWithdrawalNotice] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [batchOrder, setBatchOrder] = useState<BatchOrderState | null>(null);
+  const [preparingNotice, setPreparingNotice] = useState(false);
 
   // 장바구니가 열리거나 항목이 변경될 때마다 전체선택 상태로 초기화한다
   useEffect(() => {
@@ -92,6 +95,10 @@ export default function CartModal() {
         itemCount: selectedItems.length,
       });
     } catch (error) {
+      if (isPaymentPreparingError(error)) {
+        setPreparingNotice(true);
+        return;
+      }
       toast.error(
         getErrorMessage(
           error,
@@ -227,6 +234,8 @@ export default function CartModal() {
           )}
         </DialogContent>
       </Dialog>
+
+      <PaymentPreparingDialog open={preparingNotice} onClose={() => setPreparingNotice(false)} />
 
       {batchOrder && (
         <BatchPaymentModal
