@@ -59,6 +59,7 @@ export async function PUT(request: NextRequest) {
         bankName: input.bankName,
         accountHolder: input.accountHolder,
         accountNumber: input.accountNumber,
+        thirdPartyConsent: input.thirdPartyConsent === true,
       }),
       accessToken,
     });
