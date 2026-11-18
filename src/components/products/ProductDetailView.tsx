@@ -7,6 +7,7 @@ import { PurchaseOptionsPanel } from "@/components/products/PurchaseOptionsPanel
 import { PurchaseOptionProvider } from "@/components/products/PurchaseOptionContext";
 import { ProductOptionsSection } from "@/components/products/ProductOptionsSection";
 import { CodePreviewSectionLazy } from "@/components/products/CodePreviewSectionLazy";
+import { ProductDetailHeader } from "@/components/products/ProductDetailHeader";
 import { ProseHtml } from "@/components/ui/ProseHtml";
 import { ProductVisitNav } from "@/components/products/ProductVisitNav";
 import { ReviewSection } from "@/components/products/ReviewSection";
@@ -44,15 +45,25 @@ export function ProductDetailView({
   return (
     <PurchaseOptionProvider product={product}>
       <div className="mx-auto flex max-w-[1200px] flex-col gap-10 pb-6">
-        {/* 상세 콘텐츠(관리자 에디터 본문): 화면 전체 너비, 없으면 렌더링 안 됨 */}
-        {hasContentHtml && (
-          <ProseHtml html={sanitizedContentHtml} />
-        )}
+        {/* 최상단: 제목·등록일·판매자 */}
+        <ProductDetailHeader product={product} />
 
-        {/* 구매 옵션(왼쪽) + 상품 정보(오른쪽) */}
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_380px]">
-          {/* 상품 정보: 모바일 맨 위, 데스크톱 오른쪽 사이드바(스크롤 고정) */}
-          <div id="product-info" className="lg:order-2 lg:sticky lg:top-10 lg:self-start">
+        {/* 상단: 본문(왼쪽) + 구매 패널(오른쪽, 스크롤 고정). 모바일은 DOM 순서대로
+            본문 → 구매 패널 → 구매 옵션/코드 미리보기로 쌓인다. 데스크톱에서는 패널이 두 행을
+            차지해 본문과 옵션이 왼쪽 열에 이어지고 패널은 오른쪽에 sticky로 남는다. */}
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-x-10 gap-y-10 lg:grid-cols-[minmax(0,1fr)_380px]">
+          {/* 상세 콘텐츠(관리자 에디터 본문): 없으면 렌더링 안 됨 */}
+          {hasContentHtml && (
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <ProseHtml html={sanitizedContentHtml} />
+            </div>
+          )}
+
+          {/* 상품 정보(구매 패널) */}
+          <div
+            id="product-info"
+            className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-10 lg:self-start"
+          >
             <PurchaseOptionsPanel
               product={product}
               reviewCountSlot={
@@ -66,8 +77,8 @@ export function ProductDetailView({
             />
           </div>
 
-          {/* 구매 옵션: 모바일 상품 정보 아래, 데스크톱 왼쪽 */}
-          <div className="flex min-w-0 flex-col gap-10 lg:order-1">
+          {/* 구매 옵션 + 코드 미리보기 */}
+          <div className="flex min-w-0 flex-col gap-10 lg:col-start-1 lg:row-start-2">
             <ProductOptionsSection product={product} priceState={priceState} />
 
             {/* 코드 미리보기 — 다운로드 전 코드 품질을 보여주는 신뢰 장치 */}

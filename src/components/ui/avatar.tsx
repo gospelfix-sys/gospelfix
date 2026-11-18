@@ -29,6 +29,8 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
+      // 구글 프로필 이미지(lh3.googleusercontent.com)는 외부 사이트 리퍼러가 있으면 로드를 거부한다.
+      referrerPolicy="no-referrer"
       className={cn("aspect-square size-full rounded-full object-cover", className)}
       {...props}
     />

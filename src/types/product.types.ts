@@ -335,3 +335,14 @@ export const PRODUCT_FORMAT_LABELS: Record<string, string> = {
   ux_ui: `AI기반 ${PRODUCT_CATEGORY_LABELS.ux_ui}`,
   branding: `AI기반 ${PRODUCT_CATEGORY_LABELS.branding}`,
 };
+
+// 상세페이지 상단(제목·등록일·판매자)용 정보. cms.api가 판매자 이메일 원문 대신 가린 아이디만 준다.
+export interface ProductSellerInfo {
+  registered_at: string;
+  // 플랫폼 직접 등록분은 개인 판매자가 없어 null
+  seller: {
+    name: string;
+    avatar_url: string | null;
+    handle: string;
+  } | null;
+}
