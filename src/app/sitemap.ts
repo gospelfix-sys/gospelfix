@@ -7,7 +7,7 @@ import type { Product } from "@/types/product.types";
 // serverFetch가 headers()를 쓰므로 정적 생성이 불가능하다
 export const dynamic = "force-dynamic";
 
-const STATIC_PATHS = ["/", "/resources", "/blog", "/introduce", "/guide", "/about"];
+const STATIC_PATHS = ["/", "/resources", "/blog", "/introduce", "/guide"];
 
 // cms.api 장애로 sitemap 전체가 500이 되지 않도록 실패 시 빈 배열로 대체한다
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

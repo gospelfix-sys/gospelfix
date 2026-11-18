@@ -21,7 +21,7 @@ const LAYER_NAV_ITEMS = [
 ];
 
 const OFFICIAL_NAV_ITEMS = [
-  { href: "/about", linkHref: "/about", label: "소개" },
+  { href: "/introduce", linkHref: "/introduce", label: "소개" },
   { href: "/guide", linkHref: "/guide", label: "이용가이드" },
   { href: "/blog", linkHref: "/blog", label: "블로그" },
 ];

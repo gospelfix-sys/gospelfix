@@ -21,6 +21,13 @@ const nextConfig = {
         permanent: false,
       },
       {
+        // /about 페이지 삭제 후 남은 외부 링크·검색 색인을 서비스 소개로 돌린다. 되살아날 수 있어
+        // 브라우저에 캐시되는 영구 리다이렉트는 쓰지 않는다.
+        source: "/about",
+        destination: "/introduce",
+        permanent: false,
+      },
+      {
         source: "/mall",
         destination: "/",
         permanent: true,

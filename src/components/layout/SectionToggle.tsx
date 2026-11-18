@@ -8,7 +8,7 @@ export function isModaSection(pathname: string): boolean {
 }
 
 // 이 경로들은 비로그인 상태의 로그인·회원가입 버튼을 숨긴다(TopBar·NavPopover 공용).
-export const HIDE_AUTH_BUTTONS_PATHS = ["/layer", "/about"];
+export const HIDE_AUTH_BUTTONS_PATHS = ["/layer"];
 
 // 이 경로들은 햄버거 메뉴에 소개 항목만 노출한다(이용가이드·블로그 숨김).
-export const INTRO_ONLY_MENU_PATHS = ["/layer", "/about"];
+export const INTRO_ONLY_MENU_PATHS = ["/layer"];
