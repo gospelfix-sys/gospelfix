@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/cmsApi/session";
+import { proxyMultipart } from "@/lib/cmsApi/proxyMultipart";
 
 export const runtime = "nodejs";
 
@@ -16,14 +17,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    // multipart/form-data는 boundary가 FormData 인스턴스마다 달라 cmsApiFetch(axios,
-    // JSON 전용)로 그대로 전달할 수 없다 — 여기서만 예외적으로 원본 fetch로 프록시한다.
-    const formData = await request.formData();
-    const res = await fetch(`${CMS_API_BASE_URL}/api/v1/auth/avatar`, {
-      method: "POST",
-      headers: { "X-API-Key": CMS_API_KEY, Authorization: `Bearer ${accessToken}` },
-      body: formData,
-    });
+    // multipart는 cmsApiFetch(axios, JSON 전용)로 전달할 수 없어 proxyMultipart로 중계한다.
+    const res = await proxyMultipart(request, "/api/v1/auth/avatar", accessToken);
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {

@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/cmsApi/session";
+import { proxyMultipart } from "@/lib/cmsApi/proxyMultipart";
 
 export const runtime = "nodejs";
 
 const CMS_API_BASE_URL = process.env.CMS_API_BASE_URL;
 const CMS_API_KEY = process.env.CMS_API_KEY;
 
-// 무료 상품 다운로드용 zip 업로드. auth/avatar/route.ts, my-products/images/route.ts와
-// 동일하게 multipart는 원본 fetch로 프록시한다(cmsApiFetch는 JSON 전용).
+// 무료 상품 다운로드용 zip 업로드. multipart는 cmsApiFetch(axios, JSON 전용)로 전달할 수 없어
+// proxyMultipart로 원본 본문을 그대로 중계한다.
 export async function POST(request: Request) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -18,12 +19,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const formData = await request.formData();
-    const res = await fetch(`${CMS_API_BASE_URL}/api/v1/my-products/files`, {
-      method: "POST",
-      headers: { "X-API-Key": CMS_API_KEY, Authorization: `Bearer ${accessToken}` },
-      body: formData,
-    });
+    const res = await proxyMultipart(request, "/api/v1/my-products/files", accessToken);
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
