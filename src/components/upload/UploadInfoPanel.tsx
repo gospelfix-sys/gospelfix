@@ -51,6 +51,7 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
     coverVideoInput,
     setCoverVideoInput,
     handleCoverPick,
+    handleCoverRemove,
     handleCoverVideoBlur,
     description,
     setDescription,
@@ -188,6 +189,7 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
         onCoverModeChange={setCoverMode}
         onCoverVideoInputChange={setCoverVideoInput}
         onCoverPick={handleCoverPick}
+        onCoverRemove={handleCoverRemove}
         onCoverVideoBlur={handleCoverVideoBlur}
       />
 

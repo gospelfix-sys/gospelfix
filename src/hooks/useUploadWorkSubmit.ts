@@ -101,7 +101,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
       if (coverMode === "video-link" && coverVideoInput.trim()) {
         const info = await resolveVideoLink(coverVideoInput.trim());
         if (!info)
-          throw new Error("Youtube 또는 Vimeo 링크만 지원합니다. 표지 영상 링크를 확인해주세요.");
+          throw new Error("Youtube 또는 Vimeo 링크만 지원합니다. 섬네일 영상 링크를 확인해주세요.");
         finalCoverUrl = info.thumbnailUrl;
       } else if (coverFile) {
         finalCoverUrl = await uploadImage(coverFile);

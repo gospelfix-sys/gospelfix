@@ -286,6 +286,14 @@ export function useUploadWorkForm({
     e.target.value = "";
   }
 
+  // 섬네일을 비운다. 영상 링크 입력이 남아 있으면 저장 시 다시 썸네일로 확정되므로 함께 비운다.
+  function handleCoverRemove() {
+    if (coverPreview?.startsWith("blob:")) URL.revokeObjectURL(coverPreview);
+    setCoverFile(null);
+    setCoverPreview(null);
+    setCoverVideoInput("");
+  }
+
   async function handleCoverVideoBlur() {
     const value = coverVideoInput.trim();
     if (!value) return;
@@ -387,6 +395,7 @@ export function useUploadWorkForm({
     updateTextBlock,
     removeBlock,
     handleCoverPick,
+    handleCoverRemove,
     handleCoverVideoBlur,
   };
 }

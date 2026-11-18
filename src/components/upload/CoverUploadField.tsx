@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Image as ImageIcon, Plus } from "lucide-react";
+import { Image as ImageIcon, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -12,6 +12,7 @@ interface CoverUploadFieldProps {
   onCoverModeChange: (mode: "image" | "video-link") => void;
   onCoverVideoInputChange: (value: string) => void;
   onCoverPick: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCoverRemove: () => void;
   onCoverVideoBlur: () => void;
 }
 
@@ -22,13 +23,14 @@ export function CoverUploadField({
   onCoverModeChange,
   onCoverVideoInputChange,
   onCoverPick,
+  onCoverRemove,
   onCoverVideoBlur,
 }: CoverUploadFieldProps) {
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="space-y-2">
-      <h2 className="text-sm font-bold text-gf-black">표지 업로드</h2>
+      <h2 className="text-sm font-bold text-gf-black">섬네일 업로드</h2>
       <div className="flex gap-2">
         <Button
           type="button"
@@ -48,12 +50,31 @@ export function CoverUploadField({
         </Button>
       </div>
       <div className="flex items-center gap-3 rounded-xl border border-gf-border bg-gf-white p-3">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gf-bg">
-          {coverPreview ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={coverPreview} alt="표지 미리보기" className="h-full w-full object-cover" />
-          ) : (
-            <ImageIcon className="h-6 w-6 text-gf-gray2" />
+        {/* 삭제 버튼이 둥근 모서리 클리핑에 잘리지 않게 overflow-hidden 박스 바깥 래퍼에 둔다 */}
+        <div className="relative shrink-0">
+          <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-gf-bg">
+            {coverPreview ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={coverPreview}
+                alt="섬네일 미리보기"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <ImageIcon className="h-6 w-6 text-gf-gray2" />
+            )}
+          </div>
+          {coverPreview && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              onClick={onCoverRemove}
+              aria-label="섬네일 삭제"
+              className="absolute -right-1.5 -top-1.5 size-5 rounded-full bg-gf-black text-white shadow hover:bg-gf-black hover:text-white"
+            >
+              <X />
+            </Button>
           )}
         </div>
         {coverMode === "image" ? (
@@ -65,7 +86,7 @@ export function CoverUploadField({
             className="gap-1"
           >
             <Plus className="h-3.5 w-3.5" />
-            표지 업로드
+            섬네일 업로드
           </Button>
         ) : (
           <Input
@@ -87,7 +108,7 @@ export function CoverUploadField({
       <p className="text-xs text-gf-gray2">
         {coverMode === "image"
           ? "권장 사이즈 1200x600px (2:1 가로형) · JPG, PNG, WEBP, AVIF"
-          : "링크를 붙여넣으면 영상 썸네일이 표지로 자동 적용됩니다."}
+          : "링크를 붙여넣으면 영상 썸네일이 섬네일로 자동 적용됩니다."}
       </p>
     </div>
   );
