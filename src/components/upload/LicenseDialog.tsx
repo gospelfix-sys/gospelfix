@@ -159,10 +159,16 @@ export function LicenseDialog({
   const isFree = priceType === "free";
   // 선택한 구분에 따라 확인 항목 수가 달라지므로 인덱스가 아니라 문구(text)로 체크 상태를 찾는다.
   const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const acknowledgements =
+  const baseAcknowledgements =
     draftLicense === SERVICE_DELIVERY_LICENSE
       ? [...ACKNOWLEDGEMENTS, SERVICE_DELIVERY_ACKNOWLEDGEMENT]
       : ACKNOWLEDGEMENTS;
+  // 펼침 안내가 있는 항목끼리 이어서 보이도록 안내 있는 항목을 앞에 둔다(각 그룹 안의 순서는 유지).
+  // 표시 순서만 바꾸며 문구·필수 여부는 같으므로 동의 문구 버전은 올리지 않는다.
+  const acknowledgements = [
+    ...baseAcknowledgements.filter(({ guide }) => guide),
+    ...baseAcknowledgements.filter(({ guide }) => !guide),
+  ];
 
   // 열 때마다 동의를 초기화한다 — 라이선스는 철회가 불가능해 매번 다시 확인받는다.
   useEffect(() => {
