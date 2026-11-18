@@ -46,6 +46,13 @@ const ALLOWED_ATTRIBUTES = {
   span: ["style"],
   p: ["style"],
   div: ["style"],
+  // 에디터 TextAlign이 heading에도 text-align을 inline style로 저장하므로 허용해야 정렬이 유지된다.
+  h1: ["style"],
+  h2: ["style"],
+  h3: ["style"],
+  h4: ["style"],
+  h5: ["style"],
+  h6: ["style"],
   "*": ["class"],
 };
 
