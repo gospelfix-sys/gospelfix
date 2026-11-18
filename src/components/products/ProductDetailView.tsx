@@ -50,8 +50,8 @@ export function ProductDetailView({
             제목 → 본문 → 구매 패널 → 구매 옵션/코드 미리보기로 쌓인다. 데스크톱에서는 패널이
             제목 행부터 왼쪽 열 전체 높이를 차지해 제목과 같은 높이에서 시작하고, sticky로 남는다. */}
         <div className="grid grid-cols-[minmax(0,1fr)] gap-x-10 gap-y-10 lg:grid-cols-[minmax(0,1fr)_380px]">
-          {/* 제목·등록일·판매자 */}
-          <div className="min-w-0 lg:col-start-1">
+          {/* 제목·등록일·판매자. 아래 구분선은 행 간격(gap-y-10)의 한가운데에 놓아 위아래 여백을 같게 한다. gap-y-10과 -bottom-5는 함께 바꿀 것. */}
+          <div className="relative min-w-0 after:absolute after:inset-x-0 after:-bottom-5 after:h-px after:bg-gf-gray3 lg:col-start-1">
             <ProductDetailHeader product={product} />
           </div>
 
