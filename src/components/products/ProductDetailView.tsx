@@ -66,7 +66,7 @@ export function ProductDetailView({
           <div
             id="product-info"
             className={cn(
-              "lg:col-start-2 lg:row-start-1 lg:sticky lg:top-10 lg:self-start",
+              "lg:col-start-2 lg:row-start-1 lg:sticky lg:top-0 lg:self-start",
               // 본문이 없으면 왼쪽 열이 두 행(제목·옵션)뿐이라 빈 행이 생기지 않게 span을 줄인다.
               hasContentHtml ? "lg:row-span-3" : "lg:row-span-2",
             )}
