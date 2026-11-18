@@ -88,7 +88,7 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
           type="button"
           onClick={handleBack}
           aria-label="뒤로가기"
-          className="size-11 shrink-0 rounded-md border border-white bg-white p-0 text-gf-black shadow-none hover:bg-white/90 hover:text-gf-black"
+          className="size-11 shrink-0 rounded-md border border-white bg-white p-0 text-black shadow-none hover:bg-white/90 hover:text-black"
         >
           <ArrowLeft className="size-4" />
         </Button>

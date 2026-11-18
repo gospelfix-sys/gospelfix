@@ -20,7 +20,7 @@ export default async function BlogDetailModal({ params }: Props) {
   const adjacent = await getAdjacentNews(slug);
 
   return (
-    <RouteModal ariaLabel={news.title} theme="dark">
+    <RouteModal ariaLabel={news.title} theme="themed">
       <div className="mx-auto max-w-3xl">
         <NewsDetailContent news={news} />
 

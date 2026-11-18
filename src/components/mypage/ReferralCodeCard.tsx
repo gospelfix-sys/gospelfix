@@ -95,7 +95,7 @@ export function ReferralCodeCard({ referralCode, banners }: ReferralCodeCardProp
       animate={pageLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: "40%" }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
-      <Alert className="w-auto border-white/10 bg-gf-black shadow-lg sm:w-[420px]">
+      <Alert className="w-auto border-white/10 bg-black shadow-lg sm:w-[420px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentBanner.id}
@@ -142,7 +142,7 @@ export function ReferralCodeCard({ referralCode, banners }: ReferralCodeCardProp
             size="icon-sm"
             aria-label="닫기"
             onClick={handleDismiss}
-            className="rounded-full border border-white bg-gf-black text-white hover:bg-gf-black hover:text-white hover:opacity-80"
+            className="rounded-full border border-white bg-black text-white hover:bg-black hover:text-white hover:opacity-80"
           >
             <X className="size-3.5" />
           </Button>

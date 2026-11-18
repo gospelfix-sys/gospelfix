@@ -25,7 +25,7 @@ export default function LayerLoading() {
         </div>
       </section>
 
-      <section className="border-b border-gf-border bg-white px-6 pb-24 pt-20">
+      <section className="border-b border-gf-border bg-gf-white px-6 pb-24 pt-20">
         <div className="mx-auto max-w-5xl">
           <SectionHeadingSkeleton
             showLabel

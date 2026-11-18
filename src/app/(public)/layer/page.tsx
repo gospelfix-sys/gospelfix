@@ -66,7 +66,7 @@ export default async function OfficialHomePage() {
       {/* 히어로 */}
       <section className="min-h-[100vh] flex flex-col items-center justify-center gap-8 px-6 pt-16 pb-12 text-center">
         {/* 배지 */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gf-border text-gf-black text-sm font-bold shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gf-white border border-gf-border text-gf-black text-sm font-bold shadow-sm">
           <span className="w-2 h-2 rounded-full bg-gf-orange shrink-0" />
           GOSPELFIX 브랜딩부터 챗봇 홈페이지까지
         </div>
@@ -103,7 +103,7 @@ export default async function OfficialHomePage() {
       </section>
 
       {/* 추천 대상 */}
-      <section className="px-6 pt-20 pb-24 bg-white border-b border-gf-border">
+      <section className="px-6 pt-20 pb-24 bg-gf-white border-b border-gf-border">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="gf-section-label">For You</span>
@@ -130,7 +130,7 @@ export default async function OfficialHomePage() {
       <ReservationAiShowcase />
 
       {/* 포트폴리오 */}
-      <section className="pt-20 pb-24 bg-white overflow-hidden">
+      <section className="pt-20 pb-24 bg-gf-white overflow-hidden">
         {portfolios.length > 0 ? (
           <PortfolioSwiper portfolios={portfolios} />
         ) : (

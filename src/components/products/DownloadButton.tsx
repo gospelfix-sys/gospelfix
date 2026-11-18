@@ -23,7 +23,7 @@ export function DownloadButton({ productId, hasFile }: DownloadButtonProps) {
       prefetch={false}
       className={cn(
         buttonVariants({ size: "lg" }),
-        "w-full gap-1.5 rounded-2xl bg-gf-black text-sm font-bold text-gf-orange",
+        "w-full gap-1.5 rounded-2xl bg-black text-sm font-bold text-gf-orange",
       )}
     >
       <Download className="size-4" />

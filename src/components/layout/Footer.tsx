@@ -9,10 +9,10 @@ import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import { cn } from "@/lib/utils";
 
 // 이 경로들은 푸터에서 환불정책 링크를 숨긴다(정확 일치).
-const HIDE_REFUND_PATHS = ["/layer", "/about"];
+const HIDE_REFUND_PATHS = ["/layer"];
 
 const FOOTER_LINKS = [
-  { href: "/about", label: "서비스소개" },
+  { href: "/introduce", label: "서비스소개" },
   { href: "/blog", label: "블로그" },
 ];
 
@@ -29,8 +29,8 @@ export default function Footer() {
   const pathname = usePathname();
   const [infoOpen, setInfoOpen] = useState(false);
 
-  // LayerShell(다크 상단 네비) 경로는 푸터도 다크 스코프로 맞춘다.
-  const isDarkShell =
+  // LayerShell 경로는 푸터도 같은 테마 스코프로 맞춘다.
+  const isLayerShell =
     pathname === "/" ||
     pathname.startsWith("/resources") ||
     pathname.startsWith("/introduce") ||
@@ -42,7 +42,7 @@ export default function Footer() {
     <footer
       className={cn(
         "hidden border-t border-gf-border bg-gf-white md:block",
-        isDarkShell && "gf-dark",
+        isLayerShell && "gf-themed",
       )}
     >
       <div className="relative px-10">

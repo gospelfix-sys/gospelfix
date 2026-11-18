@@ -87,7 +87,7 @@ export function SortTabs() {
             whileTap="tap"
             className={cn(
               "relative whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
-              isActive ? "text-black" : "text-gf-gray2 hover:text-gf-black",
+              isActive ? "text-gf-white" : "text-gf-gray2 hover:text-gf-black",
             )}
           >
             {isActive && (
@@ -98,7 +98,7 @@ export function SortTabs() {
                 layoutId="sort-tabs-indicator"
                 layoutDependency={activeSort}
                 transition={SEGMENT_INDICATOR_TRANSITION}
-                className="absolute inset-0 rounded-full bg-white"
+                className="absolute inset-0 rounded-full bg-gf-black"
               />
             )}
             <motion.span variants={labelVariants} className="relative block">

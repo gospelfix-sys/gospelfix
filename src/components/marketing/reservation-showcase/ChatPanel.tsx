@@ -189,7 +189,7 @@ export function ChatPanel({
     (bookingStep === "awaiting_datetime" || bookingStep === "awaiting_change_datetime") &&
     !isTyping;
   const optionChipClassName =
-    "shrink-0 border-gf-border bg-white px-3.5 py-2 text-xs font-semibold text-gf-black hover:border-gf-orange hover:text-gf-orange";
+    "shrink-0 border-gf-border bg-gf-white px-3.5 py-2 text-xs font-semibold text-gf-black hover:border-gf-orange hover:text-gf-orange";
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">

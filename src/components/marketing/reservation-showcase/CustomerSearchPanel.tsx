@@ -72,7 +72,7 @@ export function CustomerSearchPanel({ reservations }: CustomerSearchPanelProps) 
           <ul className="flex flex-col gap-3 border-l border-gf-border pl-4">
             {customer.visits.map((visit) => (
               <li key={`${visit.date}-${visit.service}`} className="relative">
-                <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full border-2 border-gf-orange bg-white" />
+                <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full border-2 border-gf-orange bg-gf-white" />
                 <p className="text-sm font-semibold text-gf-black">
                   {visit.service}
                   <span

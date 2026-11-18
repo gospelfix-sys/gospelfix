@@ -14,19 +14,20 @@ const ROUTE_MODAL_PANEL_CLASS =
   "fixed inset-0 top-6 z-50 bg-white outline-none overflow-hidden";
 export const ROUTE_MODAL_BODY_CLASS = "h-full overflow-y-auto bg-gf-bg px-6 lg:px-[60px] py-14";
 
-export type RouteModalTheme = "light" | "dark";
+// themed: 사이트 테마 설정(gf-themed)을 따른다. LayerShell 화면(블로그)에서 열리는 모달용.
+export type RouteModalTheme = "light" | "themed";
 
-// 모달은 body로 포털되어 LayerShell의 .gf-dark 스코프 밖에 있으므로, 다크 화면(블로그)에서 열리는
-// 모달은 패널에 직접 .gf-dark를 달아 토큰을 뒤집는다. 로딩 패널과 실제 모달이 같은 값을 써야
+// 모달은 body로 포털되어 LayerShell의 .gf-themed 스코프 밖에 있으므로, 블로그에서 열리는
+// 모달은 패널에 직접 .gf-themed를 달아 같은 테마를 따른다. 로딩 패널과 실제 모달이 같은 값을 써야
 // 교체 순간 색이 튀지 않는다.
 export function routeModalPanelClass(theme: RouteModalTheme): string {
-  return theme === "dark" ? `${ROUTE_MODAL_PANEL_CLASS} gf-dark` : ROUTE_MODAL_PANEL_CLASS;
+  return theme === "themed" ? `${ROUTE_MODAL_PANEL_CLASS} gf-themed` : ROUTE_MODAL_PANEL_CLASS;
 }
 
-// 뒤로가기 버튼은 라이트에서 검정 면이라 다크 패널(#121212)에서는 묻힌다. 다크에서는 흰 면으로 뒤집는다.
+// 뒤로가기 버튼은 테마에 따라 면이 뒤집히도록 토큰(gf-black/gf-white)을 쓴다. 라이트는 검정 면, 다크는 흰 면.
 export function routeModalCloseButtonClass(theme: RouteModalTheme): string {
-  return theme === "dark"
-    ? "bg-white text-black hover:bg-white hover:text-black hover:opacity-100"
+  return theme === "themed"
+    ? "bg-gf-black text-gf-white hover:bg-gf-black hover:text-gf-white hover:opacity-100"
     : "bg-black text-white hover:bg-black hover:text-white hover:opacity-100 dark:hover:bg-black";
 }
 

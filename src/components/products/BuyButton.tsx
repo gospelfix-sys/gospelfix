@@ -113,7 +113,7 @@ export function BuyButton({
         onClick={handleClick}
         disabled={loading || !agreedToWithdrawalNotice}
         size="lg"
-        className="h-14 w-full rounded-2xl bg-gf-black text-base font-bold text-gf-orange"
+        className="h-14 w-full rounded-2xl bg-black text-base font-bold text-gf-orange"
       >
         {loading ? "처리 중..." : price === 0 ? "무료로 받기" : `${formatPrice(price)} 구매하기`}
       </Button>

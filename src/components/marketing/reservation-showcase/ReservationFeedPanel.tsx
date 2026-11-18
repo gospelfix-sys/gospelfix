@@ -26,7 +26,7 @@ export function ReservationFeedPanel({ reservations, onStatusChange }: Reservati
         <div
           key={reservation.id}
           className={cn(
-            "flex flex-col gap-3 rounded-2xl border border-gf-border bg-white p-4 animate-in fade-in slide-in-from-top-2 duration-300",
+            "flex flex-col gap-3 rounded-2xl border border-gf-border bg-gf-white p-4 animate-in fade-in slide-in-from-top-2 duration-300",
             reservation.status === "cancelled" && "opacity-50",
           )}
         >

@@ -66,7 +66,7 @@ export function PricingSection() {
             <div
               key={plan.name}
               className={cn(
-                "flex flex-col gap-5 rounded-2xl border bg-white p-6",
+                "flex flex-col gap-5 rounded-2xl border bg-gf-white p-6",
                 plan.recommended
                   ? "border-gf-orange shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
                   : "border-gf-border",

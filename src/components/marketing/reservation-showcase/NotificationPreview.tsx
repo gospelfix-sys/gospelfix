@@ -18,7 +18,7 @@ export function NotificationPreview({ customerName, text, onExpire }: Notificati
   return (
     <div
       role="status"
-      className="absolute bottom-4 right-4 z-10 flex w-64 flex-col gap-1.5 rounded-2xl border border-gf-border bg-white p-4 shadow-lg [animation:notification-slide-in_0.35s_ease-out]"
+      className="absolute bottom-4 right-4 z-10 flex w-64 flex-col gap-1.5 rounded-2xl border border-gf-border bg-gf-white p-4 shadow-lg [animation:notification-slide-in_0.35s_ease-out]"
     >
       <div className="flex items-center gap-1.5 text-xs font-bold text-gf-orange">
         <MessageSquareText className="h-3.5 w-3.5" />

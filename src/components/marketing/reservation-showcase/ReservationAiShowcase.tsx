@@ -159,7 +159,7 @@ export function ReservationAiShowcase() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* 좌: 입력 채널 — 카드 높이를 고정하고 flex-col로 감싸, 예약이 아무리 쌓여도
               카드가 늘어나지 않고 내부 스크롤로 처리되면서 입력창은 항상 맨 아래에 붙는다 */}
-          <div className="flex h-[520px] flex-col overflow-hidden rounded-2xl border border-gf-border bg-white">
+          <div className="flex h-[520px] flex-col overflow-hidden rounded-2xl border border-gf-border bg-gf-white">
             <div role="tablist" className="flex shrink-0 border-b border-gf-border">
               <Tab
                 active={leftTab === "chat"}
@@ -198,7 +198,7 @@ export function ReservationAiShowcase() {
           </div>
 
           {/* 우: 통합 대시보드 — 좌측과 동일한 고정 높이로 맞춘다 */}
-          <div className="relative flex h-[520px] flex-col overflow-hidden rounded-2xl border border-gf-border bg-white">
+          <div className="relative flex h-[520px] flex-col overflow-hidden rounded-2xl border border-gf-border bg-gf-white">
             <div role="tablist" className="flex shrink-0 border-b border-gf-border">
               <Tab
                 active={rightTab === "feed"}

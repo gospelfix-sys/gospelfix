@@ -71,7 +71,7 @@ export function CoverUploadField({
               size="icon-xs"
               onClick={onCoverRemove}
               aria-label="섬네일 삭제"
-              className="absolute -right-1.5 -top-1.5 size-5 rounded-full bg-gf-black text-white shadow hover:bg-gf-black hover:text-white"
+              className="absolute -right-1.5 -top-1.5 size-5 rounded-full bg-black text-white shadow hover:bg-black hover:text-white"
             >
               <X />
             </Button>

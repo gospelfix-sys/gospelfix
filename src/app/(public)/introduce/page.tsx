@@ -68,7 +68,7 @@ export default function IntroducePage() {
         </p>
         <Link
           href="/upload"
-          className="flex items-center justify-center gap-2 rounded-full bg-gf-black px-7 py-3.5 text-sm font-bold text-gf-orange no-underline"
+          className="flex items-center justify-center gap-2 rounded-full bg-black px-7 py-3.5 text-sm font-bold text-gf-orange no-underline"
         >
           작품 업로드하기
         </Link>

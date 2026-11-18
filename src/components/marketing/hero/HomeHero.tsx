@@ -19,7 +19,7 @@ export function HomeHero() {
       <HeroCta
         href="#gallery"
         icon={<ArrowRight className="h-4 w-4" />}
-        className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black no-underline transition-colors hover:bg-white/90"
+        className="inline-flex items-center gap-2 rounded-full bg-gf-black px-6 py-3 text-sm font-bold text-gf-white no-underline transition-opacity hover:opacity-90"
       >
         디자인 소재 둘러보기
       </HeroCta>

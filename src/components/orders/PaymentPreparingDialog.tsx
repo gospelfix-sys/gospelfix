@@ -31,7 +31,7 @@ export default function PaymentPreparingDialog({ open, onClose }: PaymentPrepari
           type="button"
           size="lg"
           onClick={onClose}
-          className="mt-6 h-12 w-full rounded-xl bg-gf-black text-base font-bold text-gf-orange hover:bg-gf-black/90"
+          className="mt-6 h-12 w-full rounded-xl bg-black text-base font-bold text-gf-orange hover:bg-black/90"
         >
           확인
         </Button>

@@ -49,7 +49,7 @@ export function MypageSidebar({ canSell = false }: MypageSidebarProps) {
             className={cn(
               "flex shrink-0 items-center gap-2.5 rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-colors",
               active
-                ? "bg-white text-primary"
+                ? "bg-gf-white text-primary"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >

@@ -410,7 +410,7 @@ export function QuoteChatModal({ open, onOpenChange }: QuoteChatModalProps) {
                     <Chip
                       key={option.label}
                       onClick={() => handleSelectOption(option.label)}
-                      className="shrink-0 rounded-full border-gf-border bg-white px-4 py-2.5 text-sm font-bold text-gf-black hover:border-gf-orange hover:text-gf-orange"
+                      className="shrink-0 rounded-full border-gf-border bg-gf-white px-4 py-2.5 text-sm font-bold text-gf-black hover:border-gf-orange hover:text-gf-orange"
                     >
                       {option.label}
                     </Chip>
@@ -429,7 +429,7 @@ export function QuoteChatModal({ open, onOpenChange }: QuoteChatModalProps) {
                           active={active}
                           onClick={() => toggleFeature(option.label)}
                           className={cn(
-                            "shrink-0 rounded-full border-gf-border bg-white px-4 py-2.5 text-sm font-bold text-gf-black hover:border-gf-orange hover:text-gf-orange",
+                            "shrink-0 rounded-full border-gf-border bg-gf-white px-4 py-2.5 text-sm font-bold text-gf-black hover:border-gf-orange hover:text-gf-orange",
                             active && "border-gf-orange bg-gf-orange-bg text-gf-orange",
                           )}
                         >
@@ -453,7 +453,7 @@ export function QuoteChatModal({ open, onOpenChange }: QuoteChatModalProps) {
             {/* 하단 고정 입력창 */}
             <form
               onSubmit={handleSendMessage}
-              className="flex shrink-0 items-center gap-2 border-t border-gf-border bg-white p-3"
+              className="flex shrink-0 items-center gap-2 border-t border-gf-border bg-gf-white p-3"
             >
               <Input
                 value={chatInput}

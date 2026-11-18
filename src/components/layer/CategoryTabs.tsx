@@ -41,7 +41,7 @@ export function CategoryTabs({ currentCategory, categories }: CategoryTabsProps)
               className={cn(
                 "shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold no-underline transition-colors",
                 isActive
-                  ? "border-white bg-white text-black"
+                  ? "border-gf-black bg-gf-black text-gf-white"
                   : "border-gf-border bg-gf-white text-gf-black hover:bg-gf-border",
               )}
             >

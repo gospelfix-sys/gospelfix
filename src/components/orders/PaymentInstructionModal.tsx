@@ -74,7 +74,7 @@ export default function PaymentInstructionModal({
               <Button
                 onClick={onConfirm}
                 disabled={loading || (payoutOrderId !== null && !account)}
-                className="h-12 w-full bg-gf-black text-base text-gf-orange hover:bg-gf-black/90"
+                className="h-12 w-full bg-black text-base text-gf-orange hover:bg-black/90"
                 size="lg"
               >
                 {loading ? "처리 중..." : "입금했어요"}
@@ -83,7 +83,7 @@ export default function PaymentInstructionModal({
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="h-12 w-full border-gf-orange bg-white text-base text-gf-orange hover:bg-gf-orange-bg hover:text-gf-orange"
+                className="h-12 w-full border-gf-orange bg-gf-white text-base text-gf-orange hover:bg-gf-orange-bg hover:text-gf-orange"
               >
                 취소
               </Button>

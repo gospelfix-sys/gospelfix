@@ -78,7 +78,7 @@ export function QuoteFloatingButton() {
         className="relative block h-[150px] w-[245px]"
       >
         {/* 입체 플랫폼 카드 */}
-        <div className="absolute inset-x-0 bottom-0 h-[150px] overflow-visible rounded-[26px] bg-white shadow-[0_18px_30px_-14px_rgba(17,17,17,0.35)] ring-1 ring-black/[0.04]" />
+        <div className="absolute inset-x-0 bottom-0 h-[150px] overflow-visible rounded-[26px] bg-gf-white shadow-[0_18px_30px_-14px_rgba(17,17,17,0.35)] ring-1 ring-black/[0.04]" />
 
         {/* 인물 이미지 - 카드 프레임을 뚫고 튀어나오는 레이어 (추후 교체 예정) */}
         {/* 1초 대기 후 아래에서 위로 페이드인 (opacity/translateY는 이 래퍼가 전담, 아래 hover 리프트와 transform 충돌 방지) */}
@@ -103,7 +103,7 @@ export function QuoteFloatingButton() {
         </motion.div>
 
         {/* CTA 알약 - 카드 하단과 겹치며 입체감 형성 */}
-        <div className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-1.5 rounded-full bg-gf-black py-3 shadow-[0_10px_20px_-6px_rgba(17,17,17,0.55)]">
+        <div className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-1.5 rounded-full bg-black py-3 shadow-[0_10px_20px_-6px_rgba(17,17,17,0.55)]">
           <span className="text-sm font-extrabold text-white whitespace-nowrap sm:text-base">
             챗봇으로 상담신청
           </span>
@@ -114,7 +114,7 @@ export function QuoteFloatingButton() {
       </motion.button>
 
       {/* 오늘 그만보기 / 닫기 */}
-      <div className="flex w-[245px] items-center justify-between rounded-full bg-white px-4 py-2 shadow-[0_6px_16px_-4px_rgba(17,17,17,0.25)] ring-1 ring-black/[0.06]">
+      <div className="flex w-[245px] items-center justify-between rounded-full bg-gf-white px-4 py-2 shadow-[0_6px_16px_-4px_rgba(17,17,17,0.25)] ring-1 ring-black/[0.06]">
         <Button
           variant="link"
           onClick={hideForToday}

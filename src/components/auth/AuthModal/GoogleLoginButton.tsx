@@ -35,7 +35,7 @@ export default function GoogleLoginButton() {
       icon={<GoogleIcon />}
       label="Google로 계속하기"
       onClick={() => signInWithOAuth("google")}
-      className="border-gf-line bg-white text-gf-black hover:bg-gf-black/5"
+      className="border-gf-line bg-gf-white text-gf-black hover:bg-gf-black/5"
     />
   );
 }

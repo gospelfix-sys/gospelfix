@@ -7,6 +7,7 @@ import CartProvider from "@/components/cart/CartProvider";
 import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_DESCRIPTION, SITE_URL } from "@/lib/siteMetadata";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 // 네이버 서치어드바이저 소유확인 값. 미설정이면 meta 태그를 아예 출력하지 않는다
 const NAVER_SITE_VERIFICATION = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION?.trim();
@@ -51,8 +52,12 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ko">
-      <body>
+    // 초기화 스크립트가 hydration 전에 html에 data-gf-theme를 붙이므로 속성 불일치 경고를 끈다.
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body className="gf-themed">
         <PostHogProvider>
           <RecoilProvider>
             <AuthProvider>
