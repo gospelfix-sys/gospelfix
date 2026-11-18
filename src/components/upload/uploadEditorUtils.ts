@@ -57,7 +57,19 @@ export function normalizeLicense(license: string, isFree: boolean): string {
   return isFree ? "" : COMMERCIAL_LICENSE;
 }
 
+// Vercel 서버리스 요청 본문 한도(약 4.5MB)에 multipart 오버헤드를 감안한 이미지 업로드 상한.
+// 넘기면 본문이 잘려 서버가 "Failed to parse body as FormData."를 내므로 보내기 전에 막는다.
+export const MAX_UPLOAD_IMAGE_BYTES = 4 * 1024 * 1024;
+
+export function getImageSizeError(file: File): string | null {
+  if (file.size <= MAX_UPLOAD_IMAGE_BYTES) return null;
+  const mb = (file.size / (1024 * 1024)).toFixed(1);
+  return `이미지 용량이 너무 큽니다. (${mb}MB) 4MB 이하로 줄여서 올려주세요.`;
+}
+
 export async function uploadImage(file: File): Promise<string> {
+  const sizeError = getImageSizeError(file);
+  if (sizeError) throw new Error(sizeError);
   const formData = new FormData();
   formData.append("file", file);
   const res = await fetch("/api/my-products/images", { method: "POST", body: formData });

@@ -7,6 +7,7 @@ import {
   createEmptyCodePreviewItem,
   createEmptyPurchaseOption,
   createId,
+  getImageSizeError,
   normalizeLicense,
   parseContentBlocks,
   type ContentBlock,
@@ -274,6 +275,12 @@ export function useUploadWorkForm({
   function handleCoverPick(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    const sizeError = getImageSizeError(file);
+    if (sizeError) {
+      toast.error(sizeError);
+      e.target.value = "";
+      return;
+    }
     setCoverFile(file);
     setCoverPreview(URL.createObjectURL(file));
     e.target.value = "";
