@@ -79,14 +79,14 @@ export function CoverUploadField({
         <input
           ref={coverInputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,image/avif"
           className="hidden"
           onChange={onCoverPick}
         />
       </div>
       <p className="text-xs text-gf-gray2">
         {coverMode === "image"
-          ? "권장 사이즈 1080x1350px (4:5 세로형) · JPG, PNG, WEBP"
+          ? "권장 사이즈 1200x600px (2:1 가로형) · JPG, PNG, WEBP, AVIF"
           : "링크를 붙여넣으면 영상 썸네일이 표지로 자동 적용됩니다."}
       </p>
     </div>

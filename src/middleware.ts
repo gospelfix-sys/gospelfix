@@ -85,6 +85,6 @@ export const config = {
   // 갱신된 쿠키는 브라우저로 전달되지 않아 그대로 버려진다. API 라우트는 각자
   // getAccessToken()으로 인증을 직접 판단하므로 미들웨어의 선제 refresh가 필요 없다.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif)$).*)",
   ],
 };

@@ -18,7 +18,7 @@ export function FormatGuideDialog({ open, onOpenChange }: FormatGuideDialogProps
         <div className="space-y-5">
           <div className="space-y-1.5">
             <h3 className="text-sm font-bold text-gf-black">파일 포맷</h3>
-            <p className="text-sm text-gf-gray1">이미지 JPG, PNG, WEBP</p>
+            <p className="text-sm text-gf-gray1">이미지 JPG, PNG, WEBP, AVIF</p>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-sm font-bold text-gf-black">최대 용량</h3>
