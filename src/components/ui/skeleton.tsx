@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
-  /** 크기·모양·색 덮어쓰기. 기본 색은 라이트/다크(gf-dark) 양쪽에서 대비가 맞는 bg-gf-border. */
+  /** 크기·모양·색 덮어쓰기. 기본 색은 라이트/다크 테마 양쪽에서 대비가 맞는 bg-gf-border. */
   className?: string;
 }
 

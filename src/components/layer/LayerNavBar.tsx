@@ -128,7 +128,7 @@ export function LayerNavBar() {
 
   return (
     <>
-      {/* 화면 위에 떠 있는 흰 알약 헤더. 다크 스코프(gf-dark) 안이라 토큰이 반전되므로 white/black을 직접 쓴다.
+      {/* 화면 위에 떠 있는 흰 알약 헤더. 다크 테마(gf-themed)에서 토큰이 반전되므로 white/black을 직접 쓴다.
           fixed라 문서 흐름에서 빠지므로 콘텐츠 상단 여백은 LayerShell이 한 번만 확보한다. */}
       <header className="fixed left-1/2 top-[20px] z-30 flex h-16 w-[1280px] max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center rounded-2xl bg-white px-4 shadow-[0_1px_20px_rgba(0,0,0,0.12)] sm:px-6 lg:px-8 xl:px-[60px]">
         {/* popLayout: 나가는 쪽을 레이아웃에서 빼 두 상태가 같은 자리에서 교차 페이드한다.

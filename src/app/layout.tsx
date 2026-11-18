@@ -5,6 +5,7 @@ import PostHogProvider from "@/components/providers/PostHogProvider";
 import AuthProvider from "@/components/auth/AuthProvider";
 import CartProvider from "@/components/cart/CartProvider";
 import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
+import ThemeSync from "@/components/providers/ThemeSync";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_DESCRIPTION, SITE_URL } from "@/lib/siteMetadata";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <CookieConsentBanner />
           </RecoilProvider>
         </PostHogProvider>
+        <ThemeSync />
         <Toaster />
       </body>
     </html>

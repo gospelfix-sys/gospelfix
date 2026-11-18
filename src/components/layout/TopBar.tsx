@@ -4,19 +4,14 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import { authUserAtom, authLoadingAtom } from "@/store/atoms/authAtom";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { cartItemCountSelector } from "@/store/selectors/cartSelector";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { NavPopover } from "@/components/layout/NavPopover";
-import {
-  HIDE_AUTH_BUTTONS_PATHS,
-  MODA_SHELL_PATHS,
-  isModaSection,
-} from "@/components/layout/SectionToggle";
+import { MODA_SHELL_PATHS, isModaSection } from "@/components/layout/SectionToggle";
 import { cn } from "@/lib/utils";
 
 // 주의: 모다 섹션 경로(MODA_SHELL_PATHS, "/")는 아래 hide 조건에서 이미 걸러져 TopBar 자체가
@@ -24,11 +19,6 @@ import { cn } from "@/lib/utils";
 // 항상 false다 — 장바구니 버튼도 항상 숨겨진다(의도된 동작: 모다 섹션 안에서는 LayerNavBar의
 // 장바구니 버튼을 대신 쓴다). 분기를 남겨둔 건 모다 섹션 중 LayerShell을 쓰지 않는 페이지가
 // 다시 생길 경우를 위한 확장 지점이라서다.
-// 이 픽셀 구간(0~SCROLL_MORPH_RANGE) 동안 스크롤 값에 비례해 넓은 헤더가 압축 알약으로 좁아진다
-const SCROLL_MORPH_RANGE = 300;
-const WIDE_WIDTH = 1280;
-const COMPACT_WIDTH = 460;
-
 export default function TopBar() {
   const pathname = usePathname();
 
@@ -45,145 +35,7 @@ export default function TopBar() {
   // 에이전시 홈(/layer)은 헤더 자체를 숨긴다(넓은 헤더·압축 알약 모두).
   if (pathname === "/layer") return null;
 
-  // 히어로 배너가 있어 헤더가 콘텐츠 위에 겹쳐도 안전한 페이지만 스크롤에 따라
-  // 넓은 헤더 → 압축 알약으로 연속 전환된다. 그 외 페이지는 처음부터 압축 알약
-  // 상태로 고정 표시한다. 해당 페이지(/about)가 삭제돼 현재는 대상이 없다.
-  const isOverlayHero = false;
-
-  if (!isOverlayHero) {
-    return <CompactNav className="fixed left-1/2 top-[20px] z-30 w-fit -translate-x-1/2" />;
-  }
-
-  return <MorphingHeader />;
-}
-
-/** 히어로 라우트 전용: 스크롤 값(px)에 비례해 폭·콘텐츠가 연속적으로 전환되는 헤더. */
-function MorphingHeader() {
-  const { scrollY } = useScroll();
-
-  // 좁은 화면에서는 헤더가 컨테이너의 max-w-[calc(100vw-2rem)]에 항상 눌리기 때문에,
-  // 보간 시작값을 WIDE_WIDTH(1280) 그대로 쓰면 실제 렌더링 폭이 그 상한 아래로 내려오기
-  // 전까지 스크롤을 아무리 해도 화면상 변화가 없다가 막판에 갑자기 좁아지는 것처럼 보인다.
-  // 보간 양 끝을 뷰포트 기준 실제 렌더링 가능한 값으로 맞춰서 스크롤 전 구간에 걸쳐
-  // 고르게 좁아지도록 한다.
-  const [viewportWidth, setViewportWidth] = useState(WIDE_WIDTH);
-  useEffect(() => {
-    const updateViewportWidth = () => setViewportWidth(window.innerWidth);
-    updateViewportWidth();
-    window.addEventListener("resize", updateViewportWidth);
-    return () => window.removeEventListener("resize", updateViewportWidth);
-  }, []);
-  const effectiveWideWidth = Math.min(WIDE_WIDTH, viewportWidth - 32); // max-w-[calc(100vw-2rem)]와 동일한 값
-  const compactWidth = Math.min(COMPACT_WIDTH, viewportWidth * 0.75);
-
-  const width = useTransform(
-    scrollY,
-    [0, SCROLL_MORPH_RANGE],
-    [effectiveWideWidth, compactWidth],
-    { clamp: true },
-  );
-  const wideOpacity = useTransform(scrollY, [0, SCROLL_MORPH_RANGE * 0.6], [1, 0], {
-    clamp: true,
-  });
-  const compactOpacity = useTransform(
-    scrollY,
-    [SCROLL_MORPH_RANGE * 0.4, SCROLL_MORPH_RANGE],
-    [0, 1],
-    { clamp: true },
-  );
-
-  // 크로스페이드 중 투명해진 레이어가 클릭을 가로채지 않도록, 전환 중간 지점을 기준으로
-  // 활성 레이어만 pointer-events를 허용한다.
-  const [isCompact, setIsCompact] = useState(false);
-  useMotionValueEvent(scrollY, "change", (v) => setIsCompact(v > SCROLL_MORPH_RANGE / 2));
-
-  return (
-    <motion.header
-      style={{ width }}
-      className="fixed left-1/2 top-[20px] z-30 grid max-w-[calc(100vw-2rem)] -translate-x-1/2"
-    >
-      <motion.div
-        style={{ opacity: wideOpacity }}
-        className={cn(
-          "col-start-1 row-start-1 h-16 w-full overflow-hidden rounded-2xl bg-black shadow-[0_1px_20px_rgba(0,0,0,0.25)]",
-          isCompact && "pointer-events-none",
-        )}
-      >
-        <WideContent />
-      </motion.div>
-
-      <motion.div
-        style={{ opacity: compactOpacity }}
-        className={cn("col-start-1 row-start-1 w-full", !isCompact && "pointer-events-none")}
-      >
-        <CompactNav className="mx-auto" />
-      </motion.div>
-    </motion.header>
-  );
-}
-
-/** 넓은 상태: 로고 + 카테고리 메뉴 + 로그인/회원가입. */
-function WideContent() {
-  const user = useRecoilValue(authUserAtom);
-  const loading = useRecoilValue(authLoadingAtom);
-  const { signOut, openAuthModal } = useAuth();
-  const pathname = usePathname();
-
-  async function handleSignOut() {
-    await signOut("/");
-  }
-
-  return (
-    <div className="relative flex h-16 items-center justify-between px-6 lg:px-[60px]">
-      <div className="flex items-center gap-8">
-        <Link
-          href="/"
-          className="flex items-center gap-0.5 text-lg font-black tracking-[-0.03em] no-underline text-white"
-        >
-          <span className="font-kr">GOSPEL</span>
-          <span className="font-kr text-gf-orange">FIX</span>
-        </Link>
-      </div>
-
-      {!loading && (user || !HIDE_AUTH_BUTTONS_PATHS.includes(pathname)) && (
-        <div className="flex items-center gap-2">
-          {user ? (
-            <>
-              <Link
-                href="/mypage"
-                className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "text-white hover:bg-white/10 hover:text-white",
-                )}
-              >
-                마이페이지
-              </Link>
-              <Button
-                variant="ghost"
-                onClick={handleSignOut}
-                className="text-white hover:bg-white/10 hover:text-white"
-              >
-                로그아웃
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="ghost"
-                onClick={() => openAuthModal("login")}
-                className="text-white hover:bg-white/10 hover:text-white"
-              >
-                로그인
-              </Button>
-              <Button variant="default" onClick={() => openAuthModal("signup")}>
-                회원가입
-              </Button>
-            </>
-          )}
-        </div>
-      )}
-    </div>
-  );
+  return <CompactNav className="fixed left-1/2 top-[20px] z-30 w-fit -translate-x-1/2" />;
 }
 
 interface CompactNavProps {

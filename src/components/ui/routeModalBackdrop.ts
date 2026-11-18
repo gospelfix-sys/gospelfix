@@ -10,16 +10,15 @@
 export const ROUTE_MODAL_FADE_TRANSITION = { duration: 0.3, ease: "easeOut" as const };
 export const ROUTE_MODAL_BACKDROP_CLASS = "fixed inset-0 z-50 bg-black/10 backdrop-blur-[20px]";
 // 패널 겉면과 스크롤 본문. 로딩 패널과 실제 모달이 같은 면 위에서 내용만 바뀌도록 공유한다.
-const ROUTE_MODAL_PANEL_CLASS =
-  "fixed inset-0 top-6 z-50 bg-white outline-none overflow-hidden";
+const ROUTE_MODAL_PANEL_CLASS = "fixed inset-0 top-6 z-50 bg-white outline-none overflow-hidden";
 export const ROUTE_MODAL_BODY_CLASS = "h-full overflow-y-auto bg-gf-bg px-6 lg:px-[60px] py-14";
 
 // themed: 사이트 테마 설정(gf-themed)을 따른다. LayerShell 화면(블로그)에서 열리는 모달용.
 export type RouteModalTheme = "light" | "themed";
 
-// 모달은 body로 포털되어 LayerShell의 .gf-themed 스코프 밖에 있으므로, 블로그에서 열리는
-// 모달은 패널에 직접 .gf-themed를 달아 같은 테마를 따른다. 로딩 패널과 실제 모달이 같은 값을 써야
-// 교체 순간 색이 튀지 않는다.
+// 모달은 body 아래로 포털되므로 body의 .gf-themed를 이미 따른다. 그래도 themed 모달은 패널에
+// .gf-themed를 명시해 테마를 따르는 모달임을 드러내고, 로딩 패널과 실제 모달이 같은 값을 써서
+// 교체 순간 색이 튀지 않게 한다.
 export function routeModalPanelClass(theme: RouteModalTheme): string {
   return theme === "themed" ? `${ROUTE_MODAL_PANEL_CLASS} gf-themed` : ROUTE_MODAL_PANEL_CLASS;
 }
