@@ -12,6 +12,7 @@ type: feedback
 ### 1. raw `<button>` 재발 (Major, 가장 많이 재발)
 - 규칙: 클릭 UI는 `components/ui/button.tsx`(`Button`/`buttonVariants`), 토글·칩은 `ui/Chip.tsx`, 탭은 `ui/Tab.tsx`를 쓴다. 링크 버튼은 `<Link className={buttonVariants()}>`.
 - 재발 징후: 신규·전면 재작성 파일의 닫기(X), 아코디언 더보기, 복사, 옵션 토글, 칩, 팝업 트리거. 같은 디렉토리에 Chip/Button 선례가 있어도 재발한다. `components/ui/` 내부 파일도 예외가 아니다(RouteModal 닫기 버튼 사례).
+- 최근 재발: `upload/CoverUploadField.tsx` 미리보기 ✕ 삭제 버튼(같은 폴더 `DownloadFileField.tsx`에 `<Button variant="ghost" size="icon-xs">` 선례가 있었는데도 raw `<button>`, 리뷰 후 `Button`으로 수정 완료). `upload/` 안에 기존 raw `<button>`(UploadCanvas, CategoryDialog, DateTimeField)이 남아 있어 "이미 있으니 괜찮다"로 새 것이 따라 들어오기 쉽다.
 - 예외 선례: variants 전파·layoutId가 필요한 `motion.button`은 `CategoryTabs`/`SortTabs`가 "왜 직접 쓰는지" 주석을 달고 허용됨. 주석 없는 `motion.button`(예: `QuoteFloatingButton`)은 Minor로 주석 요청.
 - 방법: 리뷰 시작 때 `grep -rn "<button" src`로 전수 확인. 같은 마크업이 2곳 이상이면 먼저 `ui/`로 추출한다. 단일 위젯 전용 장식 요소(진행바 dot 등)는 Minor로 하향 가능.
 
@@ -86,6 +87,11 @@ type: feedback
 - 징후: 페이지 래퍼가 IntersectionObserver/상태 하나 때문에 `"use client"`가 되면, 거기서 import한 훅 없는 섹션·정적 콘텐츠 모듈(`resumeContent` 등)까지 전부 클라이언트 번들이 된다. 주석에는 "서버 컴포넌트로 둔다"고 써 있어도 실제로는 아니다(`ReelsfactoryPage.tsx` 사례).
 - 방법: 상태·옵저버는 그것을 쓰는 가장 작은 클라이언트 컴포넌트(예: `SideRail`)로 내리고, 페이지 래퍼는 서버 컴포넌트로 둔다.
 - 연관: cms.api 값(`site_url` 등)을 병합해 `href`로 쓰는 매퍼(`mergeWorks`)는 `https?` 검증을 누락하기 쉽다(#15).
+
+### 19. base-ui Dialog 닫힘 애니메이션 중 내용 변형 + RouteModal Esc 충돌 (Major)
+- `ui/dialog.tsx`는 `open=false` 후에도 닫힘 애니메이션(0.2초)이 끝날 때까지 마운트를 유지한다. 그래서 `open={a || b}`처럼 "종류 플래그"가 곧 open인 구조에서 닫기 핸들러가 플래그를 모두 false로 만들면, 페이드아웃 중에 제목·설명·버튼이 다른 분기로 바뀐다(`BuyButton.tsx` 완료 팝업, 현재는 `completionOpen` 분리로 수정 완료). 종류(kind)는 유지하고 `open`만 끄는 구조로 분리한다.
+- `RouteModal.tsx`는 document `keydown`으로 Esc를 직접 처리하며 다른 Dialog가 떠 있는지 보지 않는다. RouteModal 안(`BuyButton` → `PaymentModal`)에서 연 `Dialog`는 Esc 한 번에 둘 다 닫힐 수 있고, "Esc로 안 닫힘"을 의도한 팝업도 소용이 없다. Dialog를 RouteModal 하위에서 새로 쓰는 변경은 정의 파일(RouteModal)에서 가드한다.
+- 호출부 반복: `showCloseButton={false} className="gap-0 p-6 ... sm:max-w-sm"`이 3곳(`PaymentPreparingDialog`, `BuyButton`, `PaymentInstructionModal`)에 있다. `sm:max-w-sm`은 기본값과 같아 중복. 4번째가 생기면 `ui`에 알림형 variant로 추출.
 
 ## B. 아키텍처 메모
 
