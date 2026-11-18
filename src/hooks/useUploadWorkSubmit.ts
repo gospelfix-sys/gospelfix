@@ -8,6 +8,10 @@ import {
   uploadImage,
   uploadZip,
 } from "@/components/upload/uploadEditorUtils";
+import {
+  clearUploadedEditorImages,
+  uploadEditorImages,
+} from "@/components/rich-text/editorImages";
 import type { UploadWorkForm } from "@/hooks/useUploadWorkForm";
 import type { SellerProductInput } from "@/types/product.types";
 import { generateRandomSlug } from "@/lib/utils";
@@ -126,6 +130,13 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
           }
         }
       }
+      // 텍스트 블록 안에 삽입한 이미지는 blob URL이라 저장 전에 업로드해 실제 URL로 바꾼다.
+      const resolvedTextHtml: Record<string, string> = {};
+      for (const block of blocks) {
+        if (block.type === "text" && block.html) {
+          resolvedTextHtml[block.id] = await uploadEditorImages(block.html, uploadImage);
+        }
+      }
       const contentHtml = blocks
         .map((block) => {
           if (block.type === "image") {
@@ -137,7 +148,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
             if (!src) return "";
             return `<div class="video-embed relative aspect-video w-full overflow-hidden rounded-xl bg-black"><iframe src="${src}" class="absolute inset-0 h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" title="상품 소개 영상"></iframe></div>`;
           }
-          return block.html ?? "";
+          return resolvedTextHtml[block.id] ?? block.html ?? "";
         })
         .join("\n");
 
@@ -189,7 +200,15 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         throw new Error(data?.error ?? "저장에 실패했습니다.");
       }
 
-      toast.success(status === "draft" ? "임시저장했습니다." : "검수 요청을 제출했습니다.");
+      clearUploadedEditorImages();
+      // 수정 저장에 "검수 요청 제출"이라고 안내하면 매번 새로 심사받는 것처럼 읽혀 혼란스럽다.
+      toast.success(
+        status === "draft"
+          ? "임시저장했습니다."
+          : editId
+            ? "상품이 수정되었습니다."
+            : "검수 요청을 제출했습니다.",
+      );
       router.push("/mypage/products");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "저장에 실패했습니다.");

@@ -576,3 +576,9 @@ html {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(70, 70, 70, 0.85);
 }
+
+/* 에디터에서 이미지를 클릭해 선택하면(링크 지정 대상) 선택됐음을 보여 준다 */
+.layer-rich-editor-content img.ProseMirror-selectednode {
+  outline: 2px solid var(--gf-orange);
+  outline-offset: 2px;
+}

@@ -81,9 +81,9 @@ export function sanitizeContentHtml(html: string): string {
         color: [/^#[0-9a-fA-F]{3,6}$/, /^rgb\([\d\s,%.]+\)$/],
         "text-align": [/^left$|^right$|^center$|^justify$/],
         "font-weight": [/^\d+$|^bold$|^normal$/],
-        // 관리자 전용 CMS 콘텐츠라 보안 위험은 아니지만, 에디터 오조작으로 레이아웃이 깨지는 것을
-        // 막기 위해 px는 8~72, rem/em은 0~10 범위로 제한한다.
-        "font-size": [/^(?:[89]|[1-6]\d|7[0-2])(\.\d+)?px$/, /^(?:\d|10)(\.\d+)?(rem|em)$/],
+        // 판매자·관리자 입력이 모두 거치므로, 레이아웃 파괴와 화면 덮기를 막기 위해
+        // px는 8~96(에디터 글자 크기 선택지 범위), rem/em은 0~10 범위로 제한한다.
+        "font-size": [/^(?:[89]|[1-8]\d|9[0-6])(\.\d+)?px$/, /^(?:\d|10)(\.\d+)?(rem|em)$/],
       },
     },
     allowedSchemes: ["http", "https", "mailto"],

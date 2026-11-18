@@ -26,6 +26,7 @@ import {
 import { ToolbarButton, Divider } from "@/components/rich-text/ToolbarButton";
 import { FontSizeControl } from "@/components/rich-text/FontSizeControl";
 import { ColorControl } from "@/components/rich-text/ColorControl";
+import { registerEditorImage } from "@/components/rich-text/editorImages";
 
 interface RichTextToolbarProps {
   editor: Editor;
@@ -60,6 +61,11 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
 
   function setLink() {
     if (!editor) return;
+    // 선택 영역이 비어 있으면 setLink가 아무 일도 하지 않아 버튼이 고장 난 것처럼 보인다.
+    if (editor.state.selection.empty && !editor.isActive("link")) {
+      toast.error("링크를 걸 글자나 이미지를 먼저 선택해주세요.");
+      return;
+    }
     const prev = editor.getAttributes("link").href as string | undefined;
     const url = window.prompt("링크 URL을 입력하세요:", prev ?? "");
     if (url === null) return;
@@ -83,7 +89,7 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
   function insertImages(files: FileList | null) {
     if (!editor || !files || files.length === 0) return;
     for (const file of Array.from(files)) {
-      editor.chain().focus().setImage({ src: URL.createObjectURL(file) }).run();
+      editor.chain().focus().setImage({ src: registerEditorImage(file) }).run();
     }
   }
 
@@ -210,7 +216,7 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
 
       <Divider />
 
-      <ToolbarButton onClick={setLink} active={toolbarState?.isLink} title="링크 추가">
+      <ToolbarButton onClick={setLink} active={toolbarState?.isLink} title="링크 추가 (글자·이미지 선택)">
         <Link2 size={15} />
       </ToolbarButton>
       <ToolbarButton onClick={() => editor.chain().focus().unsetLink().run()} title="링크 제거">
