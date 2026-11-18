@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   normalizeLicense,
+  serializeGallery,
+  serializeImageTag,
   uploadImage,
   uploadZip,
 } from "@/components/upload/uploadEditorUtils";
@@ -113,6 +115,11 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         if (block.type === "image" && block.file) {
           uploadedBlockUrls[block.id] = await uploadImage(block.file);
         }
+        if (block.type === "gallery") {
+          for (const image of block.images ?? []) {
+            if (image.file) uploadedBlockUrls[image.id] = await uploadImage(image.file);
+          }
+        }
         if (block.type === "video" && block.videoInput?.trim()) {
           const value = block.videoInput.trim();
           if (block.embedUrl && value === block.lastResolvedInput) {
@@ -141,7 +148,16 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         .map((block) => {
           if (block.type === "image") {
             const src = uploadedBlockUrls[block.id] ?? block.url ?? "";
-            return src ? `<img src="${src}" alt="" />` : "";
+            return src ? serializeImageTag(src) : "";
+          }
+          if (block.type === "gallery") {
+            const images = (block.images ?? [])
+              .map((image) => ({
+                url: uploadedBlockUrls[image.id] ?? image.url,
+                device: image.device,
+              }))
+              .filter((image) => image.url);
+            return serializeGallery(images);
           }
           if (block.type === "video") {
             const src = resolvedVideoEmbeds[block.id] ?? block.embedUrl;

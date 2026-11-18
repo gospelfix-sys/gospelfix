@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { arrayMove } from "@dnd-kit/sortable";
 import {
   createEmptyCodePreviewItem,
   createEmptyPurchaseOption,
@@ -11,6 +12,8 @@ import {
   normalizeLicense,
   parseContentBlocks,
   type ContentBlock,
+  type GalleryDevice,
+  type GalleryImage,
 } from "@/components/upload/uploadEditorUtils";
 import {
   EMPTY_ART_DETAILS,
@@ -24,6 +27,10 @@ import {
 } from "@/types/product.types";
 import { generateProductCode, generateRandomSlug } from "@/lib/utils";
 import { resolveVideoLink } from "@/lib/videoLink";
+
+function createGalleryImage(file: File): GalleryImage {
+  return { id: createId(), url: URL.createObjectURL(file), device: "desktop", file };
+}
 
 interface UseUploadWorkFormOptions {
   categories: ProductCategory[];
@@ -230,14 +237,74 @@ export function useUploadWorkForm({
 
   function handleImagePick(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
-    const newBlocks = files.map<ContentBlock>((file) => ({
-      id: createId(),
-      type: "image",
-      url: URL.createObjectURL(file),
-      file,
-    }));
-    setBlocks((prev) => [...prev, ...newBlocks]);
     e.target.value = "";
+    if (files.length === 0) return;
+    // 한 번에 2장 이상 고르면 상세페이지에서 좌우 슬라이더가 되는 gallery 블록 하나로 묶는다.
+    if (files.length >= 2) {
+      setBlocks((prev) => [
+        ...prev,
+        { id: createId(), type: "gallery", images: files.map(createGalleryImage) },
+      ]);
+      return;
+    }
+    setBlocks((prev) => [
+      ...prev,
+      { id: createId(), type: "image", url: URL.createObjectURL(files[0]), file: files[0] },
+    ]);
+  }
+
+  function addGalleryImages(blockId: string, e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = "";
+    if (files.length === 0) return;
+    setBlocks((prev) =>
+      prev.map((b) =>
+        b.id === blockId
+          ? { ...b, images: [...(b.images ?? []), ...files.map(createGalleryImage)] }
+          : b,
+      ),
+    );
+  }
+
+  function setGalleryImageDevice(blockId: string, imageId: string, device: GalleryDevice) {
+    setBlocks((prev) =>
+      prev.map((b) =>
+        b.id === blockId
+          ? {
+              ...b,
+              images: (b.images ?? []).map((img) =>
+                img.id === imageId ? { ...img, device } : img,
+              ),
+            }
+          : b,
+      ),
+    );
+  }
+
+  // 묶음 안에서 드래그가 끝난 자리로 사진을 옮긴다. 상세페이지 슬라이더 순서가 이 순서를 따른다.
+  function reorderGalleryImages(blockId: string, activeId: string, overId: string) {
+    if (activeId === overId) return;
+    setBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const images = b.images ?? [];
+        const from = images.findIndex((img) => img.id === activeId);
+        const to = images.findIndex((img) => img.id === overId);
+        if (from < 0 || to < 0) return b;
+        return { ...b, images: arrayMove(images, from, to) };
+      }),
+    );
+  }
+
+  function removeGalleryImage(blockId: string, imageId: string) {
+    setBlocks((prev) =>
+      prev.flatMap((b) => {
+        if (b.id !== blockId) return [b];
+        const images = (b.images ?? []).filter((img) => img.id !== imageId);
+        // 마지막 사진까지 지우면 빈 묶음이 남지 않게 블록째 제거한다.
+        return images.length === 0 ? [] : [{ ...b, images }];
+      }),
+    );
   }
 
   function addVideoLinkBlock() {
@@ -270,6 +337,29 @@ export function useUploadWorkForm({
 
   function removeBlock(id: string) {
     setBlocks((prev) => prev.filter((b) => b.id !== id));
+  }
+
+  // 블록을 한 칸 위/아래로 옮긴다. 맨 위·맨 아래에서 더 못 가는 방향은 무시한다.
+  function moveBlock(id: string, direction: "up" | "down") {
+    setBlocks((prev) => {
+      const from = prev.findIndex((b) => b.id === id);
+      const to = direction === "up" ? from - 1 : from + 1;
+      if (from < 0 || to < 0 || to >= prev.length) return prev;
+      const next = [...prev];
+      [next[from], next[to]] = [next[to], next[from]];
+      return next;
+    });
+  }
+
+  // 드래그가 끝난 자리로 블록을 옮긴다. 제자리에 놓았거나 대상이 없으면 무시한다.
+  function reorderBlocks(activeId: string, overId: string) {
+    if (activeId === overId) return;
+    setBlocks((prev) => {
+      const from = prev.findIndex((b) => b.id === activeId);
+      const to = prev.findIndex((b) => b.id === overId);
+      if (from < 0 || to < 0) return prev;
+      return arrayMove(prev, from, to);
+    });
   }
 
   function handleCoverPick(e: React.ChangeEvent<HTMLInputElement>) {
@@ -388,12 +478,18 @@ export function useUploadWorkForm({
     updateCodePreviewItem,
     removeCodePreviewItem,
     handleImagePick,
+    addGalleryImages,
+    setGalleryImageDevice,
+    removeGalleryImage,
+    reorderGalleryImages,
     addVideoLinkBlock,
     updateVideoBlock,
     resolveBlockVideoLink,
     addTextBlock,
     updateTextBlock,
     removeBlock,
+    moveBlock,
+    reorderBlocks,
     handleCoverPick,
     handleCoverRemove,
     handleCoverVideoBlur,

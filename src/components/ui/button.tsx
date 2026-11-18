@@ -19,6 +19,11 @@ const buttonVariants = cva(
         destructive:
           "bg-[rgba(220,38,38,0.1)] text-destructive hover:bg-[rgba(220,38,38,0.2)] focus-visible:border-[rgba(220,38,38,0.4)] focus-visible:ring-[rgba(220,38,38,0.2)] dark:bg-[rgba(220,38,38,0.2)] dark:hover:bg-[rgba(220,38,38,0.3)] dark:focus-visible:ring-[rgba(220,38,38,0.4)]",
         link: "text-primary underline-offset-4 hover:underline",
+        // 사진 위에 얹는 흰 원형 버튼. --gf-white는 다크 모드에서 어두워지므로 색을 고정한다.
+        floating:
+          "border-white bg-white text-black shadow-md hover:border-gf-orange hover:bg-white hover:text-gf-orange dark:hover:bg-white",
+        // 카드·블록 모서리에 얹는 작은 원형 아이콘 버튼(삭제·이동·핸들).
+        round: "border-border bg-gf-white text-foreground hover:bg-muted",
       },
       size: {
         default:
@@ -32,6 +37,8 @@ const buttonVariants = cva(
         "icon-lg": "size-9",
       },
     },
+    // size의 rounded-*가 variant보다 뒤에 적용되므로 원형은 여기서 한 번 더 보장한다.
+    compoundVariants: [{ variant: ["floating", "round"], class: "rounded-full" }],
     defaultVariants: {
       variant: "default",
       size: "default",

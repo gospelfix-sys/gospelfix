@@ -72,6 +72,43 @@ export function isContentHtmlEmpty(html: string): boolean {
   return !/<img[\s>]|<hr[\s/>]/i.test(html);
 }
 
+export interface GallerySlide {
+  src: string;
+  device: "desktop" | "mobile";
+}
+
+export type ContentSegment =
+  | { type: "html"; html: string }
+  | { type: "gallery"; images: GallerySlide[] };
+
+// 업로드 에디터가 묶음 이미지를 <div class="image-gallery"><img …/>…</div>로 저장한다
+// (uploadEditorUtils의 serializeGallery와 형식을 맞출 것). ProseHtml은 innerHTML이라 슬라이더를
+// 넣을 수 없어, 정제가 끝난 HTML을 일반 HTML 조각과 갤러리 조각으로 나눠 렌더링한다.
+// 반드시 sanitizeContentHtml 결과에만 쓴다 — 갤러리의 src는 정제된 값이어야 한다.
+export function splitContentSegments(sanitizedHtml: string): ContentSegment[] {
+  const segments: ContentSegment[] = [];
+  const galleryPattern = /<div class="image-gallery">([\s\S]*?)<\/div>/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  while ((match = galleryPattern.exec(sanitizedHtml))) {
+    const before = sanitizedHtml.slice(lastIndex, match.index);
+    if (before.trim()) segments.push({ type: "html", html: before });
+    // 정제기가 속성값의 &를 &amp;로 바꿔 두므로 React src에 넣기 전에 되돌린다.
+    // 모바일용 사진은 class="device-mobile"이 붙어 있다(uploadEditorUtils의 GALLERY_MOBILE_CLASS).
+    const images = Array.from(match[1].matchAll(/<img\b[^>]*>/g), (tag): GallerySlide | null => {
+      const src = /\ssrc="([^"]*)"/.exec(tag[0])?.[1];
+      if (!src) return null;
+      const isMobile = /\sclass="[^"]*\bdevice-mobile\b[^"]*"/.test(tag[0]);
+      return { src: src.replace(/&amp;/g, "&"), device: isMobile ? "mobile" : "desktop" };
+    }).filter((slide): slide is GallerySlide => slide !== null);
+    if (images.length > 0) segments.push({ type: "gallery", images });
+    lastIndex = galleryPattern.lastIndex;
+  }
+  const rest = sanitizedHtml.slice(lastIndex);
+  if (rest.trim()) segments.push({ type: "html", html: rest });
+  return segments;
+}
+
 export function sanitizeContentHtml(html: string): string {
   return sanitizeHtml(html, {
     allowedTags: ALLOWED_TAGS,

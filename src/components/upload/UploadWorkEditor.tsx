@@ -84,12 +84,18 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
           <UploadCanvas
             blocks={form.blocks}
             onImagePick={form.handleImagePick}
+            onAddGalleryImages={form.addGalleryImages}
+            onSetGalleryImageDevice={form.setGalleryImageDevice}
+            onRemoveGalleryImage={form.removeGalleryImage}
+            onReorderGalleryImages={form.reorderGalleryImages}
             onAddVideoLinkBlock={form.addVideoLinkBlock}
             onAddTextBlock={form.addTextBlock}
             onUpdateVideoBlock={form.updateVideoBlock}
             onResolveBlockVideoLink={form.resolveBlockVideoLink}
             onUpdateTextBlock={form.updateTextBlock}
             onRemoveBlock={form.removeBlock}
+            onMoveBlock={form.moveBlock}
+            onReorderBlocks={form.reorderBlocks}
             onOpenFormatGuide={() => form.setFormatGuideOpen(true)}
           />
 

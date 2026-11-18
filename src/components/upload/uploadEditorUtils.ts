@@ -5,12 +5,25 @@ import {
   type ProductOption,
 } from "@/types/product.types";
 
+// 묶음 안 사진의 용도. 상세페이지에서 Desktop/Mobile 토글로 걸러 보여준다.
+export type GalleryDevice = "desktop" | "mobile";
+
+// gallery 블록 안의 이미지 한 장. file이 있으면 아직 업로드 전(blob URL)이다.
+export interface GalleryImage {
+  id: string;
+  url: string;
+  device: GalleryDevice;
+  file?: File;
+}
+
 export interface ContentBlock {
   id: string;
-  type: "image" | "text" | "video";
+  type: "image" | "text" | "video" | "gallery";
   url?: string;
   // 새로 선택했지만 아직 업로드하지 않은 이미지. 업로드는 게시/초안저장 시점에 한 번에 처리한다.
   file?: File;
+  // gallery 블록 전용: 상세페이지에서 좌우 슬라이더로 보이는 이미지 묶음.
+  images?: GalleryImage[];
   html?: string;
   // video 블록 전용: 사용자가 입력 중인 원본 링크와, resolveVideoLink로 확인된 임베드 URL.
   videoInput?: string;
@@ -78,12 +91,37 @@ export async function uploadImage(file: File): Promise<string> {
   return data.url as string;
 }
 
-// content_html 저장 시 직렬화하는 두 고정 패턴(<img>, video-embed div)만 역으로 인식해
-// image/video 블록으로 복원한다. 그 외(리치 텍스트로 작성된 부분)는 text 블록으로 남긴다 —
-// Tiptap 확장 구성에 iframe 노드가 없어 video-embed div를 텍스트 블록으로 그대로 넘기면
-// 파싱 과정에서 통째로 사라지는 문제(수정 화면 재진입 시 저장했던 동영상이 없어짐)를 막는다.
+// 이미지 묶음(gallery) 직렬화 형식. 상세페이지가 이 클래스를 보고 슬라이더로 바꾼다
+// (src/lib/sanitizeHtml.ts의 splitContentSegments와 형식을 맞출 것).
+export const IMAGE_GALLERY_CLASS = "image-gallery";
+// 모바일용 사진만 클래스를 붙인다. 데스크톱은 기본값이라 표시가 없다.
+export const GALLERY_MOBILE_CLASS = "device-mobile";
+
+export function serializeImageTag(src: string): string {
+  return `<img src="${src}" alt="" />`;
+}
+
+export function serializeGallery(images: { url: string; device: GalleryDevice }[]): string {
+  // 1장짜리 묶음은 슬라이더가 필요 없으므로 일반 이미지로 저장한다.
+  if (images.length === 0) return "";
+  if (images.length === 1) return serializeImageTag(images[0].url);
+  const tags = images.map(({ url, device }) =>
+    device === "mobile"
+      ? `<img src="${url}" alt="" class="${GALLERY_MOBILE_CLASS}" />`
+      : serializeImageTag(url),
+  );
+  return `<div class="${IMAGE_GALLERY_CLASS}">${tags.join("")}</div>`;
+}
+
+// content_html 저장 시 직렬화하는 세 고정 패턴(<img>, image-gallery div, video-embed div)만
+// 역으로 인식해 image/gallery/video 블록으로 복원한다. 그 외(리치 텍스트로 작성된 부분)는 text
+// 블록으로 남긴다 — Tiptap 확장 구성에 iframe 노드가 없어 video-embed div를 텍스트 블록으로
+// 그대로 넘기면 파싱 과정에서 통째로 사라지는 문제(수정 화면 재진입 시 저장했던 동영상이
+// 없어짐)를 막는다. gallery는 <img> 단독 패턴보다 먼저 매칭돼야 안쪽 img가 따로 잡히지 않는다.
 const CONTENT_BLOCK_PATTERN =
-  /<div class="video-embed[^"]*"><iframe src="([^"]*)"[^>]*><\/iframe><\/div>|<img src="([^"]*)" alt="" \/>/g;
+  /<div class="video-embed[^"]*"><iframe src="([^"]*)"[^>]*><\/iframe><\/div>|<div class="image-gallery">((?:<img src="[^"]*" alt=""(?: class="[^"]*")? \/>)+)<\/div>|<img src="([^"]*)" alt="" \/>/g;
+
+const GALLERY_IMAGE_PATTERN = /<img src="([^"]*)" alt=""(?: class="([^"]*)")? \/>/g;
 
 export function parseContentBlocks(html: string): ContentBlock[] {
   const blocks: ContentBlock[] = [];
@@ -105,7 +143,16 @@ export function parseContentBlocks(html: string): ContentBlock[] {
         lastResolvedInput: match[1],
       });
     } else if (match[2]) {
-      blocks.push({ id: createId(), type: "image", url: match[2] });
+      const images = Array.from(match[2].matchAll(GALLERY_IMAGE_PATTERN), (m) => ({
+        id: createId(),
+        url: m[1],
+        device: m[2]?.split(" ").includes(GALLERY_MOBILE_CLASS)
+          ? ("mobile" as const)
+          : ("desktop" as const),
+      }));
+      blocks.push({ id: createId(), type: "gallery", images });
+    } else if (match[3]) {
+      blocks.push({ id: createId(), type: "image", url: match[3] });
     }
     lastIndex = CONTENT_BLOCK_PATTERN.lastIndex;
   }

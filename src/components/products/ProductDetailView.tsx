@@ -2,7 +2,12 @@ import { Suspense } from "react";
 import type { Product } from "@/types/product.types";
 import type { Coupon } from "@/types/coupon.types";
 import type { ProductPriceState } from "@/lib/discount";
-import { isContentHtmlEmpty, sanitizeContentHtml } from "@/lib/sanitizeHtml";
+import {
+  isContentHtmlEmpty,
+  sanitizeContentHtml,
+  splitContentSegments,
+} from "@/lib/sanitizeHtml";
+import { ProductImageSlider } from "@/components/products/ProductImageSlider";
 import { PurchaseOptionsPanel } from "@/components/products/PurchaseOptionsPanel";
 import { PurchaseOptionProvider } from "@/components/products/PurchaseOptionContext";
 import { ProductOptionsSection } from "@/components/products/ProductOptionsSection";
@@ -39,6 +44,8 @@ export function ProductDetailView({
     ? sanitizeContentHtml(product.content_html)
     : "";
   const hasContentHtml = !isContentHtmlEmpty(sanitizedContentHtml);
+  // 이미지 묶음(image-gallery)은 슬라이더로, 나머지는 기존처럼 ProseHtml로 렌더링한다.
+  const contentSegments = splitContentSegments(sanitizedContentHtml);
   const hasCodePreview = (product.code_preview ?? []).some(
     (item) => item.code.trim().length > 0,
   );
@@ -57,8 +64,20 @@ export function ProductDetailView({
 
           {/* 상세 콘텐츠(관리자 에디터 본문): 없으면 렌더링 안 됨 */}
           {hasContentHtml && (
-            <div className="min-w-0 lg:col-start-1">
-              <ProseHtml html={sanitizedContentHtml} />
+            <div className="flex min-w-0 flex-col gap-4 lg:col-start-1">
+              {contentSegments.map((segment, idx) =>
+                segment.type === "gallery" ? (
+                  <ProductImageSlider
+                    key={idx}
+                    images={segment.images}
+                    productName={product.name}
+                    demoUrl={product.demo_url}
+                    sliderId={`product-slider-${idx}`}
+                  />
+                ) : (
+                  <ProseHtml key={idx} html={segment.html} />
+                ),
+              )}
             </div>
           )}
 
