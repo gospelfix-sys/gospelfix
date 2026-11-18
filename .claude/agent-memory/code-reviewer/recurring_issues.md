@@ -93,6 +93,11 @@ type: feedback
 - `RouteModal.tsx`는 document `keydown`으로 Esc를 직접 처리하며 다른 Dialog가 떠 있는지 보지 않는다. RouteModal 안(`BuyButton` → `PaymentModal`)에서 연 `Dialog`는 Esc 한 번에 둘 다 닫힐 수 있고, "Esc로 안 닫힘"을 의도한 팝업도 소용이 없다. Dialog를 RouteModal 하위에서 새로 쓰는 변경은 정의 파일(RouteModal)에서 가드한다.
 - 호출부 반복: `showCloseButton={false} className="gap-0 p-6 ... sm:max-w-sm"`이 3곳(`PaymentPreparingDialog`, `BuyButton`, `PaymentInstructionModal`)에 있다. `sm:max-w-sm`은 기본값과 같아 중복. 4번째가 생기면 `ui`에 알림형 variant로 추출.
 
+### 20. 사이트 테마(gf-themed) 토큰 반전 리뷰 포인트
+- `body.gf-themed` + `html[data-gf-theme="dark"] .gf-themed`가 `--gf-black`/`--gf-white` 등을 뒤집는다. body가 스코프라 포털(Dialog/RouteModal)·전 페이지가 다크를 따른다. 그래서 LayerShell/Footer/RouteModal 패널에 다시 단 `gf-themed`와 "포털이라 스코프 밖" 주석은 중복·stale이다.
+- 점검: `bg-gf-black`+흰 글씨(대신 `bg-black text-white`), `bg-white`+토큰 글씨, `bg-gf-black/N`·`hover:bg-gf-black/N`(#4 알파 모디파이어 미생성 가능), 옛 `gf-dark` 주석·셀렉터 잔존. `THEME_INIT_SCRIPT`와 `resolveTheme`/`parseThemeChoice`는 규칙을 함께 고쳐야 한다(2026-11 리뷰 시점 일치 확인).
+- 서비스된 라우트(`/about`) 삭제 때 `next.config.mjs` redirects 누락이 재발하기 쉽다(#10).
+
 ## B. 아키텍처 메모
 
 ### BFF 데이터 흐름
