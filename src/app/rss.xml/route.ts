@@ -19,9 +19,12 @@ function escapeXml(value: string): string {
 export async function GET() {
   const news = await serverFetchOr<NewsListItem[]>("/api/news", [], "rss");
 
+  // 날짜가 깨진 글은 NaN이 되므로 정렬에서는 맨 뒤로 보내고 pubDate만 생략한다
   const items = news
     .filter((item) => item.is_published)
-    .map((item) => {
+    .map((item) => ({ item, time: Date.parse(item.created_at) }))
+    .sort((a, b) => (Number.isNaN(b.time) ? 0 : b.time) - (Number.isNaN(a.time) ? 0 : a.time))
+    .map(({ item, time }) => {
       const link = `${SITE_URL}/blog/${encodeURIComponent(item.slug)}`;
       return [
         "    <item>",
@@ -29,7 +32,8 @@ export async function GET() {
         `      <link>${link}</link>`,
         `      <guid isPermaLink="true">${link}</guid>`,
         `      <category>${escapeXml(item.category)}</category>`,
-        `      <pubDate>${new Date(item.created_at).toUTCString()}</pubDate>`,
+        // Invalid Date가 그대로 출력되면 RSS 리더가 항목을 거부할 수 있다
+        ...(Number.isNaN(time) ? [] : [`      <pubDate>${new Date(time).toUTCString()}</pubDate>`]),
         "    </item>",
       ].join("\n");
     })
