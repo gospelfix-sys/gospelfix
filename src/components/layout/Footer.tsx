@@ -16,6 +16,11 @@ const FOOTER_LINKS = [
   { href: "/blog", label: "블로그" },
 ];
 
+const FEED_LINKS = [
+  { href: "/rss.xml", label: "RSS" },
+  { href: "/sitemap.xml", label: "사이트맵" },
+];
+
 // TODO: cms.api 연동 후 serverFetch로 조회한 값으로 교체
 const BUSINESS_INFO = [
   { label: "사업자 등록번호", value: "815-34-01726" },
@@ -108,6 +113,18 @@ export default function Footer() {
             >
               개인정보처리방침
             </LegalDialogTrigger>
+            {/* XML 리소스라 Next 라우팅이 아닌 일반 a 태그로 새 탭에서 연다 */}
+            {FEED_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline text-gf-gray1 transition-colors hover:text-gf-black"
+              >
+                {link.label}
+              </a>
+            ))}
             {showRefund && (
               <LegalDialogTrigger
                 type="refund"

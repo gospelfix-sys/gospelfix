@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "GOSPELFIX",
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
+  alternates: { types: { "application/rss+xml": "/rss.xml" } },
   ...(NAVER_SITE_VERIFICATION && {
     other: { "naver-site-verification": NAVER_SITE_VERIFICATION },
   }),
