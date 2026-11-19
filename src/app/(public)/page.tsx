@@ -13,7 +13,7 @@ import { CategoryTabs } from "@/components/layer/CategoryTabs";
 
 const HOME_TITLE = "가스펄픽스 | 브랜딩 디자인 소재 마켓";
 const HOME_DESCRIPTION =
-  "CI 로고, 목업, 홈페이지, 대시보드, 이커머스 템플릿, 광고 소재(PSD·AI)까지. 브랜딩에 필요한 모든 디자인 소재를 한 곳에서 구매하세요.";
+  "CI 로고, 목업, 홈페이지, 대시보드, 이커머스 템플릿, 광고 소재(PSD·AI)까지. 브랜딩 디자인 소재를 한 곳에서 구매하세요.";
 
 // 루트 레이아웃의 openGraph/twitter는 최상위 키 단위로 통째로 대체되므로,
 // 홈의 제목·설명이 공유 미리보기에도 반영되도록 함께 지정한다.
