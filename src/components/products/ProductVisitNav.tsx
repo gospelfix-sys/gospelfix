@@ -47,14 +47,14 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
   return (
     <nav
       className={cn(
-        "pointer-events-none z-40 flex justify-center px-6",
+        "pointer-events-none z-40 flex justify-center px-3 sm:px-6",
         isInModal ? "fixed inset-x-0 bottom-6" : "sticky bottom-4",
       )}
     >
-      <div className="pointer-events-auto flex h-[60px] w-fit items-center gap-2.5 rounded-md bg-black px-2 shadow-[0_1px_20px_rgba(0,0,0,0.25)] sm:px-4">
+      <div className="pointer-events-auto flex h-[60px] w-fit max-w-full items-center gap-1.5 rounded-md bg-black px-2 shadow-[0_1px_20px_rgba(0,0,0,0.25)] sm:gap-2.5 sm:px-4">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-0.5 text-base font-black tracking-[-0.03em] text-white"
+          className="flex shrink-0 items-center gap-0.5 text-sm font-black tracking-[-0.03em] text-white sm:text-base"
         >
           <span className="font-kr">GOSPEL</span>
           <span className="font-kr text-gf-orange">FIX</span>
@@ -65,7 +65,7 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
         <Button
           type="button"
           onClick={scrollToProductInfo}
-          className="h-11 gap-1.5 rounded-md border border-white/20 bg-transparent px-4 text-sm font-bold text-white/60 shadow-none hover:bg-transparent hover:text-white"
+          className="h-10 shrink-0 gap-1.5 rounded-md border border-white/20 bg-transparent px-3 text-sm font-bold text-white/60 shadow-none hover:bg-transparent hover:text-white sm:h-11 sm:px-4"
         >
           <Info className="size-4" />
           Info
@@ -76,7 +76,7 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
             href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 shrink-0 items-center rounded-md bg-gf-orange px-5 text-sm font-bold text-white transition-all duration-200 hover:opacity-80"
+            className="flex h-10 shrink-0 items-center rounded-md bg-gf-orange px-3.5 text-sm font-bold text-white transition-all duration-200 hover:opacity-80 sm:h-11 sm:px-5"
           >
             Visit Site
           </a>
@@ -88,7 +88,7 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
           type="button"
           onClick={handleBack}
           aria-label="뒤로가기"
-          className="size-11 shrink-0 rounded-md border border-white bg-white p-0 text-black shadow-none hover:bg-white/90 hover:text-black"
+          className="size-10 shrink-0 rounded-md border border-white bg-white p-0 text-black shadow-none hover:bg-white/90 hover:text-black sm:size-11"
         >
           <ArrowLeft className="size-4" />
         </Button>
