@@ -14,7 +14,7 @@ import { SkeletonRegion } from "@/components/skeletons/SkeletonRegion";
 export default function LayerLoading() {
   return (
     <LayerShell>
-      <HomeHero />
+      <HomeHero isFallback />
 
       <section id="gallery" className="scroll-mt-20 px-6 pb-24 lg:px-10">
         <div className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
