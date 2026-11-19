@@ -90,30 +90,62 @@ export default function WorkListItem({
       onPointerMove={handlePointerMove}
       className="relative"
     >
-      <motion.button
-        type="button"
-        onClick={() => onSelect(work)}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        aria-haspopup="dialog"
+      <motion.div
         initial={false}
         animate={{ opacity: dimmed ? DIM_OPACITY : 1 }}
         transition={DIM_TRANSITION}
-        whileTap={{ scale: PRESS_SCALE, transition: PRESS_TRANSITION }}
-        // 좌측 정렬 텍스트라 가운데 기준으로 줄면 글자가 오른쪽으로 밀려 보인다
-        className={cn("block w-full origin-left py-3 text-left", FOCUS_RING)}
       >
-        <span
-          lang="en"
-          className="block break-words font-rf-display text-[clamp(2.25rem,6.5vw,5rem)] uppercase leading-[1.05]"
+        <motion.button
+          type="button"
+          onClick={() => onSelect(work)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          aria-haspopup="dialog"
+          whileTap={{ scale: PRESS_SCALE, transition: PRESS_TRANSITION }}
+          // 좌측 정렬 텍스트라 가운데 기준으로 줄면 글자가 오른쪽으로 밀려 보인다
+          className={cn("block w-full origin-left pt-3 text-left", FOCUS_RING)}
         >
-          {work.nameEn}
-        </span>
-        <span className={cn("mt-1 block text-sm", tone.muted)}>
-          – {work.category}
-          <span className="sr-only"> ({work.nameKo}, 상세 보기)</span>
-        </span>
-      </motion.button>
+          <span
+            lang="en"
+            className="block break-words font-rf-display text-[clamp(2.25rem,6.5vw,5rem)] uppercase leading-[1.05]"
+          >
+            {work.nameEn}
+          </span>
+          <span className="sr-only">
+            {work.category} ({work.nameKo}, 상세 보기)
+          </span>
+        </motion.button>
+
+        {/* 링크는 버튼 안에 중첩할 수 없어 캡션 줄을 버튼 밖으로 빼고, 캡션 클릭은 같은 상세 열기를 맡긴다.
+            키보드·스크린리더는 위 버튼이 담당하므로 캡션 버튼은 탭 순서와 접근성 트리에서 뺀다 */}
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5 pb-3">
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-hidden="true"
+            onClick={() => onSelect(work)}
+            className={cn("text-left text-sm", tone.muted)}
+          >
+            – {work.category}
+          </button>
+          {work.extraLinks?.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "rounded-full border border-current px-3 py-0.5 text-xs transition-colors hover:bg-rf-cream hover:text-rf-ink",
+                tone.muted,
+                FOCUS_RING,
+              )}
+            >
+              {link.label}
+              <span className="sr-only"> (새 탭에서 열림)</span>
+            </a>
+          ))}
+        </div>
+      </motion.div>
 
       {/* 호버 썸네일 프리뷰(lg 이상). 썸네일이 세로로 긴 캡처라 3:4로 높여 윗부분만 잘리지 않게 한다. 바깥 div는 포인터 y 추적, 안쪽은 나타남·사라짐을 맡아
           두 transform이 서로의 애니메이션을 덮어쓰지 않게 나눴다 */}

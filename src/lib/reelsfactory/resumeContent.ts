@@ -18,12 +18,12 @@ export const WORK_INTRO = [
   "디자인이 화면에서 끝나지 않고 사용자가 만나는 실제 결과물이 되도록 만듭니다.",
 ];
 
-export const EXPERIENCE_SUMMARY = "디자인과 개발 경력 총 8년입니다.";
+export const EXPERIENCE_SUMMARY = "웹 디자인과 퍼블리셔 경력 총 8년입니다.";
 
 export const ABOUT_HEADLINE = "웹디자이너 소윤호입니다.";
 
 export const ABOUT_PARAGRAPHS = [
-  "웹디자이너로 커리어를 시작했고, 이후 프론트엔드 개발자로 일하며 디자인이 구현 단계에서 어떻게 달라지는지 직접 경험했습니다.",
+  "웹디자이너로 커리어를 시작했고, 이후 퍼블리셔로 일하며 디자인이 구현 단계에서 어떻게 달라지는지 직접 경험했습니다.",
   "디자이너가 구현 가능성과 데이터 구조를 이해하고 있으면 시안의 완성도와 협업 속도가 모두 높아진다고 생각합니다.",
   "컴포넌트와 타이포, 색상 같은 디자인 기준을 먼저 정리하고 시스템으로 만들어 일관성을 지킵니다. AI를 활용해 시안 제작과 API 연동 화면 구현의 반복 작업을 줄이고, 그 시간을 사용자 경험을 고민하는 데 씁니다.",
 ];
@@ -44,7 +44,7 @@ export const WORK_PROJECTS: WorkProject[] = [
       "모바일 퍼스트 반응형으로 설계",
       "운영자가 직접 관리할 수 있는 관리자 페이지를 분리해 구축",
     ],
-    tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
+    tools: ["Figma", "React", "Next.js", "styled-components", "Axios", "Claude"],
     thumbnail: "/reelsfactory/gopoomgyeok.avif",
     images: [],
     siteUrl: "https://xn--i89a2dz9q2p1bhpb.com/",
@@ -57,7 +57,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     category: "클래식 음악 미디어 웹사이트",
     duration: "12주",
     summary:
-      "클래식 음악 미디어 분야에 없던 반응형 홈페이지를 기획부터 개발까지 직접 만들었습니다.",
+      "클래식 음악 미디어 분야에 없던 반응형 홈페이지를 기획부터 퍼블리셔 작업까지 직접 만들었습니다.",
     situation:
       "클래식 음악 미디어 분야에는 반응형 기반의 홈페이지가 없었고, 콘텐츠가 쌓일수록 탐색이 어려워지는 정보구조·UI 문제가 있었습니다.",
     actions: [
@@ -65,7 +65,7 @@ export const WORK_PROJECTS: WorkProject[] = [
       "클래식 음악 미디어 분야에서 찾아보기 어려웠던 반응형 기반 홈페이지를 처음으로 제작해 PC와 모바일 어디서든 기사를 읽을 수 있게 구현",
       "콘텐츠가 쌓여도 탐색하기 쉽도록 정보구조와 UX/UI를 직접 설계·디자인해 제작",
     ],
-    tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
+    tools: ["Figma", "React", "Next.js", "styled-components", "Axios", "Claude"],
     thumbnail: "/reelsfactory/yezakeumak.avif",
     images: [],
     // 계약 만료로 운영이 끝난 사이트라 외부 링크는 숨기고 안내 문구만 보여준다
@@ -87,10 +87,13 @@ export const WORK_PROJECTS: WorkProject[] = [
       "폰트를 Pretendard로 통일하고 모노톤 중심으로 정리해 일관된 브랜드 톤 구축",
       "카페24 기반 쇼핑몰 스킨을 직접 커스텀하고 로딩 화면과 인터랙션까지 구현",
     ],
-    tools: ["Figma", "HTML5", "CSS3", "React", "Next.js", "Illustrator"],
+    tools: ["Figma", "HTML5", "CSS3", "JavaScript(ES6)", "jQuery", "Cafe24", "Claude"],
     thumbnail: "/reelsfactory/deartintsanta.avif",
     images: [],
     siteUrl: "https://deartintsanta.com",
+    extraLinks: [
+      { label: "쇼핑몰 기획전 페이지", href: "https://gospelfix-dev.github.io/component-zip/0006/" },
+    ],
     archivedNote: null,
   },
 ];
@@ -99,14 +102,14 @@ export const WORK_PROJECTS: WorkProject[] = [
 export const EXPERIENCES: ExperienceItem[] = [
   {
     company: "GospelFix",
-    role: "대표 · 웹디자인·브랜딩·프론트개발",
+    role: "대표 · 웹디자인·브랜딩·퍼블리셔",
     period: "2026. 03 ~ 현재",
     headline: "중소사업장 웹사이트와 브랜드 제작",
     situation: "중소사업장의 웹사이트와 브랜드 제작을 기획부터 배포까지 1인으로 수행합니다.",
     actions: [
-      "기획, UI 디자인, 프론트개발, 배포를 직접 수행",
+      "기획, UI 디자인, 퍼블리셔 작업, 배포를 직접 수행",
       "CI 로고, 배너, 상세페이지, MOCKUP, 광고소재 등 브랜드 디자인 에셋 제작",
-      "챗봇, 알림, 관리자 페이지 등 서비스 기능 기획·개발",
+      "챗봇, 알림, 관리자 페이지 등 서비스 기능 기획·퍼블리셔 작업",
       "고품격대패, 예작음악 신문사, 디어틴트산타 제작",
     ],
     result: "프로젝트별 상세는 Work 섹션에 정리했습니다.",
@@ -118,6 +121,7 @@ export const EXPERIENCES: ExperienceItem[] = [
       "React",
       "Next.js",
       "styled-components",
+      "Axios",
       "Claude",
       "Cafe24",
       "고도몰",
@@ -127,7 +131,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   },
   {
     company: "비스톤스",
-    role: "프론트엔드개발팀 사원",
+    role: "퍼블리셔팀 사원",
     period: "2025. 01 ~ 2025. 10",
     headline: "삼성전자 패밀리몰 기획전·이벤트 페이지",
     situation:
@@ -138,7 +142,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   },
   {
     company: "펠리즈(Feliz)",
-    role: "개발팀 프리랜서",
+    role: "퍼블리셔팀 프리랜서",
     period: "2024. 09 ~ 2024. 11",
     headline: "SKT UX 가이드라인 기반 티월드 채널 UI",
     situation: "티멤버십·티다이렉트샵·티월드 3개 채널을 통합하는 서비스 UI 작업이었습니다.",
@@ -151,7 +155,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   },
   {
     company: "㈜오엠티랩스",
-    role: "개발팀 사원",
+    role: "퍼블리셔팀 사원",
     period: "2023. 05 ~ 2024. 06",
     headline: "BBQ몰 및 기업·이벤트 사이트 UI 디자인·구현",
     situation:
@@ -165,7 +169,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   },
   {
     company: "더스포츠커뮤니케이션",
-    role: "개발팀 프리랜서",
+    role: "퍼블리셔팀 프리랜서",
     period: "2022. 12 ~ 2023. 03",
     headline: "전북현대모터스FC 오피셜 스토어 구축",
     situation: "구단 공식 온라인 스토어를 신규 구축했습니다. (NHN커머스 기반, 기여도 50%)",
@@ -225,7 +229,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
   { label: "Design", items: ["Figma", "Photoshop", "Illustrator"] },
   { label: "Markup & Style", items: ["HTML5", "CSS3", "SCSS", "JavaScript", "jQuery"] },
   { label: "Frontend", items: ["React", "Next.js", "TypeScript", "Vue2"] },
-  { label: "Commerce & CMS", items: ["Cafe24", "NHN커머스", "WordPress"] },
+  { label: "Commerce & CMS", items: ["Cafe24", "NHN커머스"] },
 ];
 
 export const EDUCATION: EducationItem[] = [
@@ -243,13 +247,13 @@ export const EDUCATION: EducationItem[] = [
       "팀 프로젝트 3회, React 기반 CSR. 중복 useState를 커스텀 훅으로 분리하고 Axios interceptor로 토큰 재요청을 구현했습니다.",
   },
   {
-    title: "비개발자를 위한 웹개발 종합반",
+    title: "비전공자를 위한 웹 퍼블리셔 종합반",
     organization: "스파르타코딩클럽",
     period: "2022. 02 ~ 2022. 03",
     description: "HTML/CSS/JS 기초부터 AWS 배포까지, 공공 API 연동 실시간 페이지를 제작했습니다.",
   },
   {
-    title: "웹 퍼블리셔 및 프론트 개발 양성과정",
+    title: "웹 퍼블리셔 양성과정",
     organization: "KIC캠퍼스",
     period: "2019. 02 ~ 2019. 08",
     description:

@@ -16,6 +16,8 @@ export interface WorkProject {
   images: string[];
   /** null이면 링크 버튼을 그리지 않는다 */
   siteUrl: string | null;
+  /** 사이트 방문 버튼 아래에 덧붙이는 추가 링크 버튼 */
+  extraLinks?: ContactLink[];
   /** 운영이 끝난 프로젝트의 안내 문구. 있으면 링크 대신 보여준다 */
   archivedNote: string | null;
 }

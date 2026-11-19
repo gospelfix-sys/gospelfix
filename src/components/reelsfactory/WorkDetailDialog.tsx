@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import type { WorkProject } from "@/types/reelsfactory.types";
+import type { ContactLink, WorkProject } from "@/types/reelsfactory.types";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import ToolGroups from "@/components/reelsfactory/ToolGroups";
@@ -22,6 +22,13 @@ interface WorkDetailDialogProps {
 export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetailDialogProps) {
   // API 이미지가 없으면 썸네일 한 장으로 대신한다
   const gallery = work ? (work.images.length > 0 ? work.images : [work.thumbnail]) : [];
+  // 사이트 방문 버튼과 추가 링크 버튼은 모양이 같아 한 목록으로 합쳐 같은 마크업으로 그린다
+  const links: ContactLink[] = work
+    ? [
+        ...(work.siteUrl ? [{ label: "사이트 방문", href: work.siteUrl }] : []),
+        ...(work.extraLinks ?? []),
+      ]
+    : [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -99,19 +106,24 @@ export default function WorkDetailDialog({ work, open, onOpenChange }: WorkDetai
             {work.archivedNote ? (
               <p className="text-rf-cream/70">{work.archivedNote}</p>
             ) : (
-              work.siteUrl && (
-                <a
-                  href={work.siteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ variant: "default", size: "lg" }),
-                    "bg-rf-cream text-rf-ink hover:bg-rf-cream/85",
-                  )}
-                >
-                  사이트 방문
-                  <span className="sr-only"> (새 탭에서 열림)</span>
-                </a>
+              links.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        buttonVariants({ variant: "default", size: "lg" }),
+                        "bg-rf-cream text-rf-ink hover:bg-rf-cream/85",
+                      )}
+                    >
+                      {link.label}
+                      <span className="sr-only"> (새 탭에서 열림)</span>
+                    </a>
+                  ))}
+                </div>
               )
             )}
           </>
