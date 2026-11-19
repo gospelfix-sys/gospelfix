@@ -23,11 +23,13 @@ export function routeModalPanelClass(theme: RouteModalTheme): string {
   return theme === "themed" ? `${ROUTE_MODAL_PANEL_CLASS} gf-themed` : ROUTE_MODAL_PANEL_CLASS;
 }
 
-// 뒤로가기 버튼은 테마에 따라 면이 뒤집히도록 토큰(gf-black/gf-white)을 쓴다. 라이트는 검정 면, 다크는 흰 면.
+// 닫기 버튼은 패널 면(흰색/gf-bg) 위에서 묻히지 않도록 테두리를 둔다. themed는 면·글자·테두리를
+// 토큰(gf-white/gf-black)으로 써서 라이트는 흰 면+검정 X, 다크는 어두운 면+밝은 X로 따라간다.
+// 상품 상세 모달(light)은 테마와 무관하게 항상 라이트 패널이라 고정 색을 쓴다.
 export function routeModalCloseButtonClass(theme: RouteModalTheme): string {
   return theme === "themed"
-    ? "bg-gf-black text-gf-white hover:bg-gf-black hover:text-gf-white hover:opacity-100"
-    : "bg-black text-white hover:bg-black hover:text-white hover:opacity-100 dark:hover:bg-black";
+    ? "border border-[color-mix(in_srgb,var(--gf-black)_15%,transparent)] bg-gf-white text-gf-black hover:bg-gf-white hover:text-gf-black hover:opacity-100"
+    : "border border-black/15 bg-white text-black hover:bg-white hover:text-black hover:opacity-100";
 }
 
 // 패널은 아래에서 살짝 올라오며 나타나고, 같은 방향으로 내려가며 사라진다.
