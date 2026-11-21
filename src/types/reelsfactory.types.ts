@@ -31,6 +31,8 @@ export interface FeaturedProject {
   background: string[];
   role: string[];
   result: string[];
+  /** 대표 프로젝트에만 보여줄 추가 링크. 사이트·기획전 링크 뒤에 붙는다 */
+  links?: ContactLink[];
 }
 
 export interface ExperienceItem {

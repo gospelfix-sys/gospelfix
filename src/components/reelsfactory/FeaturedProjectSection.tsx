@@ -23,6 +23,7 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
   const links = [
     ...(work.siteUrl ? [{ label: "쇼핑몰 보기", href: work.siteUrl }] : []),
     ...(work.extraLinks ?? []),
+    ...(FEATURED_PROJECT.links ?? []),
   ];
 
   return (
@@ -65,7 +66,7 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
           {links.length > 0 && (
             <RevealItem as="ul" className="flex flex-wrap gap-x-8 gap-y-3">
               {links.map((link) => (
-                <li key={link.href}>
+                <li key={`${link.label}-${link.href}`}>
                   <a
                     href={link.href}
                     target="_blank"
