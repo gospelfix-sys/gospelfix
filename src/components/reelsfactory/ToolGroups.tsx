@@ -30,8 +30,12 @@ export default function ToolGroups({ tools, chipClassName, labelClassName }: Too
   return (
     <div className="flex flex-col gap-2">
       {groups.map((group) => (
-        <div key={group.label} className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <span className={cn("w-24 shrink-0 text-xs", labelClassName)}>{group.label}</span>
+        // 모바일은 칩 개수에 따라 라벨 옆/아래로 갈리지 않도록 항상 라벨을 위에 둔다
+        <div
+          key={group.label}
+          className="flex flex-col items-start gap-1.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3"
+        >
+          <span className={cn("shrink-0 text-xs sm:w-24", labelClassName)}>{group.label}</span>
           <ul className="flex flex-wrap gap-1.5" aria-label={group.label}>
             {group.items.map((tool) => (
               <li key={tool} className={cn("rounded-sm px-2 py-0.5 text-xs", chipClassName)}>
