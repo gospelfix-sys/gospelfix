@@ -39,7 +39,9 @@ export default function WorkSection({ works }: WorkSectionProps) {
     <SectionShell id="work" tone="cream">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
         <div className="flex flex-col gap-8">
-          <SectionTitle sectionId="work">Work</SectionTitle>
+          <SectionTitle sectionId="work" size="md">
+            More Work
+          </SectionTitle>
           <RevealGroup className={cn("flex max-w-sm flex-col gap-3", tone.muted)}>
             {WORK_INTRO.map((paragraph) => (
               <RevealItem as="p" key={paragraph}>

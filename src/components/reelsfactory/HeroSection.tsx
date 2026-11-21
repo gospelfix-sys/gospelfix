@@ -9,7 +9,7 @@ interface HeroLink {
 }
 
 const HERO_LINKS: HeroLink[] = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "#featured" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];

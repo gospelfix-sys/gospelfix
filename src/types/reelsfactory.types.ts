@@ -22,6 +22,17 @@ export interface WorkProject {
   archivedNote: string | null;
 }
 
+/** 최상단 대표 프로젝트. 공고의 "대표 프로젝트 3칸" 형식을 따른다. 값이 없는 항목은 그리지 않는다 */
+export interface FeaturedProject {
+  /** `WorkProject.slug`. 링크·이름은 이 slug로 mergeWorks 결과에서 가져온다 */
+  slug: string;
+  /** 프로젝트명 옆 한 줄 (기간 / 플랫폼) */
+  meta: string;
+  background: string[];
+  role: string[];
+  result: string[];
+}
+
 export interface ExperienceItem {
   company: string;
   role: string;

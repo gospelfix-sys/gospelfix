@@ -2,6 +2,7 @@ import type {
   ContactLink,
   EducationItem,
   ExperienceItem,
+  FeaturedProject,
   SkillGroup,
   WorkProject,
 } from "@/types/reelsfactory.types";
@@ -21,6 +22,7 @@ export const WORK_INTRO: string[] = resume.workIntro;
 export const EXPERIENCE_SUMMARY: string = resume.experienceSummary;
 export const ABOUT_HEADLINE: string = resume.aboutHeadline;
 export const ABOUT_PARAGRAPHS: string[] = resume.aboutParagraphs;
+export const FEATURED_PROJECT: FeaturedProject = resume.featuredProject;
 export const WORK_PROJECTS: WorkProject[] = resume.workProjects;
 export const EXPERIENCES: ExperienceItem[] = resume.experiences;
 export const SKILL_GROUPS: SkillGroup[] = resume.skillGroups;

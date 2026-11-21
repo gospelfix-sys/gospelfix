@@ -11,7 +11,8 @@ export interface SectionMeta {
 // 순서는 페이지 렌더 순서와 같아야 한다.
 export const SECTIONS: SectionMeta[] = [
   { id: "home", label: "Home", tone: "ink" },
-  { id: "work", label: "Work", tone: "cream" },
+  { id: "featured", label: "Featured", tone: "cream" },
+  { id: "work", label: "More Work", tone: "cream" },
   { id: "about", label: "About", tone: "ink" },
   { id: "experience", label: "Experience", tone: "cream" },
   { id: "skills", label: "Skills", tone: "ink" },
