@@ -86,6 +86,7 @@ type: feedback
 ### 18. 최상위 `"use client"` 페이지 컴포넌트가 서버 섹션을 삼킴 (Major)
 - 징후: 페이지 래퍼가 IntersectionObserver/상태 하나 때문에 `"use client"`가 되면, 거기서 import한 훅 없는 섹션·정적 콘텐츠 모듈(`resumeContent` 등)까지 전부 클라이언트 번들이 된다. 주석에는 "서버 컴포넌트로 둔다"고 써 있어도 실제로는 아니다(`ReelsfactoryPage.tsx` 사례).
 - 방법: 상태·옵저버는 그것을 쓰는 가장 작은 클라이언트 컴포넌트(예: `SideRail`)로 내리고, 페이지 래퍼는 서버 컴포넌트로 둔다.
+- 현황(2026-11 리뷰): `ReelsfactoryPage`는 서버 컴포넌트로 정리됨(옵저버는 `SideRail`). 새 섹션은 `sections.ts`(SECTIONS)와 렌더 순서를 함께 맞춰야 하고, 데이터 파일(`resume.json`)의 문구가 섹션 이름 변경(Work→More Work 등)을 따라가는지 grep으로 확인한다.
 - 연관: cms.api 값(`site_url` 등)을 병합해 `href`로 쓰는 매퍼(`mergeWorks`)는 `https?` 검증을 누락하기 쉽다(#15).
 
 ### 19. base-ui Dialog 닫힘 애니메이션 중 내용 변형 + RouteModal Esc 충돌 (Major)
