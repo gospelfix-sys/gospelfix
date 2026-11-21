@@ -27,9 +27,10 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
   ];
 
   return (
-    <SectionShell id="featured" tone="cream">
+    // 바로 아래 More Work와 같은 배경이라 맞닿는 쪽 여백을 줄여 한 덩어리로 읽히게 한다
+    <SectionShell id="featured" tone="cream" className="pb-8 md:pb-12">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-0">
           <SectionTitle sectionId="featured" size="md">
             Featured
           </SectionTitle>
@@ -42,9 +43,15 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
 
         <RevealGroup className="flex max-w-2xl flex-col gap-10">
           <RevealItem className="flex flex-col gap-2">
-            <p className="text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-snug">
-              {work.nameKo}
-            </p>
+            {/* 영문·한글 이름을 한 줄에 두되, 좁은 화면에서는 줄바꿈되게 한다 */}
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <p className="font-rf-display text-[clamp(1.75rem,3.5vw,2.75rem)] leading-none tracking-wide">
+                {work.nameEn}
+              </p>
+              <p className="text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-snug">
+                {work.nameKo}
+              </p>
+            </div>
             <p className={cn("text-sm", tone.muted)}>{FEATURED_PROJECT.meta}</p>
           </RevealItem>
 

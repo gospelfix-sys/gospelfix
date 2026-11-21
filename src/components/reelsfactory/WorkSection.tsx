@@ -36,7 +36,8 @@ export default function WorkSection({ works }: WorkSectionProps) {
   };
 
   return (
-    <SectionShell id="work" tone="cream">
+    // Featured와 같은 배경으로 이어지므로 화면 높이를 채우거나 세로 중앙에 두지 않고 위 여백을 줄인다
+    <SectionShell id="work" tone="cream" className="min-h-0 justify-start pt-8 md:pt-12">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
         <div className="flex flex-col gap-8">
           <SectionTitle sectionId="work" size="md">
