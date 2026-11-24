@@ -32,6 +32,22 @@
       "그 뒤로는 화면의 완성도뿐 아니라, 사용자가 상품을 찾고 고르고 구매하기까지의 흐름이 막히지 않는지를 함께 보며 디자인합니다.",
       "현재 카페24 스킨 리뉴얼을 진행 중이며, 작업본을 아래 링크에서 볼 수 있습니다."
     ],
+    "figmaShots": [
+      {
+        "src": "/reelsfactory/deartintsanta-figma-system.webp",
+        "alt": "Figma 디자인 시스템 보드. 로고, 아이콘, 컬러 팔레트, PC GNB, 버튼, 페이지네이션을 정리한 화면",
+        "caption": "화면을 그리기 전에 로고·컬러·GNB·버튼·페이지네이션부터 공통 기준으로 정리한 보드",
+        "width": 1800,
+        "height": 1269
+      },
+      {
+        "src": "/reelsfactory/deartintsanta-figma-detail.webp",
+        "alt": "Figma 상세페이지 시안. PC 1920px과 모바일 375px 화면",
+        "caption": "PC(1920px)·모바일(375px) 상세페이지에서 할인 혜택과 장바구니·바로구매 동선을 고민한 시안",
+        "width": 1800,
+        "height": 1142
+      }
+    ],
     "links": [
       {
         "label": "카페24 스킨 작업본 (리뉴얼 진행 중)",

@@ -22,6 +22,17 @@ export interface WorkProject {
   archivedNote: string | null;
 }
 
+/** 대표 프로젝트에 곁들이는 Figma 작업 화면 캡처 */
+export interface FeaturedFigmaShot {
+  /** public 기준 경로 */
+  src: string;
+  alt: string;
+  caption: string;
+  /** next/image가 레이아웃 시프트 없이 비율을 잡도록 원본 픽셀 크기를 적는다 */
+  width: number;
+  height: number;
+}
+
 /** 최상단 대표 프로젝트. 공고의 "대표 프로젝트 3칸" 형식을 따른다. 값이 없는 항목은 그리지 않는다 */
 export interface FeaturedProject {
   /** `WorkProject.slug`. 링크·이름은 이 slug로 mergeWorks 결과에서 가져온다 */
@@ -31,6 +42,8 @@ export interface FeaturedProject {
   background: string[];
   role: string[];
   result: string[];
+  /** UX/UI를 고민한 Figma 작업 흔적. 없으면 그리지 않는다 */
+  figmaShots?: FeaturedFigmaShot[];
   /** 대표 프로젝트에만 보여줄 추가 링크. 사이트·기획전 링크 뒤에 붙는다 */
   links?: ContactLink[];
 }

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import type { WorkProject } from "@/types/reelsfactory.types";
 import { FEATURED_PROJECT } from "@/lib/reelsfactory/resumeContent";
 import SectionShell, { FOCUS_RING, TONE_CLASSES } from "@/components/reelsfactory/SectionShell";
@@ -25,6 +27,7 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
     ...(work.extraLinks ?? []),
     ...(FEATURED_PROJECT.links ?? []),
   ];
+  const figmaShots = FEATURED_PROJECT.figmaShots ?? [];
 
   return (
     // 바로 아래 More Work와 같은 배경이라 맞닿는 쪽 여백을 줄여 한 덩어리로 읽히게 한다
@@ -69,6 +72,40 @@ export default function FeaturedProjectSection({ work }: FeaturedProjectSectionP
               </RevealItem>
             );
           })}
+
+          {figmaShots.length > 0 && (
+            <RevealItem className={cn("flex flex-col gap-4 border-t pt-4", tone.rule)}>
+              <h3 className="text-xl font-medium text-inherit">Figma에서 UX/UI를 고민한 흔적</h3>
+              <ul className="flex flex-col gap-8">
+                {figmaShots.map((shot) => (
+                  <li key={shot.src}>
+                    <figure className="flex flex-col gap-3">
+                      {/* 화면 속 글씨가 작아서 원본 크기로 볼 수 있게 새 탭으로 연다 */}
+                      <a
+                        href={shot.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn("block overflow-hidden border", tone.rule, FOCUS_RING)}
+                      >
+                        <Image
+                          src={shot.src}
+                          alt={shot.alt}
+                          width={shot.width}
+                          height={shot.height}
+                          sizes="(min-width: 1024px) 672px, 100vw"
+                          className="h-auto w-full"
+                        />
+                        <span className="sr-only"> (원본 이미지 새 탭에서 열림)</span>
+                      </a>
+                      <figcaption className={cn("text-sm leading-relaxed", tone.muted)}>
+                        {shot.caption}
+                      </figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
+            </RevealItem>
+          )}
 
           {links.length > 0 && (
             <RevealItem as="ul" className="flex flex-wrap gap-x-8 gap-y-3">
