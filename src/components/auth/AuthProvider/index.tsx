@@ -25,8 +25,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     async function fetchMe() {
       try {
-        // 비로그인 상태의 401은 정상 케이스이므로 validateStatus로 axios가 던지지 않게 하고
-        // (전역 401 인터셉터의 /login 강제 리다이렉트를 여기서는 피해야 함) 직접 분기 처리한다.
+        // 비로그인은 200 + user null로 오지만, 5xx 등 그 외 상태에서 axios가 던지지 않게
+        // validateStatus로 직접 분기 처리한다(전역 401 인터셉터의 /login 리다이렉트도 피한다).
         const res = await axiosInstance.get("/auth/me", { validateStatus: () => true });
         if (res.status !== 200) {
           if (!cancelled) {
