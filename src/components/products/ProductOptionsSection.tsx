@@ -23,7 +23,6 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
   if (product.price === 0) {
     return (
       <ProductInfoChips
-        purchaseOptions={purchaseOptions}
         category={product.category}
         mode="free"
         hasAiStarterKit={product.has_ai_starter_kit}
@@ -131,7 +130,6 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
       </div>
 
       <ProductInfoChips
-        purchaseOptions={purchaseOptions}
         category={product.category}
         mode="paid"
         hasAiStarterKit={product.has_ai_starter_kit}
