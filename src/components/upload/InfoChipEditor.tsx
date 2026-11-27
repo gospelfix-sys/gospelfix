@@ -1,8 +1,12 @@
 "use client";
 
 import { Plus, X } from "lucide-react";
+import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SortableRow } from "@/components/upload/SortableRow";
+import { useSortableSensors } from "@/hooks/useSortableSensors";
 import {
   MAX_INFO_CHIPS,
   MAX_INFO_CHIP_LABEL_LENGTH,
@@ -15,9 +19,22 @@ interface InfoChipEditorProps {
   onAdd: () => void;
   onUpdate: (index: number, patch: Partial<ProductInfoChip>) => void;
   onRemove: (index: number) => void;
+  onReorder: (activeId: string, overId: string) => void;
 }
 
-export function InfoChipEditor({ chips, onAdd, onUpdate, onRemove }: InfoChipEditorProps) {
+export function InfoChipEditor({
+  chips,
+  onAdd,
+  onUpdate,
+  onRemove,
+  onReorder,
+}: InfoChipEditorProps) {
+  const sensors = useSortableSensors();
+
+  function handleDragEnd({ active, over }: DragEndEvent) {
+    if (over) onReorder(String(active.id), String(over.id));
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
@@ -37,43 +54,50 @@ export function InfoChipEditor({ chips, onAdd, onUpdate, onRemove }: InfoChipEdi
           항목 추가 ({chips.length}/{MAX_INFO_CHIPS})
         </Button>
       </div>
-      <div className="space-y-2">
-        {chips.map((chip, index) => (
-          <div key={chip.id} className="flex items-center gap-2">
-            <Input
-              value={chip.label}
-              onChange={(e) => onUpdate(index, { label: e.target.value })}
-              aria-label="항목 이름"
-              maxLength={MAX_INFO_CHIP_LABEL_LENGTH}
-              placeholder="항목 (예: 진행방식)"
-              className="h-10 w-[38%] shrink-0 rounded-xl bg-gf-white"
-            />
-            <Input
-              value={chip.value}
-              onChange={(e) => onUpdate(index, { value: e.target.value })}
-              aria-label="항목 내용"
-              maxLength={MAX_INFO_CHIP_VALUE_LENGTH}
-              placeholder="내용 (예: 전 과정 온라인)"
-              className="h-10 min-w-0 flex-1 rounded-xl bg-gf-white"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => onRemove(index)}
-              aria-label="항목 삭제"
-              className="shrink-0 text-gf-gray2 hover:text-destructive"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext
+          items={chips.map((chip) => chip.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-2">
+            {chips.map((chip, index) => (
+              <SortableRow key={chip.id} id={chip.id} disabled={chips.length < 2}>
+                <Input
+                  value={chip.label}
+                  onChange={(e) => onUpdate(index, { label: e.target.value })}
+                  aria-label="항목 이름"
+                  maxLength={MAX_INFO_CHIP_LABEL_LENGTH}
+                  placeholder="항목 (예: 진행방식)"
+                  className="h-10 w-[38%] shrink-0 rounded-xl bg-gf-white"
+                />
+                <Input
+                  value={chip.value}
+                  onChange={(e) => onUpdate(index, { value: e.target.value })}
+                  aria-label="항목 내용"
+                  maxLength={MAX_INFO_CHIP_VALUE_LENGTH}
+                  placeholder="내용 (예: 전 과정 온라인)"
+                  className="h-10 min-w-0 flex-1 rounded-xl bg-gf-white"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onRemove(index)}
+                  aria-label="항목 삭제"
+                  className="shrink-0 text-gf-gray2 hover:text-destructive"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </SortableRow>
+            ))}
           </div>
-        ))}
-        {chips.length === 0 && (
-          <p className="text-xs text-gf-gray2">
-            항목이 없으면 기본 정보 칩이 표시됩니다. &quot;항목 추가&quot;로 직접 입력하세요.
-          </p>
-        )}
-      </div>
+        </SortableContext>
+      </DndContext>
+      {chips.length === 0 && (
+        <p className="text-xs text-gf-gray2">
+          항목이 없으면 기본 정보 칩이 표시됩니다. &quot;항목 추가&quot;로 직접 입력하세요.
+        </p>
+      )}
     </div>
   );
 }

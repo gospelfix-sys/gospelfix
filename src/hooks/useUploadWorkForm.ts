@@ -246,6 +246,14 @@ export function useUploadWorkForm({
     setInfoChips((prev) => prev.map((chip, i) => (i === index ? { ...chip, ...patch } : chip)));
   }
 
+  function reorderInfoChips(activeId: string, overId: string) {
+    setInfoChips((prev) => {
+      const from = prev.findIndex((chip) => chip.id === activeId);
+      const to = prev.findIndex((chip) => chip.id === overId);
+      return from < 0 || to < 0 || from === to ? prev : arrayMove(prev, from, to);
+    });
+  }
+
   function removeInfoChip(index: number) {
     setInfoChips((prev) => prev.filter((_, i) => i !== index));
   }
@@ -520,6 +528,7 @@ export function useUploadWorkForm({
     addInfoChip,
     updateInfoChip,
     removeInfoChip,
+    reorderInfoChips,
     addCodePreviewItem,
     updateCodePreviewItem,
     removeCodePreviewItem,

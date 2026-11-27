@@ -50,6 +50,7 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
     addInfoChip,
     updateInfoChip,
     removeInfoChip,
+    reorderInfoChips,
     coverMode,
     setCoverMode,
     coverPreview,
@@ -177,6 +178,7 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
           onAdd={addInfoChip}
           onUpdate={updateInfoChip}
           onRemove={removeInfoChip}
+          onReorder={reorderInfoChips}
         />
       </CollapsibleSection>
 

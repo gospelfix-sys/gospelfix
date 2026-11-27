@@ -2,24 +2,31 @@
 
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
+import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SortableRow } from "@/components/upload/SortableRow";
+import { useSortableSensors } from "@/hooks/useSortableSensors";
 import type { ProductOption } from "@/types/product.types";
 
 // 설명은 description 문자열에 줄바꿈(\n)으로 합쳐 저장한다(cms.api 스키마 변경 없이 여러 줄 지원)
 const MAX_DESCRIPTION_LINES = 6;
 
 interface OptionalFieldRowProps {
+  id: string;
+  // 줄이 하나뿐이면 순서를 바꿀 수 없어 드래그 핸들을 숨긴다
+  sortable: boolean;
   // 없으면 제거 버튼을 숨긴다(마지막 한 줄은 지울 수 없게 할 때)
   onRemove?: () => void;
   children: React.ReactNode;
 }
 
-// 설명 입력 한 줄: 입력칸 + 오른쪽 제거 버튼
-function OptionalFieldRow({ onRemove, children }: OptionalFieldRowProps) {
+// 설명 입력 한 줄: 드래그 핸들 + 입력칸 + 오른쪽 제거 버튼
+function OptionalFieldRow({ id, sortable, onRemove, children }: OptionalFieldRowProps) {
   return (
-    <div className="flex items-center gap-2">
+    <SortableRow id={id} disabled={!sortable}>
       <div className="min-w-0 flex-1">{children}</div>
       {onRemove ? (
         <Button
@@ -35,7 +42,7 @@ function OptionalFieldRow({ onRemove, children }: OptionalFieldRowProps) {
       ) : (
         <span className="h-8 w-8 shrink-0" aria-hidden />
       )}
-    </div>
+    </SortableRow>
   );
 }
 
@@ -54,6 +61,7 @@ export function PurchaseOptionEditor({
 }: PurchaseOptionEditorProps) {
   // 사용자가 직접 늘리거나 줄인 설명 줄 수. 없으면 저장된 줄 수를 따르되 최소 한 줄은 열어 둔다
   const [lineCounts, setLineCounts] = useState<Record<string, number>>({});
+  const sensors = useSortableSensors();
 
   const getDescriptionLines = (opt: ProductOption) => {
     const saved = opt.description ? opt.description.split("\n") : [];
@@ -64,6 +72,22 @@ export function PurchaseOptionEditor({
   const commitDescriptionLines = (index: number, opt: ProductOption, lines: string[]) => {
     setLineCounts((prev) => ({ ...prev, [opt.id]: lines.length }));
     onUpdate(index, { description: lines.join("\n") });
+  };
+
+  // 줄에는 별도 id가 없어(문자열을 \n으로 합쳐 저장) 위치 기반 id를 쓴다. 드롭 직후 같은 id에 바뀐 내용이 들어가며 순서가 확정된다
+  const getLineId = (opt: ProductOption, lineIndex: number) => `${opt.id}-line-${lineIndex}`;
+
+  const reorderDescriptionLines = (
+    index: number,
+    opt: ProductOption,
+    { active, over }: DragEndEvent,
+  ) => {
+    if (!over || active.id === over.id) return;
+    const lines = getDescriptionLines(opt);
+    const from = lines.findIndex((_, i) => getLineId(opt, i) === active.id);
+    const to = lines.findIndex((_, i) => getLineId(opt, i) === over.id);
+    if (from < 0 || to < 0) return;
+    commitDescriptionLines(index, opt, arrayMove(lines, from, to));
   };
 
   return (
@@ -122,36 +146,51 @@ export function PurchaseOptionEditor({
                 className="h-10 rounded-xl bg-gf-white"
               />
             )}
-            {getDescriptionLines(opt).map((line, lineIndex, lines) => (
-              <OptionalFieldRow
-                key={lineIndex}
-                onRemove={
-                  lines.length > 1
-                    ? () =>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(event) => reorderDescriptionLines(index, opt, event)}
+            >
+              <SortableContext
+                items={getDescriptionLines(opt).map((_, i) => getLineId(opt, i))}
+                strategy={verticalListSortingStrategy}
+              >
+                {getDescriptionLines(opt).map((line, lineIndex, lines) => (
+                  <OptionalFieldRow
+                    key={getLineId(opt, lineIndex)}
+                    id={getLineId(opt, lineIndex)}
+                    sortable={lines.length > 1}
+                    onRemove={
+                      lines.length > 1
+                        ? () =>
+                            commitDescriptionLines(
+                              index,
+                              opt,
+                              lines.filter((_, i) => i !== lineIndex),
+                            )
+                        : undefined
+                    }
+                  >
+                    <Input
+                      value={line}
+                      onChange={(e) =>
                         commitDescriptionLines(
                           index,
                           opt,
-                          lines.filter((_, i) => i !== lineIndex),
+                          lines.map((l, i) => (i === lineIndex ? e.target.value : l)),
                         )
-                    : undefined
-                }
-              >
-                <Input
-                  value={line}
-                  onChange={(e) =>
-                    commitDescriptionLines(
-                      index,
-                      opt,
-                      lines.map((l, i) => (i === lineIndex ? e.target.value : l)),
-                    )
-                  }
-                  placeholder={
-                    lineIndex === 0 ? "설명 (예: 디자인 수정작업 불포함)" : `설명 ${lineIndex + 1}`
-                  }
-                  className="h-10 rounded-xl bg-gf-white"
-                />
-              </OptionalFieldRow>
-            ))}
+                      }
+                      placeholder={
+                        lineIndex === 0
+                          ? "설명 (예: 디자인 수정작업 불포함)"
+                          : `설명 ${lineIndex + 1}`
+                      }
+                      className="h-10 rounded-xl bg-gf-white"
+                    />
+                  </OptionalFieldRow>
+                ))}
+              </SortableContext>
+            </DndContext>
             {getDescriptionLines(opt).length < MAX_DESCRIPTION_LINES && (
               <div className="flex flex-wrap gap-2">
                 <Button
