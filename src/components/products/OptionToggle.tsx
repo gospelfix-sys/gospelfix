@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn, formatWorkPeriodDays } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface OptionToggleProps {
@@ -31,6 +32,8 @@ export function OptionToggle({
 }: OptionToggleProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const { main: dialogTitleMain, suffix: dialogTitleSuffix } = splitLabelSuffix(label);
+  // 설명은 여러 줄(\n 구분)로 저장되며, 빈 줄은 표시하지 않는다
+  const descriptionLines = (description ?? "").split("\n").filter((line) => line.trim() !== "");
 
   return (
     <div
@@ -53,25 +56,27 @@ export function OptionToggle({
       <p className="font-bold text-gf-black">{label}</p>
 
       <div className="flex items-start justify-between gap-4">
-        {(description || workPeriodDays != null) && (
+        {(descriptionLines.length > 0 || workPeriodDays != null) && (
           <div className="flex flex-col gap-1.5 text-sm text-gf-gray1">
-            {description && (
-              <div className="flex items-center gap-2">
-                <span>{description}</span>
-                {detail && (
-                  <button
+            {descriptionLines.map((line, lineIndex) => (
+              <div key={lineIndex} className="flex items-center gap-2">
+                <span>{line}</span>
+                {lineIndex === 0 && detail && (
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="xs"
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsDetailOpen(true);
                     }}
-                    className="shrink-0 rounded-md border border-gf-orange px-2 py-0.5 text-xs font-medium text-gf-orange hover:bg-gf-orange-bg"
+                    className="h-auto shrink-0 rounded-md border-gf-orange bg-transparent py-0.5 font-medium text-gf-orange hover:bg-gf-orange-bg hover:text-gf-orange"
                   >
                     상세보기
-                  </button>
+                  </Button>
                 )}
               </div>
-            )}
+            ))}
             {workPeriodDays != null && (
               <span>작업기간 : {formatWorkPeriodDays(workPeriodDays)}</span>
             )}

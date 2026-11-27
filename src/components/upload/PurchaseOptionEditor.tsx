@@ -1,10 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { ProductOption } from "@/types/product.types";
+
+// 설명은 description 문자열에 줄바꿈(\n)으로 합쳐 저장한다(cms.api 스키마 변경 없이 여러 줄 지원)
+const MAX_DESCRIPTION_LINES = 6;
+
+interface OptionalFieldRowProps {
+  // 없으면 제거 버튼을 숨긴다(마지막 한 줄은 지울 수 없게 할 때)
+  onRemove?: () => void;
+  children: React.ReactNode;
+}
+
+// 설명 입력 한 줄: 입력칸 + 오른쪽 제거 버튼
+function OptionalFieldRow({ onRemove, children }: OptionalFieldRowProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="min-w-0 flex-1">{children}</div>
+      {onRemove ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={onRemove}
+          aria-label="입력칸 제거"
+          className="h-8 w-8 shrink-0 text-gf-gray2 hover:text-destructive"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      ) : (
+        <span className="h-8 w-8 shrink-0" aria-hidden />
+      )}
+    </div>
+  );
+}
 
 interface PurchaseOptionEditorProps {
   options: ProductOption[];
@@ -19,6 +52,20 @@ export function PurchaseOptionEditor({
   onUpdate,
   onRemove,
 }: PurchaseOptionEditorProps) {
+  // 사용자가 직접 늘리거나 줄인 설명 줄 수. 없으면 저장된 줄 수를 따르되 최소 한 줄은 열어 둔다
+  const [lineCounts, setLineCounts] = useState<Record<string, number>>({});
+
+  const getDescriptionLines = (opt: ProductOption) => {
+    const saved = opt.description ? opt.description.split("\n") : [];
+    const count = lineCounts[opt.id] ?? Math.max(saved.length, 1);
+    return Array.from({ length: count }, (_, i) => saved[i] ?? "");
+  };
+
+  const commitDescriptionLines = (index: number, opt: ProductOption, lines: string[]) => {
+    setLineCounts((prev) => ({ ...prev, [opt.id]: lines.length }));
+    onUpdate(index, { description: lines.join("\n") });
+  };
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -75,12 +122,52 @@ export function PurchaseOptionEditor({
                 className="h-10 rounded-xl bg-gf-white"
               />
             )}
-            <Input
-              value={opt.description ?? ""}
-              onChange={(e) => onUpdate(index, { description: e.target.value })}
-              placeholder="설명 (예: 디자인 수정작업 불포함)"
-              className="h-10 rounded-xl bg-gf-white"
-            />
+            {getDescriptionLines(opt).map((line, lineIndex, lines) => (
+              <OptionalFieldRow
+                key={lineIndex}
+                onRemove={
+                  lines.length > 1
+                    ? () =>
+                        commitDescriptionLines(
+                          index,
+                          opt,
+                          lines.filter((_, i) => i !== lineIndex),
+                        )
+                    : undefined
+                }
+              >
+                <Input
+                  value={line}
+                  onChange={(e) =>
+                    commitDescriptionLines(
+                      index,
+                      opt,
+                      lines.map((l, i) => (i === lineIndex ? e.target.value : l)),
+                    )
+                  }
+                  placeholder={
+                    lineIndex === 0 ? "설명 (예: 디자인 수정작업 불포함)" : `설명 ${lineIndex + 1}`
+                  }
+                  className="h-10 rounded-xl bg-gf-white"
+                />
+              </OptionalFieldRow>
+            ))}
+            {getDescriptionLines(opt).length < MAX_DESCRIPTION_LINES && (
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    commitDescriptionLines(index, opt, [...getDescriptionLines(opt), ""])
+                  }
+                  className="h-auto gap-1 px-2 py-1 text-xs text-gf-gray2"
+                >
+                  <Plus className="h-3 w-3" /> 설명 추가 ({getDescriptionLines(opt).length}/
+                  {MAX_DESCRIPTION_LINES})
+                </Button>
+              </div>
+            )}
             <Input
               value={
                 typeof opt.work_period_days === "number"
