@@ -328,10 +328,10 @@ export interface SellerProduct extends Product {
   file_path: string | null;
 }
 
-// 상세페이지 "제공형태" 칩에 카테고리별로 노출할 서비스 관점의 명칭. 대분류 라벨 그대로에
-// "AI기반 " 접두어만 붙인다.
+// 상세페이지 "제공형태" 칩에 카테고리별로 노출할 서비스 관점의 명칭. 기본은 대분류 라벨 그대로에
+// "AI기반 " 접두어만 붙이되, website는 웹/앱을 함께 제공하고 AI로 만든다는 점이 바로 읽히도록 풀어 쓴다.
 export const PRODUCT_FORMAT_LABELS: Record<string, string> = {
-  website: `AI기반 ${PRODUCT_CATEGORY_LABELS.website}`,
+  website: "AI로 만든 웹/앱",
   ux_ui: `AI기반 ${PRODUCT_CATEGORY_LABELS.ux_ui}`,
   branding: `AI기반 ${PRODUCT_CATEGORY_LABELS.branding}`,
 };
