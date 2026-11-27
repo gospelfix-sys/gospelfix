@@ -99,6 +99,10 @@ type: feedback
 - 점검: `bg-gf-black`+흰 글씨(대신 `bg-black text-white`), `bg-white`+토큰 글씨, `bg-gf-black/N`·`hover:bg-gf-black/N`(#4 알파 모디파이어 미생성 가능), 옛 `gf-dark` 주석·셀렉터 잔존. `THEME_INIT_SCRIPT`와 `resolveTheme`/`parseThemeChoice`는 규칙을 함께 고쳐야 한다(2026-11 리뷰 시점 일치 확인).
 - 서비스된 라우트(`/about`) 삭제 때 `next.config.mjs` redirects 누락이 재발하기 쉽다(#10).
 
+### 21. 사용자 입력 문자열을 plain object 룩업 키로 사용 (Major)
+- 징후: 판매자 입력(칩 라벨 등)으로 `Record<string, X>[userInput] ?? fallback`을 하면 `"constructor"`/`"toString"` 같은 프로토타입 키가 함수로 잡혀 렌더가 깨진다(`ProductInfoChips.tsx`의 `LABEL_ICONS[chip.label]`, 2026-11 리뷰 지적). 사용자 값 → 키 매핑은 `Map` 또는 `Object.hasOwn` 가드를 쓴다.
+- 연관: 사용자 입력 라벨을 React `key`로 쓰면 중복 입력 시 key 충돌. id나 index를 섞는다. 같은 기본 문구 목록이 표시 폴백(`ProductInfoChips`)과 폼 기본값(`createDefaultInfoChips`)에 이중 정의돼 있어 드리프트 위험이 있다.
+
 ## B. 아키텍처 메모
 
 ### BFF 데이터 흐름
