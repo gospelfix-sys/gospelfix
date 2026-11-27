@@ -207,16 +207,6 @@ export function PurchaseOptionEditor({
                 </Button>
               </div>
             )}
-            <Input
-              value={
-                typeof opt.work_period_days === "number"
-                  ? String(opt.work_period_days)
-                  : (opt.work_period_days ?? "")
-              }
-              onChange={(e) => onUpdate(index, { work_period_days: e.target.value || null })}
-              placeholder="작업기간 (숫자 또는 협의)"
-              className="h-10 rounded-xl bg-gf-white"
-            />
           </div>
         ))}
         {options.length === 0 && (
