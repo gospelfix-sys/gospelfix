@@ -26,6 +26,7 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
         category={product.category}
         mode="free"
         hasAiStarterKit={product.has_ai_starter_kit}
+        chips={product.info_chips}
       />
     );
   }
@@ -133,6 +134,7 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
         category={product.category}
         mode="paid"
         hasAiStarterKit={product.has_ai_starter_kit}
+        chips={product.info_chips}
       />
     </div>
   );
