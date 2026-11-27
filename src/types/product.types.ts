@@ -5,6 +5,18 @@ export interface ProductCodePreviewItem {
   code: string;
 }
 
+// 상세페이지 정보 칩 한 줄("진행방식 : 전 과정 온라인"). 판매자가 상품 등록 시 직접 추가·수정·삭제한다.
+export interface ProductInfoChip {
+  id: string;
+  label: string;
+  value: string;
+}
+
+// 판매자가 등록할 수 있는 정보 칩 최대 개수와 항목별 글자 수 상한
+export const MAX_INFO_CHIPS = 10;
+export const MAX_INFO_CHIP_LABEL_LENGTH = 20;
+export const MAX_INFO_CHIP_VALUE_LENGTH = 60;
+
 export interface ProductOption {
   id: string;
   label: string;
@@ -86,6 +98,8 @@ export interface Product extends ArtDetailsStored {
   allow_coupon?: boolean;
   // "코드 미리보기" 섹션 탭 배열. 비어있으면 섹션 자체를 숨긴다.
   code_preview?: ProductCodePreviewItem[] | null;
+  // 상세페이지 정보 칩. 없거나 비어 있으면(이전 등록분·cms.api 배포 전) 기본 칩으로 대체해 보여준다.
+  info_chips?: ProductInfoChip[] | null;
   // 저작권 및 라이선스 구분값(LICENSE_OPTIONS의 value). cms.api가 아직 값을 내려주지
   // 않는 상품(마이그레이션 이전 등록분)을 위해 optional로 둔다.
   license?: string | null;
@@ -300,6 +314,8 @@ export interface SellerProductInput extends ArtDetails {
   allow_coupon: boolean;
   file_path: string | null;
   code_preview: ProductCodePreviewItem[];
+  // 미입력은 null이 아니라 []로 보낸다(cms.api 컬럼이 NOT NULL일 수 있음)
+  info_chips: ProductInfoChip[];
   license: string;
   // 라이선스 모달 필수 동의 기록. 이번 저장에서 라이선스를 확정(모달 "선택")했을 때만 싣는다 —
   // 없으면 cms.api는 기존 기록을 유지한다.

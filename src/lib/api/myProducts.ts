@@ -38,6 +38,8 @@ export interface CmsMyProduct {
   allowCoupon?: boolean;
   filePath: string | null;
   codePreview: { id: string; label: string; code: string }[] | null;
+  // cms.api 배포 전에는 내려오지 않을 수 있어 optional
+  infoChips?: { id: string; label: string; value: string }[] | null;
   license: string | null;
   // 미술·전시 탭 필드. 마이그레이션 이전 등록분은 값이 없을 수 있다.
   artworkSize?: string | null;
@@ -94,6 +96,7 @@ export function toSellerProduct(item: CmsMyProduct): SellerProduct {
     has_ai_starter_kit: item.hasAiStarterKit,
     allow_coupon: item.allowCoupon ?? false,
     code_preview: item.codePreview,
+    info_chips: item.infoChips ?? [],
     license: item.license,
     artwork_size: item.artworkSize,
     artwork_medium: item.artworkMedium,
@@ -144,6 +147,7 @@ export function toCmsProductInput(input: SellerProductInput) {
     allowCoupon: input.allow_coupon,
     filePath: input.file_path,
     codePreview: input.code_preview,
+    infoChips: input.info_chips,
     license: input.license,
     artworkSize: input.artwork_size,
     artworkMedium: input.artwork_medium,

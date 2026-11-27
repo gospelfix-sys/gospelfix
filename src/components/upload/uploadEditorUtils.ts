@@ -1,7 +1,9 @@
 import {
   COMMERCIAL_LICENSE,
   isLicenseAllowed,
+  PRODUCT_FORMAT_LABELS,
   type ProductCodePreviewItem,
+  type ProductInfoChip,
   type ProductOption,
 } from "@/types/product.types";
 
@@ -53,6 +55,30 @@ export function createEmptyPurchaseOption(): ProductOption {
     is_inquiry_only: false,
     detail: "",
   };
+}
+
+export function createEmptyInfoChip(): ProductInfoChip {
+  return { id: createId(), label: "", value: "" };
+}
+
+// 카테고리에 맞는 "제공형태" 기본 문구. 카테고리가 아직 없거나 목록에 없으면 웹/앱 문구를 쓴다.
+export function getDefaultFormatValue(category: string): string {
+  return PRODUCT_FORMAT_LABELS[category] ?? PRODUCT_FORMAT_LABELS.website;
+}
+
+// 새 상품 등록 시 폼에 미리 채워 두는 기본 칩. 판매자가 자유롭게 고치거나 지울 수 있다.
+export const INFO_CHIP_FORMAT_LABEL = "제공형태";
+
+export function createDefaultInfoChips(category: string): ProductInfoChip[] {
+  const defaults: [string, string][] = [
+    ["진행방식", "전 과정 온라인"],
+    ["결제수단", "계좌이체"],
+    [INFO_CHIP_FORMAT_LABEL, getDefaultFormatValue(category)],
+    ["콘텐츠", "별도 준비 필요"],
+    ["구매대상", "누구나 가능"],
+    ["진행현황", "마이페이지에서 확인"],
+  ];
+  return defaults.map(([label, value]) => ({ id: createId(), label, value }));
 }
 
 export function createEmptyCodePreviewItem(): ProductCodePreviewItem {
