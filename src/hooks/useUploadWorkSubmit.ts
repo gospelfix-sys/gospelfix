@@ -49,6 +49,7 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
     discountEndsAt,
     purchaseOptions,
     codePreview,
+    infoChips,
     filePath,
     newZipFile,
     license,
@@ -197,6 +198,10 @@ export function useUploadWorkSubmit(form: UploadWorkForm) {
         ...artDetails,
         file_path: finalFilePath,
         code_preview: codePreview,
+        // 라벨·값이 둘 다 있는 행만 저장한다(빈 줄을 지우지 않고 둔 경우 대비)
+        info_chips: infoChips
+          .map((chip) => ({ id: chip.id, label: chip.label.trim(), value: chip.value.trim() }))
+          .filter((chip) => chip.label && chip.value),
         license: finalLicense,
         // 없으면 키를 빼서(JSON 직렬화 시 제외) cms.api가 기존 동의 기록을 덮어쓰지 않게 한다.
         license_acknowledgement: acknowledgement ?? undefined,

@@ -123,7 +123,7 @@ function UploadWorkEditorInner({ categories, subCategories }: UploadWorkEditorPr
         onDraftCategoryChange={form.setDraftCategory}
         onToggleDraftSubCategory={form.toggleDraftSubCategory}
         onConfirm={() => {
-          form.setProductCategory(form.draftCategory);
+          form.applyCategory(form.draftCategory);
           form.setSubCategories(form.draftSubCategories);
         }}
       />

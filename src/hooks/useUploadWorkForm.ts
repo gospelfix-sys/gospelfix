@@ -5,8 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { arrayMove } from "@dnd-kit/sortable";
 import {
+  createDefaultInfoChips,
   createEmptyCodePreviewItem,
+  createEmptyInfoChip,
   createEmptyPurchaseOption,
+  getDefaultFormatValue,
+  INFO_CHIP_FORMAT_LABEL,
   createId,
   getImageSizeError,
   normalizeLicense,
@@ -17,11 +21,13 @@ import {
 } from "@/components/upload/uploadEditorUtils";
 import {
   EMPTY_ART_DETAILS,
+  MAX_INFO_CHIPS,
   MAX_SUB_CATEGORIES,
   type ArtDetails,
   type LicenseAcknowledgement,
   type ProductCategory,
   type ProductCodePreviewItem,
+  type ProductInfoChip,
   type ProductOption,
   type SellerProduct,
 } from "@/types/product.types";
@@ -91,6 +97,7 @@ export function useUploadWorkForm({
   const [codePreview, setCodePreview] = useState<ProductCodePreviewItem[]>(() => [
     createEmptyCodePreviewItem(),
   ]);
+  const [infoChips, setInfoChips] = useState<ProductInfoChip[]>(() => createDefaultInfoChips(""));
   const [filePath, setFilePath] = useState<string | null>(null);
   const [newZipFile, setNewZipFile] = useState<File | null>(null);
   const [license, setLicense] = useState("");
@@ -162,6 +169,12 @@ export function useUploadWorkForm({
         setCodePreview(
           product.code_preview?.length ? product.code_preview : [createEmptyCodePreviewItem()],
         );
+        // 이전 등록분(칩 미저장)은 기본 칩으로 채워 수정 화면에서 바로 편집할 수 있게 한다
+        setInfoChips(
+          product.info_chips?.length
+            ? product.info_chips
+            : createDefaultInfoChips(product.category),
+        );
         setSiteUrl(product.demo_url ?? "");
         setCoverPreview(product.images?.[0] ?? product.thumbnail_url ?? null);
         setFilePath(product.file_path);
@@ -221,6 +234,34 @@ export function useUploadWorkForm({
 
   function removePurchaseOption(index: number) {
     setPurchaseOptions((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function addInfoChip() {
+    setInfoChips((prev) =>
+      prev.length >= MAX_INFO_CHIPS ? prev : [...prev, createEmptyInfoChip()],
+    );
+  }
+
+  function updateInfoChip(index: number, patch: Partial<ProductInfoChip>) {
+    setInfoChips((prev) => prev.map((chip, i) => (i === index ? { ...chip, ...patch } : chip)));
+  }
+
+  function removeInfoChip(index: number) {
+    setInfoChips((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  // 카테고리를 바꾸면 손대지 않은 "제공형태" 칩만 새 카테고리 문구로 맞춘다(직접 고친 값은 보존)
+  function applyCategory(nextCategory: string) {
+    const prevDefault = getDefaultFormatValue(productCategory);
+    const nextDefault = getDefaultFormatValue(nextCategory);
+    setInfoChips((prev) =>
+      prev.map((chip) =>
+        chip.label === INFO_CHIP_FORMAT_LABEL && chip.value === prevDefault
+          ? { ...chip, value: nextDefault }
+          : chip,
+      ),
+    );
+    setProductCategory(nextCategory);
   }
 
   function addCodePreviewItem() {
@@ -418,6 +459,7 @@ export function useUploadWorkForm({
     setDescription,
     productCategory,
     setProductCategory,
+    applyCategory,
     subCategories,
     setSubCategories,
     categoryDialogOpen,
@@ -474,6 +516,10 @@ export function useUploadWorkForm({
     addPurchaseOption,
     updatePurchaseOption,
     removePurchaseOption,
+    infoChips,
+    addInfoChip,
+    updateInfoChip,
+    removeInfoChip,
     addCodePreviewItem,
     updateCodePreviewItem,
     removeCodePreviewItem,

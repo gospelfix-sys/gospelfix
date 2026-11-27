@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CollapsibleSection } from "@/components/ui/collapsible-section";
+import { InfoChipEditor } from "@/components/upload/InfoChipEditor";
 import { PurchaseOptionEditor } from "@/components/upload/PurchaseOptionEditor";
 import { PriceFields } from "@/components/upload/PriceFields";
 import { CoverUploadField } from "@/components/upload/CoverUploadField";
@@ -45,6 +46,10 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
     addPurchaseOption,
     updatePurchaseOption,
     removePurchaseOption,
+    infoChips,
+    addInfoChip,
+    updateInfoChip,
+    removeInfoChip,
     coverMode,
     setCoverMode,
     coverPreview,
@@ -158,6 +163,22 @@ export function UploadInfoPanel({ form }: UploadInfoPanelProps) {
           />
         </CollapsibleSection>
       )}
+
+      <CollapsibleSection
+        title={
+          <>
+            정보 칩 <span className="font-normal text-gf-gray2">(선택)</span>
+          </>
+        }
+        hasValue={infoChips.some((chip) => chip.label.trim() || chip.value.trim())}
+      >
+        <InfoChipEditor
+          chips={infoChips}
+          onAdd={addInfoChip}
+          onUpdate={updateInfoChip}
+          onRemove={removeInfoChip}
+        />
+      </CollapsibleSection>
 
       <div className="space-y-2">
         <h2 className="text-sm font-bold text-gf-black">
