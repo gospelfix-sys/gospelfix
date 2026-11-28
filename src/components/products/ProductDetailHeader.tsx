@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import type { Product, ProductSellerInfo } from "@/types/product.types";
 import { getProductSeller } from "@/lib/api/productSeller";
 import { formatDate } from "@/lib/utils";
+import type { PublicSellerIdentity } from "@/types/seller.types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SellerIdentityBlock } from "@/components/products/SellerIdentityBlock";
 
 interface ProductDetailHeaderProps {
   product: Product;
@@ -12,9 +14,11 @@ interface ProductHeaderContentProps {
   name: string;
   registeredAt: string;
   seller: ProductSellerInfo["seller"];
+  // undefined면 아직 조회 전(Suspense fallback)이라 신원정보 영역을 그리지 않는다
+  identity?: PublicSellerIdentity | null;
 }
 
-function ProductHeaderContent({ name, registeredAt, seller }: ProductHeaderContentProps) {
+function ProductHeaderContent({ name, registeredAt, seller, identity }: ProductHeaderContentProps) {
   return (
     <header className="flex flex-col gap-3">
       {/* 구매 패널이 이미 h1로 상품명을 갖고 있어 문서에 h1이 둘이 되지 않도록 h2를 쓴다. */}
@@ -34,6 +38,8 @@ function ProductHeaderContent({ name, registeredAt, seller }: ProductHeaderConte
         )}
         <time dateTime={registeredAt}>{formatDate(registeredAt)} 등록</time>
       </div>
+      {/* 플랫폼 직접 등록 상품은 seller가 없어 신원정보 대상이 아니다 */}
+      {seller && identity !== undefined && <SellerIdentityBlock identity={identity} />}
     </header>
   );
 }
@@ -45,6 +51,7 @@ async function ProductSellerHeader({ product }: ProductDetailHeaderProps) {
       name={product.name}
       registeredAt={info?.registered_at ?? product.created_at}
       seller={info?.seller ?? null}
+      identity={info?.identity ?? null}
     />
   );
 }

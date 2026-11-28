@@ -29,10 +29,7 @@ export default async function MypageProfilePage() {
       <h1 className="text-2xl font-bold">프로필</h1>
 
       <div className="space-y-4">
-        <RoleCard
-          role={profile?.role ?? "user"}
-          sellerRequestedAt={profile?.seller_requested_at ?? null}
-        />
+        <RoleCard role={profile?.role ?? "user"} />
         {isSeller && <PayoutAccountCard account={payoutAccount} />}
         <Card>
           <CardHeader className="pb-2">

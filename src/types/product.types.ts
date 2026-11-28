@@ -1,3 +1,5 @@
+import type { PublicSellerIdentity } from "@/types/seller.types";
+
 // "코드 미리보기" 섹션 탭 1개. label이 파일명 역할을 겸한다(예: "index.html", "data.json").
 export interface ProductCodePreviewItem {
   id: string;
@@ -361,4 +363,6 @@ export interface ProductSellerInfo {
     avatar_url: string | null;
     handle: string;
   } | null;
+  // 주문 전 신원정보. 승인 전·미제출(기존 판매자 유예 포함)이면 null
+  identity: PublicSellerIdentity | null;
 }

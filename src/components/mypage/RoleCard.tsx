@@ -1,12 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { SellerRequestButton } from "@/components/mypage/SellerRequestButton";
+import { SellerIdentityPanel } from "@/components/mypage/SellerIdentityPanel";
 
 type Role = "user" | "admin" | "seller";
 
 interface RoleCardProps {
   role: Role;
-  sellerRequestedAt: string | null;
 }
 
 interface RoleGuide {
@@ -50,7 +49,7 @@ const ROLE_GUIDES: RoleGuide[] = [
 // 마이페이지 프로필의 "권한" 카드 — 현재 권한과 일반 사용자/판매자의 차이를 함께 보여준다.
 // 판매자 전환은 신청 후 관리자가 승인해야 하며, 일반 사용자에게는 판매자 칸 아래에
 // 신청 버튼을 붙여 혜택을 읽은 자리에서 바로 신청할 수 있게 한다.
-export function RoleCard({ role, sellerRequestedAt }: RoleCardProps) {
+export function RoleCard({ role }: RoleCardProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -87,9 +86,9 @@ export function RoleCard({ role, sellerRequestedAt }: RoleCardProps) {
                     <li key={feature}>{feature}</li>
                   ))}
                 </ul>
-                {guide.key === "seller" && role === "user" && (
+                {guide.key === "seller" && (role === "user" || role === "seller") && (
                   <div className="mt-4">
-                    <SellerRequestButton sellerRequestedAt={sellerRequestedAt} />
+                    <SellerIdentityPanel role={role} />
                   </div>
                 )}
               </div>
