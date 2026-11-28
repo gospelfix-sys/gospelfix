@@ -17,21 +17,15 @@ export async function POST(request: Request) {
   if (!body || (body.sellerType !== "individual" && body.sellerType !== "business")) {
     return NextResponse.json({ error: "판매자 유형을 선택해주세요." }, { status: 400 });
   }
-  if (!body.phoneVerificationToken || !body.emailVerificationToken) {
-    return NextResponse.json({ error: "휴대폰과 이메일 인증을 완료해주세요." }, { status: 400 });
-  }
-
   // 알려진 필드만 cms.api로 넘긴다
   const payload: SellerIdentityInput = {
     sellerType: body.sellerType,
+    contactName: body.contactName,
     contactPhone: body.contactPhone ?? "",
-    phoneVerificationToken: body.phoneVerificationToken,
     contactEmail: body.contactEmail ?? "",
-    emailVerificationToken: body.emailVerificationToken,
     businessName: body.businessName,
     representativeName: body.representativeName,
     businessAddress: body.businessAddress,
-    businessPhone: body.businessPhone,
     businessNumber: body.businessNumber,
     businessOpenedAt: body.businessOpenedAt,
     mailOrderReportNumber: body.mailOrderReportNumber,

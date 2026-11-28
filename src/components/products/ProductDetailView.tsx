@@ -13,6 +13,7 @@ import { PurchaseOptionProvider } from "@/components/products/PurchaseOptionCont
 import { ProductOptionsSection } from "@/components/products/ProductOptionsSection";
 import { CodePreviewSectionLazy } from "@/components/products/CodePreviewSectionLazy";
 import { ProductDetailHeader } from "@/components/products/ProductDetailHeader";
+import { getProductSeller } from "@/lib/api/productSeller";
 import { cn } from "@/lib/utils";
 import { ProseHtml } from "@/components/ui/ProseHtml";
 import { ProductVisitNav } from "@/components/products/ProductVisitNav";
@@ -34,12 +35,14 @@ interface ProductDetailViewProps {
  * 동일하게 재사용한다 — 두 곳에 복제하면 레이아웃 수정 시 한쪽만 고치는 드리프트가
  * 생기므로, news의 NewsDetailContent와 같은 이유로 여기서 한 번만 정의한다.
  */
-export function ProductDetailView({
+export async function ProductDetailView({
   product,
   priceState,
   availableCoupon,
   alreadyPurchased,
 }: ProductDetailViewProps) {
+  // 부가세 가산 여부는 판매자 과세유형에 달려 있다. 요청 내 메모이제이션이라 헤더의 조회와 중복되지 않는다
+  const sellerInfo = await getProductSeller(product.id);
   const sanitizedContentHtml = product.content_html
     ? sanitizeContentHtml(product.content_html)
     : "";
@@ -100,6 +103,7 @@ export function ProductDetailView({
               priceState={priceState}
               availableCoupon={availableCoupon}
               alreadyPurchased={alreadyPurchased}
+              vatApplicable={sellerInfo?.vatApplicable ?? false}
             />
           </div>
 

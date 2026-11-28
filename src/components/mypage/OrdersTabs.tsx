@@ -108,7 +108,8 @@ export function OrdersTabs({ pendingOrders, coupons, orders }: OrdersTabsProps) 
                     {order.product?.name ?? "상품명 없음"}
                   </CardTitle>
                   <CardDescription>
-                    {order.amount === 0 ? "FREE" : formatPrice(order.amount)} ·{" "}
+                    {order.amount === 0 ? "FREE" : formatPrice(order.amount)}
+                    {order.vat_amount > 0 && " (VAT 포함)"} ·{" "}
                     {order.paid_at ? new Date(order.paid_at).toLocaleDateString("ko-KR") : "-"}
                   </CardDescription>
                 </CardHeader>

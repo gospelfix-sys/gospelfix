@@ -12,10 +12,11 @@ interface Props {
   orderId: string;
   productName: string;
   amount: number;
+  vatAmount?: number;
   onClose: () => void;
 }
 
-export default function PaymentModal({ orderId, productName, amount, onClose }: Props) {
+export default function PaymentModal({ orderId, productName, amount, vatAmount, onClose }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -53,7 +54,12 @@ export default function PaymentModal({ orderId, productName, amount, onClose }: 
       onClose={onClose}
       onGoToMypage={handleGoToMypage}
     >
-      <PaymentAmountBox amount={amount} orderNumber={shortId} note={productName} />
+      <PaymentAmountBox
+        amount={amount}
+        vatAmount={vatAmount}
+        orderNumber={shortId}
+        note={productName}
+      />
     </PaymentInstructionModal>
   );
 }

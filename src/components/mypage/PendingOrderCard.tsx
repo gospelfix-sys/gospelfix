@@ -63,7 +63,8 @@ export function PendingOrderCard({ order }: PendingOrderCardProps) {
             </span>
           </div>
           <CardDescription>
-            {order.amount === 0 ? "FREE" : formatPrice(order.amount)} ·{" "}
+            {order.amount === 0 ? "FREE" : formatPrice(order.amount)}
+            {order.vat_amount > 0 && " (VAT 포함)"} ·{" "}
             {new Date(order.created_at).toLocaleDateString("ko-KR")}
           </CardDescription>
           <p className="mt-1 font-mono text-[11px] text-muted-foreground">
@@ -92,6 +93,7 @@ export function PendingOrderCard({ order }: PendingOrderCardProps) {
           orderId={order.order_id}
           productName={order.product.name}
           amount={order.amount}
+          vatAmount={order.vat_amount}
           onClose={() => setShowPaymentModal(false)}
         />
       )}

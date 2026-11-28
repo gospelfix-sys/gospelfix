@@ -41,11 +41,15 @@ export function PriceFields({
     <>
       <div className="space-y-2">
         <h2 className="text-sm font-bold text-gf-black">
-          판매 가격{" "}
+          판매 가격 (공급가){" "}
           <span className="font-normal text-gf-gray2">
-            (할인 기간 내에만 적용, 종료 시 공급원가로 자동 복귀)
+            (할인 기간 내에만 적용, 종료 시 정가로 자동 복귀)
           </span>
         </h2>
+        <p className="text-xs text-gf-gray2">
+          부가세 별도 금액입니다. 일반과세자로 확인된 판매자의 상품에만 구매 시 부가세 10%가 더해져
+          표시·결제됩니다.
+        </p>
         <div className="flex gap-2">
           <Button
             type="button"
@@ -103,15 +107,15 @@ export function PriceFields({
         <CollapsibleSection
           title={
             <>
-              공급원가 · 할인 기간 <span className="font-normal text-gf-gray2">(선택)</span>
+              정가 · 할인 기간 <span className="font-normal text-gf-gray2">(선택)</span>
             </>
           }
           hasValue={!!supplyPrice || !!discountStartsAt || !!discountEndsAt}
         >
           <div className="space-y-2">
             <h3 className="text-sm font-bold text-gf-black">
-              공급원가{" "}
-              <span className="font-normal text-gf-gray2">(취소선 참고가, 미입력 시 숨김)</span>
+              정가{" "}
+              <span className="font-normal text-gf-gray2">(취소선 표시용, 미입력 시 숨김)</span>
             </h3>
             <Input
               type="text"

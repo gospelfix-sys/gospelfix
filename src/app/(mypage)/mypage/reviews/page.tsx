@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackButton } from "@/components/mypage/BackButton";
 import { getMe } from "@/lib/api/me";
 import { serverFetch } from "@/lib/serverFetch";
 import type { MyReview } from "@/types/review.types";
@@ -13,7 +14,10 @@ export default async function MypageReviewsPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold">작성한 댓글</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-xl font-bold">작성한 댓글</h1>
+        <BackButton />
+      </div>
 
       {reviews.length === 0 ? (
         <EmptyStateCard message="아직 작성한 리뷰가 없습니다." />

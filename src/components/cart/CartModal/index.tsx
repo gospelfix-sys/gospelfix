@@ -16,12 +16,14 @@ import { useCart } from "@/hooks/useCart";
 import axiosInstance from "@/lib/axios/instance";
 import { getErrorMessage } from "@/lib/axios/getErrorMessage";
 import { formatPrice } from "@/lib/utils";
+import { calcVat } from "@/lib/vat";
 
 interface BatchOrderState {
   orderIds: string[];
   // 판매자 입금 계좌를 조회할 유료 주문(전부 무료면 null)
   payoutOrderId: string | null;
   amount: number;
+  vatAmount: number;
   itemCount: number;
 }
 
@@ -39,7 +41,11 @@ export default function CartModal() {
   }, [items]);
 
   const selectedItems = items.filter((item) => selectedIds.has(item.id));
-  const selectedTotal = selectedItems.reduce((sum, item) => sum + item.price, 0);
+  // 일반과세자 상품은 부가세를 더한 금액이 결제 총액이다(서버도 같은 규칙으로 검증)
+  const selectedTotal = selectedItems.reduce(
+    (sum, item) => sum + calcVat(item.price, item.vatApplicable).total,
+    0,
+  );
   const allSelected = items.length > 0 && selectedIds.size === items.length;
 
   function toggleAll() {
@@ -80,7 +86,7 @@ export default function CartModal() {
     try {
       const orderItems = selectedItems.map((item) => ({
         productId: item.productId,
-        amount: item.price,
+        amount: calcVat(item.price, item.vatApplicable).total,
       }));
       const { data } = await axiosInstance.post<{ orderIds: string[] }>("/orders/create-batch", {
         items: orderItems,
@@ -92,6 +98,10 @@ export default function CartModal() {
         orderIds: data.orderIds,
         payoutOrderId: paidIndex >= 0 ? (data.orderIds[paidIndex] ?? null) : null,
         amount: selectedTotal,
+        vatAmount: selectedItems.reduce(
+          (sum, item) => sum + calcVat(item.price, item.vatApplicable).vat,
+          0,
+        ),
         itemCount: selectedItems.length,
       });
     } catch (error) {
@@ -180,7 +190,12 @@ export default function CartModal() {
                         {item.productName}
                       </p>
                       <p className="text-xs text-gf-gray2">{item.optionLabel}</p>
-                      <p className="text-sm font-bold text-gf-orange">{formatPrice(item.price)}</p>
+                      <p className="text-sm font-bold text-gf-orange">
+                        {formatPrice(calcVat(item.price, item.vatApplicable).total)}
+                        {item.vatApplicable && (
+                          <span className="ml-1 text-xs font-normal text-gf-gray2">VAT 포함</span>
+                        )}
+                      </p>
                     </div>
                     <Button
                       type="button"
@@ -243,6 +258,7 @@ export default function CartModal() {
           payoutOrderId={batchOrder.payoutOrderId}
           itemCount={batchOrder.itemCount}
           amount={batchOrder.amount}
+          vatAmount={batchOrder.vatAmount}
           onConfirmed={handleConfirmed}
           onClose={() => setBatchOrder(null)}
         />

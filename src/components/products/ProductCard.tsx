@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, type Variants } from "motion/react";
 import type { ProductPriceState } from "@/lib/discount";
 import { cn, formatPrice } from "@/lib/utils";
+import { calcVat } from "@/lib/vat";
 import { getCategoryLabel, type Product } from "@/types/product.types";
 import { PRESS_TRANSITION } from "@/components/ui/motionPresets";
 
@@ -101,7 +102,10 @@ export function ProductCard({
                   "FREE"
                 ) : (
                   <>
-                    {priceState.effectivePrice.toLocaleString("ko-KR")}
+                    {calcVat(
+                      priceState.effectivePrice,
+                      product.vat_applicable ?? false,
+                    ).total.toLocaleString("ko-KR")}
                     <span className="ml-0.5 text-[12px] font-bold text-gf-black">원</span>
                     {priceState.discount && priceState.discount.percent > 0 && (
                       <span className="ml-1 text-[11px] font-bold">

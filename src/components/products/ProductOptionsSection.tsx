@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import LegalDialogTrigger from "@/components/legal/LegalDialogTrigger";
 import type { ProductPriceState } from "@/lib/discount";
 import { cn, formatPrice } from "@/lib/utils";
+import { calcVat } from "@/lib/vat";
 import type { Product } from "@/types/product.types";
 
 interface ProductOptionsSectionProps {
@@ -119,7 +120,12 @@ export function ProductOptionsSection({ product, priceState }: ProductOptionsSec
             priceLabel={
               option.is_inquiry_only
                 ? "별도 문의"
-                : formatPrice(option.price ?? priceState.effectivePrice)
+                : formatPrice(
+                    calcVat(
+                      option.price ?? priceState.effectivePrice,
+                      product.vat_applicable ?? false,
+                    ).total,
+                  )
             }
             description={option.description}
             workPeriodDays={option.work_period_days}

@@ -16,6 +16,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import type { ProductPriceState } from "@/lib/discount";
 import { formatPrice } from "@/lib/utils";
+import { calcVat } from "@/lib/vat";
 import { isAuthenticatedSelector } from "@/store/selectors/authSelector";
 import { getCategoryLabel, type Product } from "@/types/product.types";
 import type { Coupon } from "@/types/coupon.types";
@@ -38,6 +39,8 @@ interface PurchaseOptionsPanelProps {
   availableCoupon: Coupon | null;
   // 로그인 유저가 이 상품을 이미 결제 완료했는지 여부 — true면 재구매를 유도하는 쿠폰 UI를 숨긴다.
   alreadyPurchased: boolean;
+  // 일반과세자 상품이면 true — 결제 총액에 부가세 10%를 더해 보여주고 결제한다(서버도 같은 기준으로 검증)
+  vatApplicable: boolean;
 }
 
 interface PrimaryActionRowProps {
@@ -66,6 +69,7 @@ export function PurchaseOptionsPanel({
   priceState,
   availableCoupon,
   alreadyPurchased,
+  vatApplicable,
 }: PurchaseOptionsPanelProps) {
   const isAuthenticated = useRecoilValue(isAuthenticatedSelector);
   const { openAuthModal } = useAuth();
@@ -84,7 +88,11 @@ export function PurchaseOptionsPanel({
     isCouponApplied && usableCoupon
       ? Math.floor((basePrice * usableCoupon.discount_rate) / 100)
       : 0;
-  const finalPrice = basePrice - couponDiscountAmount;
+  const {
+    supply: supplyPrice,
+    vat: vatAmount,
+    total: finalPrice,
+  } = calcVat(basePrice - couponDiscountAmount, vatApplicable);
   const productionSolution = product.production_solution || DEFAULT_PRODUCTION_SOLUTION;
   const categoryLabel = getCategoryLabel(product.category);
 
@@ -169,6 +177,11 @@ export function PurchaseOptionsPanel({
           {!isFree && !isInquiryOnly && priceState.discount && (
             <DiscountCountdown endsAt={priceState.discount.endsAt} />
           )}
+          {!isFree && !isInquiryOnly && vatAmount > 0 && (
+            <p className="mt-1.5 text-xs tracking-[-0.01em] text-gf-gray1">
+              VAT 포함 · 공급가 {formatPrice(supplyPrice)} + 부가세 {formatPrice(vatAmount)}
+            </p>
+          )}
         </div>
       </ProductInfoTicket>
 
@@ -221,6 +234,7 @@ export function PurchaseOptionsPanel({
                   productSlug={product.slug}
                   productName={product.name}
                   price={finalPrice}
+                  vatAmount={vatAmount}
                   couponCode={isCouponApplied ? usableCoupon?.code : undefined}
                   agreedToWithdrawalNotice={isWithdrawalNoticeAgreed}
                 />

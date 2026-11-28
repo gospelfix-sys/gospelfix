@@ -4,6 +4,7 @@ export type SellerIdentityStatus = "pending" | "approved" | "rejected";
 // 판매자 본인이 제출한 신원정보와 승인 상태(본인 조회 전용, 연락처 원문 포함).
 export interface SellerIdentity {
   sellerType: SellerType;
+  contactName: string | null;
   contactPhone: string;
   phoneVerified: boolean;
   contactEmail: string;
@@ -11,7 +12,6 @@ export interface SellerIdentity {
   businessName: string | null;
   representativeName: string | null;
   businessAddress: string | null;
-  businessPhone: string | null;
   businessNumber: string | null;
   mailOrderReportNumber: string | null;
   businessVerified: boolean;
@@ -19,17 +19,16 @@ export interface SellerIdentity {
   submittedAt: string;
 }
 
-// 판매자 신청 폼 입력. 인증 토큰은 인증번호 확인 단계에서 받는다.
+// 판매자 신청 폼 입력. 연락처는 인증 없이 입력만 받는다.
 export interface SellerIdentityInput {
   sellerType: SellerType;
+  // 개인만 받는다(사업자는 대표자명)
+  contactName?: string;
   contactPhone: string;
-  phoneVerificationToken: string;
   contactEmail: string;
-  emailVerificationToken: string;
   businessName?: string;
   representativeName?: string;
   businessAddress?: string;
-  businessPhone?: string;
   businessNumber?: string;
   // 국세청 진위확인에만 쓰이고 저장되지 않는다 (YYYYMMDD)
   businessOpenedAt?: string;
@@ -44,8 +43,8 @@ export interface PublicSellerIdentity {
     name: string;
     representativeName: string;
     address: string;
-    phone: string;
     businessNumber: string;
-    mailOrderReportNumber: string;
+    // 신고 면제 등으로 입력하지 않은 판매자는 null
+    mailOrderReportNumber: string | null;
   } | null;
 }

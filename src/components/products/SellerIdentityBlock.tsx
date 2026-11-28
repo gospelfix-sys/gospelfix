@@ -1,3 +1,5 @@
+import { CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { PublicSellerIdentity } from "@/types/seller.types";
 
 interface SellerIdentityBlockProps {
@@ -31,9 +33,17 @@ export function SellerIdentityBlock({ identity }: SellerIdentityBlockProps) {
 
   if (!identity.business) {
     return (
-      <p className="rounded-xl border p-3 text-xs text-gf-gray2">
+      <p
+        className={cn(
+          "flex items-center gap-2 rounded-xl border p-3 text-xs",
+          identity.verified ? "border-gf-gray2 font-medium text-gf-black" : "text-gf-gray2",
+        )}
+      >
+        {identity.verified && (
+          <CheckCircle2 className="size-4 shrink-0 text-gf-orange" aria-hidden="true" />
+        )}
         {identity.verified
-          ? "개인 판매자 · 휴대폰·이메일 확인 완료"
+          ? "개인 판매자 · 신원정보 확인 완료"
           : "개인 판매자 · 신원정보 확인 중입니다."}
       </p>
     );
@@ -47,9 +57,10 @@ export function SellerIdentityBlock({ identity }: SellerIdentityBlockProps) {
         <BusinessRow label="상호" value={business.name} />
         <BusinessRow label="대표자" value={business.representativeName} />
         <BusinessRow label="사업장 주소" value={business.address} />
-        <BusinessRow label="전화번호" value={business.phone} />
         <BusinessRow label="사업자등록번호" value={business.businessNumber} />
-        <BusinessRow label="통신판매업 신고" value={business.mailOrderReportNumber} />
+        {business.mailOrderReportNumber && (
+          <BusinessRow label="통신판매업 신고" value={business.mailOrderReportNumber} />
+        )}
       </dl>
     </section>
   );

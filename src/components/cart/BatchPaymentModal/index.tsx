@@ -13,6 +13,7 @@ interface BatchPaymentModalProps {
   payoutOrderId: string | null;
   itemCount: number;
   amount: number;
+  vatAmount: number;
   onConfirmed: () => void;
   onClose: () => void;
 }
@@ -22,6 +23,7 @@ export function BatchPaymentModal({
   payoutOrderId,
   itemCount,
   amount,
+  vatAmount,
   onConfirmed,
   onClose,
 }: BatchPaymentModalProps) {
@@ -62,7 +64,7 @@ export function BatchPaymentModal({
       onClose={onClose}
       onGoToMypage={handleGoToMypage}
     >
-      <PaymentAmountBox amount={amount} note={`총 ${itemCount}개 상품`} />
+      <PaymentAmountBox amount={amount} vatAmount={vatAmount} note={`총 ${itemCount}개 상품`} />
     </PaymentInstructionModal>
   );
 }

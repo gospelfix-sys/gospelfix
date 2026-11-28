@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Clock } from "lucide-react";
 import axiosInstance from "@/lib/axios/instance";
 import type { SellerIdentity, SellerIdentityStatus } from "@/types/seller.types";
 import { Button } from "@/components/ui/button";
@@ -58,7 +59,21 @@ export function SellerIdentityPanel({ role }: SellerIdentityPanelProps) {
 
   return (
     <div className="space-y-2">
-      {identity ? (
+      {identity?.status === "pending" ? (
+        // 접수 직후 가장 먼저 확인해야 할 안내라 강조 박스로 보여준다
+        <div
+          role="status"
+          className="flex items-start gap-3 rounded-xl border border-gf-orange bg-gf-orange-bg p-4"
+        >
+          <Clock className="mt-0.5 h-5 w-5 shrink-0 text-gf-orange" aria-hidden="true" />
+          <div className="space-y-1">
+            <p className="text-base font-semibold">{STATUS_COPY.pending}</p>
+            <p className="text-sm text-muted-foreground">
+              검토에는 약 5일 정도 소요돼요. 승인되면 판매자로 전환됩니다.
+            </p>
+          </div>
+        </div>
+      ) : identity ? (
         <p className="text-sm text-muted-foreground">{STATUS_COPY[identity.status]}</p>
       ) : (
         role === "seller" && (

@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { DownloadButton } from "@/components/products/DownloadButton";
 import PaymentPreparingDialog from "@/components/orders/PaymentPreparingDialog";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { NoticeDialog } from "@/components/ui/notice-dialog";
 import { isPaymentPreparingError } from "@/lib/paymentPreparing";
 import PaymentModal from "./PaymentModal";
 
@@ -20,7 +21,10 @@ interface BuyButtonProps {
   productId: string;
   productSlug: string;
   productName: string;
+  // 결제 총액. 일반과세자 상품이면 부가세가 이미 더해진 금액이다
   price: number;
+  // price에 포함된 부가세(없으면 0)
+  vatAmount?: number;
   agreedToWithdrawalNotice: boolean;
   couponCode?: string;
 }
@@ -30,6 +34,7 @@ export function BuyButton({
   productSlug,
   productName,
   price,
+  vatAmount = 0,
   agreedToWithdrawalNotice,
   couponCode,
 }: BuyButtonProps) {
@@ -43,7 +48,18 @@ export function BuyButton({
   // 닫힘 애니메이션 동안 팝업 내용이 바뀌지 않도록 종류 플래그는 유지하고 열림 상태만 끈다
   const [completionOpen, setCompletionOpen] = useState(false);
   const [preparingNotice, setPreparingNotice] = useState(false);
+  // 닫힘 애니메이션 동안 문구가 비지 않도록 메시지는 유지하고 열림 상태만 끈다
+  const [notice, setNotice] = useState({ open: false, message: "", redirectToMypage: false });
   const isRequestingRef = useRef(false);
+
+  function showNotice(message: string, redirectToMypage = false) {
+    setNotice({ open: true, message, redirectToMypage });
+  }
+
+  function closeNotice() {
+    setNotice((prev) => ({ ...prev, open: false }));
+    if (notice.redirectToMypage) router.push("/mypage");
+  }
 
   function closeCompletionModal() {
     setCompletionOpen(false);
@@ -75,8 +91,10 @@ export function BuyButton({
           setAlreadyPurchased(false);
           setCompletionOpen(true);
         } catch {
-          alert("주문은 생성되었지만 완료 처리에 실패했습니다. 마이페이지에서 다시 시도해주세요.");
-          router.push("/mypage");
+          showNotice(
+            "주문은 생성되었지만 완료 처리에 실패했습니다. 마이페이지에서 다시 시도해주세요.",
+            true,
+          );
         }
         return;
       }
@@ -97,10 +115,10 @@ export function BuyButton({
           setCompletionOpen(true);
           return;
         }
-        alert(data?.error ?? "주문 생성에 실패했습니다.");
+        showNotice(data?.error ?? "주문 생성에 실패했습니다.");
         return;
       }
-      alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+      showNotice("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       isRequestingRef.current = false;
       setLoading(false);
@@ -115,8 +133,14 @@ export function BuyButton({
         size="lg"
         className="h-14 w-full rounded-2xl bg-black text-base font-bold text-gf-orange"
       >
-        {loading ? "처리 중..." : price === 0 ? "무료로 받기" : `${formatPrice(price)} 구매하기`}
+        {loading
+          ? "처리 중..."
+          : price === 0
+            ? "무료로 받기"
+            : `${formatPrice(price)} 구매하기${vatAmount > 0 ? " (VAT 포함)" : ""}`}
       </Button>
+
+      <NoticeDialog open={notice.open} message={notice.message} onClose={closeNotice} />
 
       <PaymentPreparingDialog open={preparingNotice} onClose={() => setPreparingNotice(false)} />
 
@@ -125,6 +149,7 @@ export function BuyButton({
           orderId={orderId}
           productName={productName}
           amount={price}
+          vatAmount={vatAmount}
           onClose={() => setOrderId(null)}
         />
       )}

@@ -142,7 +142,7 @@ export function PurchaseOptionEditor({
                   const raw = e.target.value.replace(/[^0-9]/g, "");
                   onUpdate(index, { price: raw === "" ? 0 : parseInt(raw, 10) });
                 }}
-                placeholder="판매 가격"
+                placeholder="판매 가격 (공급가, 부가세 별도)"
                 className="h-10 rounded-xl bg-gf-white"
               />
             )}

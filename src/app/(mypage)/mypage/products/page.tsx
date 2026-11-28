@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackButton } from "@/components/mypage/BackButton";
 import { getMe } from "@/lib/api/me";
 import { serverFetch } from "@/lib/serverFetch";
 import { buttonVariants } from "@/components/ui/button";
@@ -27,11 +28,14 @@ export default async function MypageProductsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <h1 className="text-xl font-bold">내 상품</h1>
-        <Link href="/upload" className={cn(buttonVariants({ size: "sm" }))}>
-          새 상품 등록
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/upload" className={cn(buttonVariants({ size: "sm" }))}>
+            새 상품 등록
+          </Link>
+          <BackButton />
+        </div>
       </div>
 
       {products.length === 0 ? (

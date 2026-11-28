@@ -1,4 +1,5 @@
 import { getMe } from "@/lib/api/me";
+import { BackButton } from "@/components/mypage/BackButton";
 import { serverFetch } from "@/lib/serverFetch";
 import type { PendingOrder, PurchasedOrder } from "@/types/order.types";
 import type { Coupon } from "@/types/coupon.types";
@@ -22,7 +23,10 @@ export default async function MypageOrdersPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold">구매 / 혜택</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-xl font-bold">구매 / 혜택</h1>
+        <BackButton />
+      </div>
       <OrdersTabs pendingOrders={pendingOrdersWithProduct} coupons={coupons} orders={orders} />
     </div>
   );

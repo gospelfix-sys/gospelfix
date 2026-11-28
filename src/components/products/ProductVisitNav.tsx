@@ -45,10 +45,11 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
   const isSafeDemoUrl = !!demoUrl && /^https?:\/\//.test(demoUrl);
 
   return (
+    // 모달 밖에서는 본문 컨테이너의 좌우 패딩(px-6)이 알약 가용 폭을 줄이므로 lg 미만에서 상쇄한다
     <nav
       className={cn(
         "pointer-events-none z-40 flex justify-center px-3 sm:px-6",
-        isInModal ? "fixed inset-x-0 bottom-6" : "sticky bottom-4",
+        isInModal ? "fixed inset-x-0 bottom-6" : "sticky bottom-4 -mx-6 lg:mx-0",
       )}
     >
       <div className="pointer-events-auto flex h-[60px] w-fit max-w-full items-center gap-1.5 rounded-md bg-black px-2 shadow-[0_1px_20px_rgba(0,0,0,0.25)] sm:gap-2.5 sm:px-4">
@@ -65,10 +66,12 @@ export function ProductVisitNav({ demoUrl }: ProductVisitNavProps) {
         <Button
           type="button"
           onClick={scrollToProductInfo}
+          aria-label="상품 정보로 이동"
           className="h-10 shrink-0 gap-1.5 rounded-md border border-white/20 bg-transparent px-3 text-sm font-bold text-white/60 shadow-none hover:bg-transparent hover:text-white sm:h-11 sm:px-4"
         >
           <Info className="size-4" />
-          Info
+          {/* 360px 미만에서는 항목들이 알약 폭을 넘치므로 아이콘만 남긴다 */}
+          <span className="hidden min-[360px]:inline">Info</span>
         </Button>
 
         {isSafeDemoUrl && (

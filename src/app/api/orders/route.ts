@@ -10,6 +10,7 @@ interface CmsMeOrder {
   orderId: string;
   paidAt: string | null;
   amount: number;
+  vatAmount?: number;
   product: {
     id: string;
     name: string;
@@ -33,6 +34,7 @@ export async function GET() {
       order_id: order.orderId,
       paid_at: order.paidAt,
       amount: order.amount,
+      vat_amount: order.vatAmount ?? 0,
       product: order.product
         ? {
             id: order.product.id,

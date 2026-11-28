@@ -89,6 +89,8 @@ export interface Product extends ArtDetailsStored {
   created_at: string;
   updated_at: string;
   supply_price?: number | null;
+  // 일반과세자 상품이면 true — 표시 가격에 부가세 10%가 가산된다(cms.api가 판매자 과세유형으로 결정)
+  vat_applicable?: boolean;
   purchase_options?: ProductOption[] | null;
   production_solution?: string | null;
   product_code?: string | null;
@@ -365,4 +367,6 @@ export interface ProductSellerInfo {
   } | null;
   // 주문 전 신원정보. 승인 전·미제출(기존 판매자 유예 포함)이면 null
   identity: PublicSellerIdentity | null;
+  // 결제 금액에 부가세 10%가 가산되는 상품인지(일반과세자 상품). 서버가 판단한다
+  vatApplicable: boolean;
 }

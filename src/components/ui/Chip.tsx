@@ -12,7 +12,10 @@ export function Chip({ active = false, className, children, ...props }: ChipProp
     <button
       type="button"
       aria-pressed={active}
-      className={cn("rounded-full border transition-colors", className)}
+      className={cn(
+        "rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
+        className,
+      )}
       {...props}
     >
       {children}

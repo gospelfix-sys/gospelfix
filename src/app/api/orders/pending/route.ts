@@ -10,6 +10,7 @@ interface CmsMePendingOrder {
   orderId: string;
   status: "pending" | "pending_confirm";
   amount: number;
+  vatAmount?: number;
   createdAt: string;
   product: {
     id: string;
@@ -33,6 +34,7 @@ export async function GET() {
       order_id: order.orderId,
       status: order.status,
       amount: order.amount,
+      vat_amount: order.vatAmount ?? 0,
       created_at: order.createdAt,
       product: order.product
         ? {

@@ -157,9 +157,10 @@ export function PayoutAccountCard({ account }: PayoutAccountCardProps) {
                 전까지는 내 상품의 새 주문을 받을 수 없어요.
               </p>
             )}
-            <div className="flex items-center gap-4 rounded-xl border border-border p-4 sm:gap-6">
+            {/* QR은 계좌 정보 박스 밖 왼쪽에 둔다(좁은 화면에서는 위로 쌓는다) */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <PayoutAccountQr updatedAt={account.updatedAt} />
-              <dl className="min-w-0 flex-1 divide-y divide-border text-sm">
+              <dl className="min-w-0 flex-1 divide-y divide-border rounded-xl border border-border p-4 text-sm">
                 <div className="flex items-center justify-between gap-3 py-2 first:pt-0">
                   <dt className="text-xs text-muted-foreground">은행</dt>
                   <dd className="font-medium">{account.bankName}</dd>

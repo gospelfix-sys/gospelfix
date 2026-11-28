@@ -11,6 +11,7 @@ interface CmsCartItem {
   optionId: string;
   optionLabel: string;
   price: number;
+  vatApplicable: boolean;
   createdAt: string;
   product: {
     id: string;
@@ -44,6 +45,7 @@ export async function GET() {
         optionId: item.optionId,
         optionLabel: item.optionLabel,
         price: item.price,
+        vatApplicable: item.vatApplicable ?? false,
         createdAt: item.createdAt,
       }));
 
