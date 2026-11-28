@@ -437,6 +437,18 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.12.tgz#afefe785949f16ac4cdd1e695935a321572dd56a"
   integrity sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==
 
+"@gospelfix/qr@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@gospelfix/qr/-/qr-0.1.0.tgz#dd002de13b3e72b5abb5dfe55065e69ecf8a135a"
+  integrity sha512-1P0L7WZtOVUCQybSxPMGKMW2pzHSq9zrXfkXdlowzJSTMDDlHjVp2lqA4/KKN6ZDOd2/R2aZ80UEmDFnK5gLew==
+  dependencies:
+    "@base-ui/react" "^1.3.0"
+    class-variance-authority "^0.7.1"
+    clsx "^2.1.1"
+    lucide-react "^1.26.0"
+    qrcode-generator "^2.0.4"
+    tailwind-merge "^3.5.0"
+
 "@hono/node-server@^1.19.9":
   version "1.19.14"
   resolved "https://registry.npmjs.org/@hono/node-server/-/node-server-1.19.14.tgz"
@@ -4667,6 +4679,11 @@ punycode@^2.1.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
+
+qrcode-generator@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/qrcode-generator/-/qrcode-generator-2.0.4.tgz#e8b3f30922577eba52078aa9c0d5a2a74fe1fd94"
+  integrity sha512-mZSiP6RnbHl4xL2Ap5HfkjLnmxfKcPWpWe/c+5XxCuetEenqmNFf1FH/ftXPCtFG5/TDobjsjz6sSNL0Sr8Z9g==
 
 qs@^6.14.0, qs@^6.14.1:
   version "6.15.1"

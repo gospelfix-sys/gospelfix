@@ -1,4 +1,4 @@
-// 판매자 정산 계좌. 서버는 전체 번호를 돌려주지 않고 끝 4자리만 준다.
+// 판매자 정산 계좌. 목록·상세 조회는 끝 4자리만 주고, 전체 번호는 본인 송금 QR 조회에서만 내려준다.
 export interface PayoutAccount {
   bankName: string;
   accountHolder: string;

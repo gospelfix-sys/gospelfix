@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { QrCode } from "@/components/ui/QrCode";
+import { buildTransferQr } from "@/lib/transferQr";
 import type { SellerTransferAccount } from "@/types/payout.types";
 
 interface AccountTransferCardProps {
@@ -13,6 +15,12 @@ interface AccountTransferCardProps {
 // 구매자에게 보여주는 판매자 입금 정보. 회사 계좌가 아니라 상품 판매자의 계좌다.
 export default function AccountTransferCard({ account }: AccountTransferCardProps) {
   const [copied, setCopied] = useState(false);
+  const [qrMatrix, setQrMatrix] = useState<boolean[][] | null>(null);
+
+  // origin은 브라우저에서만 알 수 있어 마운트 후에 만든다(SSR 불일치 방지)
+  useEffect(() => {
+    setQrMatrix(buildTransferQr(window.location.origin, account));
+  }, [account]);
 
   useEffect(() => {
     if (!copied) return;
@@ -62,6 +70,14 @@ export default function AccountTransferCard({ account }: AccountTransferCardProp
             <span className="font-bold text-gray-900">{account.accountHolder}</span>
           </div>
         </div>
+        {qrMatrix && (
+          <div className="flex flex-col items-center gap-2 bg-gray-50 px-4 py-4">
+            <QrCode matrix={qrMatrix} className="border border-gray-200" />
+            <p className="text-[11px] text-gray-500">
+              휴대폰 카메라로 스캔하면 송금 안내 화면이 열려요
+            </p>
+          </div>
+        )}
       </div>
 
       <ul className="mb-4 list-disc space-y-1 pl-4 text-[11px] leading-relaxed text-gray-500">
